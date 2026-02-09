@@ -27,7 +27,7 @@ export type SimplifyState = {
   };
 };
 
-const generativeModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+const generativeModel = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 const OcrSchema = z.object({
   image: z.string().min(1, { message: "An image is required." }),
