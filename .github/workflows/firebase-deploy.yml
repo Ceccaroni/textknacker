@@ -33,4 +33,5 @@ jobs:
           channelId: live
           projectId: textknacker-76464080-e8b74
         env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
