@@ -228,7 +228,7 @@ export default function Home() {
         </Tabs>
       </div>
        <footer className="mt-6 text-center text-gray-500 text-sm">
-        <p>Powered by Gemini & Firebase</p>
+        <p>Powered by Claude & Firebase</p>
       </footer>
     </main>
   );

@@ -9,7 +9,7 @@
     "frameworksBackend": {
       "region": "us-central1",
       "memory": "1GiB",
-      "secrets": ["GEMINI_API_KEY"],
+      "secrets": ["ANTHROPIC_API_KEY"],
       "serviceAccount": "textknacker-76464080-e8b74@appspot.gserviceaccount.com",
       "ingressSettings": "ALLOW_ALL",
       "vpc": {
