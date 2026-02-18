@@ -144,9 +144,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <header className="p-4 border-b bg-gray-100">
-            <h1 className="text-2xl font-bold text-center text-gray-800">PHORO Read</h1>
-            <p className="text-center text-gray-500">Take a photo, simplify the text.</p>
+        <header className="p-4 border-b bg-gray-100 flex flex-col items-center">
+            <img src="/logo-phoro.svg" alt="PHORO Read" className="h-10" />
+            <p className="text-center text-gray-500 mt-1">Take a photo, simplify the text.</p>
         </header>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
