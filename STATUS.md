@@ -2,31 +2,35 @@
 
 > Letzte Aktualisierung: 2026-02-18
 
-## Zuletzt erledigt
+## Zuletzt erledigt (diese Session)
 
-- **Projekt umbenannt** von "Textknacker" zu "PHORO Read" (package.json, UI, Doku)
-- **CLAUDE.md** erstellt (Architektur, Stack, Regeln, Doku-Strategie)
-- **Logo + Favicon** eingebettet (logo-phoro.svg, icon.svg)
-- **App komplett umgebaut** gemäss Blueprint:
-  - State A (Input): Kamera-Tab + Text-Tab, deutsche UI
-  - State B (Reading Mode): Vereinfachter Text mit Toolbar
-  - Toolbar: Text/Liste-Switch (gecached), TTS, Fokus-Modus, Abstand, PDF-Export
-- **Fullscreen-Layout** (h-dvh, flex, internes Scrolling, alle Geräte)
-- **Lexend-Font** korrekt durchgesetzt (globals.css Fix)
-- **Textausgabe-Formatierung**: Logo-Farbe #1c3d5a, Absätze, Überschriften-Erkennung
+- **T-02**: Spracherkennung — Ausgabe immer in Eingabesprache
+- **T-03**: Regelwerk Einfache/Leichte Sprache in Prompts eingebettet
+- **T-04**: Toggle Einfach/Leicht ersetzt alten Text/Liste-Switch, Listenmodus entfernt
+- **T-05**: PHORO Design System als `DESIGN-SYSTEM.md` abgelegt, alle Farben auf PHORO-Branding umgestellt (globals.css + page.tsx)
+- **Schweizer Rechtschreibung** (ss statt ß) in beiden Simplify-Prompts erzwungen
+- **Default-Tab** auf Text (statt Kamera) geändert
+- **Branding**: "read" in Morgenrot-Akzentfarbe neben PHORO-Logo (beide Headers)
+
+## Deployment-Hinweis
+
+Die letzten Änderungen (ab Commit `33762b2`) sind auf GitHub gepusht, aber **nicht in Firebase deployed**. GitHub Actions Deploy für T-02 (`8655bcf`) schlug fehl; nachfolgende Deploys liefen durch, aber der letzte Commit (`0eb47f7`) muss noch verifiziert werden.
+
+**Aktion nötig:** Firebase-Deployment prüfen bzw. manuell deployen (`firebase deploy`).
 
 ## Erledigte Tasks
 
 - [x] T-01: Responsive Fullscreen-Layout
-- [x] T-02: Ausgabe in Eingabesprache
+- [x] T-02: Ausgabe in Eingabesprache + CH-Rechtschreibung
 - [x] T-03: Einfache vs. Leichte Sprache Regelwerk
 - [x] T-04: Umschalter Einfache/Leichte Sprache
-- [x] T-05: Farbgestaltung PHORO-Branding
+- [x] T-05: Farbgestaltung PHORO-Branding + Design-System im Repo
 - [x] T-08: Name "Textknacker" entfernt
 - [x] T-10: Lexend konsequent durchgesetzt
 - [x] T-11: Textausgabe-Formatierung
 
 ## Offene Tasks
+
 - [ ] **T-06**: Datei-Upload (Word, PDF+OCR, ODT, TXT, MD)
 - [ ] **T-07**: Download-Optionen (Word, PDF, TXT, MD)
 - [ ] **T-09**: Fotomodus Vollbild + Crop + Helligkeit/Kontrast
@@ -42,6 +46,7 @@
 
 - `src/app/page.tsx` — Gesamte App-Logik (Input + Reading Mode)
 - `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API)
-- `src/app/globals.css` — Tailwind-Theme + Font-Mapping
+- `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
+- `DESIGN-SYSTEM.md` — Verbindliches Design-System (Farben, Typo, Spacing, Anti-Patterns)
 - `TASKS.md` — Alle Tasks mit Status
 - `CLAUDE.md` — Architektur-Referenz

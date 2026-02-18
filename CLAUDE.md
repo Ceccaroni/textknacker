@@ -73,10 +73,9 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 ## Bekannte Issues
 
 1. **Zod nicht in package.json** — `actions.ts` importiert `zod`, aber es ist keine explizite Dependency. Funktioniert nur transitiv. Sollte explizit hinzugefügt werden.
-2. **Font-Mismatch in globals.css** — CSS referenziert `--font-geist-sans`/`--font-geist-mono`, aber die App nutzt Lexend (`--font-lexend`). Font wird vermutlich nicht korrekt angewendet.
-3. **Ungenutzte Dependencies** — `genkit`, `@google-cloud/vertexai`, `@google/generative-ai` können entfernt werden (Altlast aus Gemini-Phase).
-4. **GitHub Actions Workflow referenziert `GEMINI_API_KEY`** — nicht mehr benötigt, sollte durch `ANTHROPIC_API_KEY` ersetzt oder entfernt werden.
-5. **GEMINI.md** — Veraltete Datei aus der Gemini-Phase, kann entfernt werden.
+2. **Ungenutzte Dependencies** — `genkit`, `@google-cloud/vertexai`, `@google/generative-ai` können entfernt werden (Altlast aus Gemini-Phase).
+3. **GitHub Actions Workflow referenziert `GEMINI_API_KEY`** — nicht mehr benötigt, sollte durch `ANTHROPIC_API_KEY` ersetzt oder entfernt werden.
+4. **GEMINI.md** — Veraltete Datei aus der Gemini-Phase, kann entfernt werden.
 
 ## Design-System
 
