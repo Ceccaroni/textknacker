@@ -9,7 +9,7 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: "Textknacker",
+  title: "PHORO Read",
   description: "Texte einfacher verstehen",
 };
 
