@@ -270,7 +270,10 @@ export default function Home() {
 
   const currentText = resultCache[readingMode] || '';
 
-  type TextBlock = { type: 'heading'; text: string } | { type: 'paragraph'; sentences: string[] };
+  type TextBlock =
+    | { type: 'heading'; text: string }
+    | { type: 'paragraph'; sentences: string[] }
+    | { type: 'list'; ordered: boolean; items: string[] };
 
   function parseHeading(line: string): string | null {
     const md = line.match(/^#{1,3}\s+(.+)$/);
@@ -280,12 +283,35 @@ export default function Home() {
     return null;
   }
 
+  function renderInlineMarkdown(text: string): React.ReactNode[] {
+    const result: React.ReactNode[] = [];
+    const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*)/g;
+    let lastIndex = 0;
+    let match;
+    let key = 0;
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) result.push(text.slice(lastIndex, match.index));
+      if (match[2]) result.push(<strong key={`md-${key}`}><em>{match[2]}</em></strong>);
+      else if (match[3]) result.push(<strong key={`md-${key}`}>{match[3]}</strong>);
+      else if (match[4]) result.push(<em key={`md-${key}`}>{match[4]}</em>);
+      key++;
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) result.push(text.slice(lastIndex));
+    return result.length > 0 ? result : [text];
+  }
+
   const textBlocks = useMemo((): TextBlock[] => {
     if (!currentText) return [];
     return currentText.split(/\n\n+/).filter(b => b.trim()).map(block => {
       const trimmed = block.trim();
       const heading = parseHeading(trimmed);
       if (heading) return { type: 'heading', text: heading };
+      const lines = trimmed.split('\n');
+      const isUnordered = lines.every(l => /^[-*]\s+/.test(l.trim()));
+      const isOrdered = lines.every(l => /^\d+[.)]\s+/.test(l.trim()));
+      if (isUnordered) return { type: 'list', ordered: false, items: lines.map(l => l.trim().replace(/^[-*]\s+/, '')) };
+      if (isOrdered) return { type: 'list', ordered: true, items: lines.map(l => l.trim().replace(/^\d+[.)]\s+/, '')) };
       const sentences = trimmed.match(/[^.!?]*[.!?]+[\s]?|[^.!?]+$/g)?.filter(s => s.trim()) || [trimmed];
       return { type: 'paragraph', sentences };
     });
@@ -463,7 +489,17 @@ export default function Home() {
                         let sentIdx = 0;
                         return textBlocks.map((block, blockI) => {
                           if (block.type === 'heading') {
-                            return <h3 key={blockI} className="font-bold text-xl mt-6 first:mt-0 mb-2">{block.text}</h3>;
+                            return <h3 key={blockI} className="font-bold text-xl mt-6 first:mt-0 mb-2">{renderInlineMarkdown(block.text)}</h3>;
+                          }
+                          if (block.type === 'list') {
+                            const Tag = block.ordered ? 'ol' : 'ul';
+                            return (
+                              <Tag key={blockI} className={cn("mb-4 last:mb-0 pl-6", block.ordered ? "list-decimal" : "list-disc")}>
+                                {block.items.map((item, i) => (
+                                  <li key={i} className="mb-1">{renderInlineMarkdown(item)}</li>
+                                ))}
+                              </Tag>
+                            );
                           }
                           return (
                             <p key={blockI} className="mb-4 last:mb-0">
@@ -480,7 +516,7 @@ export default function Home() {
                                       focusModeActive && focusedIndex === idx && "bg-phoro-green/10 rounded px-0.5",
                                     )}
                                   >
-                                    {sentence}
+                                    {renderInlineMarkdown(sentence)}
                                   </span>
                                 );
                               })}

@@ -13,7 +13,6 @@
 | [PR-009](PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
 | [PR-012](PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
 | [PR-013](PR-013.md) | 🐛 Bug / ✨ Feature | 🔥 Hoch | System-Prompt für Textvereinfachung überarbeiten |
-| [PR-014](PR-014.md) | 🐛 Bug | 🔥 Hoch | Markdown-Formatierung in Textausgabe wird nicht gerendert |
 
 ## 🟡 In Arbeit
 
@@ -32,6 +31,7 @@
 | [PR-005](completed/PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
 | [PR-010](completed/PR-010.md) | 🔧 Refactor | 🔥 Hoch | Header-Text anpassen |
 | [PR-011](completed/PR-011.md) | 🐛 Bug | 🔥 Hoch | Bildbeschreibung bei Fotos ohne Text deaktivieren |
+| [PR-014](completed/PR-014.md) | 🐛 Bug | 🔥 Hoch | Markdown-Formatierung in Textausgabe wird nicht gerendert |
 
 ## Abhängigkeiten
 
