@@ -418,34 +418,26 @@ export default function Home() {
                       onClick={() => switchMode('einfach')}
                       disabled={isModeSwitching}
                       className={cn(
-                        "flex-1 flex flex-col items-center py-2 transition-colors disabled:opacity-50",
+                        "flex-1 flex items-center justify-center py-2 text-sm font-medium transition-colors disabled:opacity-50",
                         readingMode === 'einfach'
                           ? "bg-phoro-blue text-white"
                           : "text-phoro-slate hover:bg-phoro-blue/5"
                       )}
                     >
-                      <span className="text-sm font-medium">Einfach</span>
-                      <span className={cn(
-                        "text-[11px]",
-                        readingMode === 'einfach' ? "text-white/60" : "text-phoro-slate/50"
-                      )}>B1 – B2</span>
+                      Einfache Sprache
                     </button>
                     <button
                       type="button"
                       onClick={() => switchMode('leicht')}
                       disabled={isModeSwitching}
                       className={cn(
-                        "flex-1 flex flex-col items-center py-2 transition-colors disabled:opacity-50",
+                        "flex-1 flex items-center justify-center py-2 text-sm font-medium transition-colors disabled:opacity-50",
                         readingMode === 'leicht'
                           ? "bg-phoro-blue text-white"
                           : "text-phoro-slate hover:bg-phoro-blue/5"
                       )}
                     >
-                      <span className="text-sm font-medium">Leicht</span>
-                      <span className={cn(
-                        "text-[11px]",
-                        readingMode === 'leicht' ? "text-white/60" : "text-phoro-slate/50"
-                      )}>A1 – A2</span>
+                      Leichte Sprache
                     </button>
                   </div>
                 </div>
