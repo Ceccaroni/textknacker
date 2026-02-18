@@ -296,12 +296,29 @@ export default function Home() {
 
   return (
     <main className="h-dvh flex flex-col bg-phoro-warmbeige">
-      <div className="flex-1 flex flex-col overflow-hidden w-full max-w-2xl mx-auto">
+      <div className="flex-1 flex flex-col overflow-hidden w-full max-w-2xl md:max-w-6xl mx-auto">
 
-        {/* ════════════════ STATE A: INPUT ════════════════ */}
-        {view === 'input' && (
-          <>
-            <header className="px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex flex-col items-center shrink-0">
+        {/* ── Desktop Header (shared, full width) ── */}
+        <header className="hidden md:flex px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex-col items-center shrink-0">
+          <div className="flex items-baseline gap-1.5">
+            <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
+            <span className="text-phoro-morgenrot text-lg font-light tracking-wide">read</span>
+          </div>
+          <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
+        </header>
+
+        {/* ── Content Area ── */}
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+
+          {/* ════════════════ LEFT PANEL: INPUT ════════════════ */}
+          {/* Mobile: hidden when reading. Desktop: always visible. */}
+          <div className={cn(
+            "flex-1 flex flex-col overflow-hidden",
+            "md:w-1/2 md:border-r md:border-phoro-slate/15",
+            view === 'reading' && "max-md:hidden"
+          )}>
+            {/* Mobile-only Input Header */}
+            <header className="md:hidden px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex flex-col items-center shrink-0">
               <div className="flex items-baseline gap-1.5">
                 <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
                 <span className="text-phoro-morgenrot text-lg font-light tracking-wide">read</span>
@@ -372,14 +389,17 @@ export default function Home() {
                 </form>
               </TabsContent>
             </Tabs>
-          </>
-        )}
+          </div>
 
-        {/* ════════════════ STATE B: READING MODE ════════════════ */}
-        {view === 'reading' && (
-          <>
-            {/* ── Header ── */}
-            <header className="px-4 py-3 border-b border-phoro-slate/15 bg-[#EAE6DF] flex items-center shrink-0">
+          {/* ════════════════ RIGHT PANEL: RESULTS ════════════════ */}
+          {/* Mobile: hidden when input. Desktop: always visible. */}
+          <div className={cn(
+            "flex-1 flex flex-col overflow-hidden",
+            "md:w-1/2",
+            view === 'input' && "max-md:hidden"
+          )}>
+            {/* Mobile-only Reading Header */}
+            <header className="md:hidden px-4 py-3 border-b border-phoro-slate/15 bg-[#EAE6DF] flex items-center shrink-0">
               <Button variant="ghost" size="icon" onClick={handleBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
@@ -390,118 +410,129 @@ export default function Home() {
               <div className="w-9" />
             </header>
 
-            {/* ── Content ── */}
-            <div className={cn(
-              "flex-1 overflow-y-auto p-6 text-lg leading-relaxed text-phoro-blue",
-              wideSpacing && "tracking-[0.12em] leading-loose"
-            )}>
-              {isModeSwitching ? (
-                <div className="flex items-center justify-center py-16">
-                  <LoaderCircle className="h-8 w-8 animate-spin text-phoro-slate/50" />
-                  <span className="ml-3 text-phoro-slate/60">Wird vereinfacht...</span>
+            {/* Content or Empty Placeholder */}
+            {currentText || isModeSwitching ? (
+              <>
+                {/* ── Reading Content ── */}
+                <div className={cn(
+                  "flex-1 overflow-y-auto p-6 text-lg leading-relaxed text-phoro-blue",
+                  wideSpacing && "tracking-[0.12em] leading-loose"
+                )}>
+                  {isModeSwitching ? (
+                    <div className="flex items-center justify-center py-16">
+                      <LoaderCircle className="h-8 w-8 animate-spin text-phoro-slate/50" />
+                      <span className="ml-3 text-phoro-slate/60">Wird vereinfacht...</span>
+                    </div>
+                  ) : (
+                    <div>
+                      {(() => {
+                        let sentIdx = 0;
+                        return textBlocks.map((block, blockI) => {
+                          if (block.type === 'heading') {
+                            return <h3 key={blockI} className="font-bold text-xl mt-6 first:mt-0 mb-2">{block.text}</h3>;
+                          }
+                          return (
+                            <p key={blockI} className="mb-4 last:mb-0">
+                              {block.sentences.map((sentence, si) => {
+                                const idx = sentIdx++;
+                                return (
+                                  <span
+                                    key={si}
+                                    onClick={() => focusModeActive && setFocusedIndex(focusedIndex === idx ? null : idx)}
+                                    className={cn(
+                                      "transition-all",
+                                      focusModeActive && "cursor-pointer",
+                                      focusModeActive && focusedIndex !== null && focusedIndex !== idx && "opacity-20",
+                                      focusModeActive && focusedIndex === idx && "bg-phoro-green/10 rounded px-0.5",
+                                    )}
+                                  >
+                                    {sentence}
+                                  </span>
+                                );
+                              })}
+                            </p>
+                          );
+                        });
+                      })()}
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div>
-                  {(() => {
-                    let sentIdx = 0;
-                    return textBlocks.map((block, blockI) => {
-                      if (block.type === 'heading') {
-                        return <h3 key={blockI} className="font-bold text-xl mt-6 first:mt-0 mb-2">{block.text}</h3>;
-                      }
-                      return (
-                        <p key={blockI} className="mb-4 last:mb-0">
-                          {block.sentences.map((sentence, si) => {
-                            const idx = sentIdx++;
-                            return (
-                              <span
-                                key={si}
-                                onClick={() => focusModeActive && setFocusedIndex(focusedIndex === idx ? null : idx)}
-                                className={cn(
-                                  "transition-all",
-                                  focusModeActive && "cursor-pointer",
-                                  focusModeActive && focusedIndex !== null && focusedIndex !== idx && "opacity-20",
-                                  focusModeActive && focusedIndex === idx && "bg-phoro-green/10 rounded px-0.5",
-                                )}
-                              >
-                                {sentence}
-                              </span>
-                            );
-                          })}
-                        </p>
-                      );
-                    });
-                  })()}
+
+                {/* ── Toolbar ── */}
+                <div className="border-t border-phoro-slate/15 bg-white p-3 space-y-2 shrink-0">
+                  {/* Row 1: Level Switch */}
+                  <ToggleGroup
+                    type="single"
+                    value={readingMode}
+                    onValueChange={(val) => val && switchMode(val as 'einfach' | 'leicht')}
+                    variant="outline"
+                    spacing={0}
+                    className="w-full"
+                    disabled={isModeSwitching}
+                  >
+                    <ToggleGroupItem value="einfach" className="flex-1 gap-1.5">
+                      <BookOpen className="h-4 w-4" />
+                      Einfach
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="leicht" className="flex-1 gap-1.5">
+                      <GraduationCap className="h-4 w-4" />
+                      Leicht
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+
+                  {/* Row 2: Action Buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant={isSpeaking ? 'default' : 'outline'}
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={toggleTTS}
+                    >
+                      {isSpeaking ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                      {isSpeaking ? 'Pause' : 'Vorlesen'}
+                    </Button>
+
+                    <Button
+                      variant={focusModeActive ? 'default' : 'outline'}
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={() => { setFocusModeActive(!focusModeActive); setFocusedIndex(null); }}
+                    >
+                      <Crosshair className="h-4 w-4" />
+                      Fokus
+                    </Button>
+
+                    <Button
+                      variant={wideSpacing ? 'default' : 'outline'}
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={() => setWideSpacing(!wideSpacing)}
+                    >
+                      <Type className="h-4 w-4" />
+                      Abstand
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={handlePdfExport}
+                    >
+                      <FileDown className="h-4 w-4" />
+                      PDF
+                    </Button>
+                  </div>
                 </div>
-              )}
-            </div>
-
-            {/* ── Toolbar ── */}
-            <div className="border-t border-phoro-slate/15 bg-white p-3 space-y-2 shrink-0">
-              {/* Row 1: Level Switch */}
-              <ToggleGroup
-                type="single"
-                value={readingMode}
-                onValueChange={(val) => val && switchMode(val as 'einfach' | 'leicht')}
-                variant="outline"
-                spacing={0}
-                className="w-full"
-                disabled={isModeSwitching}
-              >
-                <ToggleGroupItem value="einfach" className="flex-1 gap-1.5">
-                  <BookOpen className="h-4 w-4" />
-                  Einfach
-                </ToggleGroupItem>
-                <ToggleGroupItem value="leicht" className="flex-1 gap-1.5">
-                  <GraduationCap className="h-4 w-4" />
-                  Leicht
-                </ToggleGroupItem>
-              </ToggleGroup>
-
-              {/* Row 2: Action Buttons */}
-              <div className="flex gap-2">
-                <Button
-                  variant={isSpeaking ? 'default' : 'outline'}
-                  size="sm"
-                  className="flex-1 gap-1.5"
-                  onClick={toggleTTS}
-                >
-                  {isSpeaking ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                  {isSpeaking ? 'Pause' : 'Vorlesen'}
-                </Button>
-
-                <Button
-                  variant={focusModeActive ? 'default' : 'outline'}
-                  size="sm"
-                  className="flex-1 gap-1.5"
-                  onClick={() => { setFocusModeActive(!focusModeActive); setFocusedIndex(null); }}
-                >
-                  <Crosshair className="h-4 w-4" />
-                  Fokus
-                </Button>
-
-                <Button
-                  variant={wideSpacing ? 'default' : 'outline'}
-                  size="sm"
-                  className="flex-1 gap-1.5"
-                  onClick={() => setWideSpacing(!wideSpacing)}
-                >
-                  <Type className="h-4 w-4" />
-                  Abstand
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 gap-1.5"
-                  onClick={handlePdfExport}
-                >
-                  <FileDown className="h-4 w-4" />
-                  PDF
-                </Button>
+              </>
+            ) : (
+              /* Desktop: empty placeholder. Mobile: panel is hidden anyway. */
+              <div className="flex-1 flex items-center justify-center">
+                <p className="text-phoro-slate/40 text-sm">Ergebnis erscheint hier.</p>
               </div>
-            </div>
-          </>
-        )}
+            )}
+          </div>
+
+        </div>
       </div>
     </main>
   );
