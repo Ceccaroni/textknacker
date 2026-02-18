@@ -105,8 +105,8 @@ export async function simplifyText(prevState: SimplifyState, formData: FormData)
   const { text, mode } = validatedFields.data;
 
   const prompt = mode === 'text'
-    ? `Rewrite the following text in simple language (A2 level). Use complete sentences.\n\nText: "${text}"`
-    : `Summarize the following content in extremely simple bullet points. No long sentences.\n\nContent: "${text}"`;
+    ? `Rewrite the following text in simple language (A2 level). Use complete sentences. IMPORTANT: Always respond in the same language as the input text.\n\nText: "${text}"`
+    : `Summarize the following content in extremely simple bullet points. No long sentences. IMPORTANT: Always respond in the same language as the input text.\n\nContent: "${text}"`;
 
   try {
     const message = await anthropic.messages.create({

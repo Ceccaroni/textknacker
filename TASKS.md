@@ -17,7 +17,9 @@ App füllt den gesamten Viewport (`h-dvh`) auf allen Geräten. Kein äusseres Sc
 
 Die Vereinfachung muss **immer in der Sprache ausgegeben werden, in der der Input erfolgte**. Deutsch rein → Deutsch raus. Englisch rein → Englisch raus. Etc.
 
-**Status:** `[ ]`
+Umgesetzt: Beide Prompts (Text- und Listenmodus) in `actions.ts` enthalten jetzt die Anweisung, immer in der Eingabesprache zu antworten.
+
+**Status:** `[x]`
 
 ---
 
