@@ -15,7 +15,7 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| [PR-005](PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
+| (keine) | | | |
 
 ## 🟢 Erledigt
 
@@ -25,6 +25,7 @@
 | [PR-002](completed/PR-002.md) | 🔧 Refactor | ⚡ Mittel | Button "Text knacken" → "Vereinfachen" |
 | [PR-003](completed/PR-003.md) | 🐛 Bug | 🔥 Hoch | Banner volle Breite auf Desktop |
 | [PR-004](completed/PR-004.md) | 🐛 Bug | 🔥 Hoch | Rechtes Panel an linkes Panel angleichen (Desktop) |
+| [PR-005](completed/PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
 
 ## Abhängigkeiten
 
