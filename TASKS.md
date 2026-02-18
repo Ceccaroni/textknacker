@@ -120,13 +120,12 @@ Der Kamera-/Fotomodus muss:
 
 ## T-11: Textausgabe — Formatierung und Styling
 
-Die vereinfachte Textausgabe (Reading Mode) muss:
-- **Schrift:** Lexend
-- **Schriftfarbe:** Gleiche Farbe wie das PHORO-Logo (`#1c3d5a`)
-- **Überschriften:** Fett
-- **Absätze:** Sichtbare Lücken/Abstände nach Absätzen
-- **Saubere Formatierung** insgesamt
+Umgesetzt:
+- **Schrift:** Lexend (via T-10)
+- **Schriftfarbe:** `#1c3d5a` (PHORO-Logo-Farbe) auf gesamtem Content-Bereich
+- **Überschriften:** Markdown-Headings (`##`) und `**bold**`-Zeilen werden als fette `<h3>` gerendert
+- **Absätze:** Text wird an `\n\n` in `<p>`-Blöcke gesplittet mit `mb-4` Abstand
+- **Listen:** Headings zwischen Stichpunkten werden ebenfalls erkannt und fett dargestellt
+- **Fokus-Modus:** Funktioniert weiterhin auf Satz-/Item-Ebene (Headings sind nicht fokussierbar)
 
-**Abhängigkeit:** T-05 (Farbcodes) und T-10 (Lexend)
-
-**Status:** `[ ]`
+**Status:** `[x]`

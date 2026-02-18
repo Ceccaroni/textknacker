@@ -267,16 +267,40 @@ export default function Home() {
     doc.save('phoro-read.pdf');
   }
 
-  // ── Reading Mode: Sentence Splitting ────────────────────────
+  // ── Reading Mode: Block Parsing ─────────────────────────────
 
   const currentText = resultCache[readingMode] || '';
 
-  const segments = useMemo(() => {
-    if (!currentText) return [];
-    if (readingMode === 'list') {
-      return currentText.split('\n').filter(line => line.trim().length > 0);
-    }
-    return currentText.match(/[^.!?]*[.!?]+[\s]?|[^.!?]+$/g)?.filter(s => s.trim()) || [currentText];
+  type TextBlock = { type: 'heading'; text: string } | { type: 'paragraph'; sentences: string[] };
+  type ListBlock = { type: 'heading'; text: string } | { type: 'item'; text: string };
+
+  function parseHeading(line: string): string | null {
+    const md = line.match(/^#{1,3}\s+(.+)$/);
+    if (md) return md[1];
+    const bold = line.match(/^\*\*(.+)\*\*$/);
+    if (bold) return bold[1];
+    return null;
+  }
+
+  const textBlocks = useMemo((): TextBlock[] => {
+    if (!currentText || readingMode !== 'text') return [];
+    return currentText.split(/\n\n+/).filter(b => b.trim()).map(block => {
+      const trimmed = block.trim();
+      const heading = parseHeading(trimmed);
+      if (heading) return { type: 'heading', text: heading };
+      const sentences = trimmed.match(/[^.!?]*[.!?]+[\s]?|[^.!?]+$/g)?.filter(s => s.trim()) || [trimmed];
+      return { type: 'paragraph', sentences };
+    });
+  }, [currentText, readingMode]);
+
+  const listBlocks = useMemo((): ListBlock[] => {
+    if (!currentText || readingMode !== 'list') return [];
+    return currentText.split('\n').filter(l => l.trim()).map(line => {
+      const trimmed = line.trim();
+      const heading = parseHeading(trimmed);
+      if (heading) return { type: 'heading', text: heading };
+      return { type: 'item', text: trimmed.replace(/^[-•*]\s*/, '') };
+    });
   }, [currentText, readingMode]);
 
   // ── Render ──────────────────────────────────────────────────
@@ -373,7 +397,7 @@ export default function Home() {
 
             {/* ── Content ── */}
             <div className={cn(
-              "flex-1 overflow-y-auto p-6 text-lg leading-relaxed",
+              "flex-1 overflow-y-auto p-6 text-lg leading-relaxed text-[#1c3d5a]",
               wideSpacing && "tracking-[0.12em] leading-loose"
             )}>
               {isModeSwitching ? (
@@ -382,38 +406,62 @@ export default function Home() {
                   <span className="ml-3 text-gray-500">Wird vereinfacht...</span>
                 </div>
               ) : readingMode === 'list' ? (
-                <ul className="space-y-3 list-none pl-0">
-                  {segments.map((item, i) => (
-                    <li
-                      key={i}
-                      onClick={() => focusModeActive && setFocusedIndex(focusedIndex === i ? null : i)}
-                      className={cn(
-                        "p-3 rounded-lg bg-gray-50 border border-gray-100 transition-all",
-                        focusModeActive && "cursor-pointer",
-                        focusModeActive && focusedIndex !== null && focusedIndex !== i && "opacity-20",
-                        focusModeActive && focusedIndex === i && "bg-yellow-100 border-yellow-300",
-                      )}
-                    >
-                      {item.replace(/^[-•*]\s*/, '')}
-                    </li>
-                  ))}
-                </ul>
+                <div className="space-y-3">
+                  {(() => {
+                    let itemIdx = 0;
+                    return listBlocks.map((block, i) => {
+                      if (block.type === 'heading') {
+                        return <h3 key={i} className="font-bold text-xl mt-5 first:mt-0 mb-1">{block.text}</h3>;
+                      }
+                      const idx = itemIdx++;
+                      return (
+                        <div
+                          key={i}
+                          onClick={() => focusModeActive && setFocusedIndex(focusedIndex === idx ? null : idx)}
+                          className={cn(
+                            "p-3 rounded-lg bg-gray-50 border border-gray-100 transition-all",
+                            focusModeActive && "cursor-pointer",
+                            focusModeActive && focusedIndex !== null && focusedIndex !== idx && "opacity-20",
+                            focusModeActive && focusedIndex === idx && "bg-yellow-100 border-yellow-300",
+                          )}
+                        >
+                          {block.text}
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
               ) : (
                 <div>
-                  {segments.map((sentence, i) => (
-                    <span
-                      key={i}
-                      onClick={() => focusModeActive && setFocusedIndex(focusedIndex === i ? null : i)}
-                      className={cn(
-                        "transition-all",
-                        focusModeActive && "cursor-pointer",
-                        focusModeActive && focusedIndex !== null && focusedIndex !== i && "opacity-20",
-                        focusModeActive && focusedIndex === i && "bg-yellow-200 rounded px-0.5",
-                      )}
-                    >
-                      {sentence}
-                    </span>
-                  ))}
+                  {(() => {
+                    let sentIdx = 0;
+                    return textBlocks.map((block, blockI) => {
+                      if (block.type === 'heading') {
+                        return <h3 key={blockI} className="font-bold text-xl mt-6 first:mt-0 mb-2">{block.text}</h3>;
+                      }
+                      return (
+                        <p key={blockI} className="mb-4 last:mb-0">
+                          {block.sentences.map((sentence, si) => {
+                            const idx = sentIdx++;
+                            return (
+                              <span
+                                key={si}
+                                onClick={() => focusModeActive && setFocusedIndex(focusedIndex === idx ? null : idx)}
+                                className={cn(
+                                  "transition-all",
+                                  focusModeActive && "cursor-pointer",
+                                  focusModeActive && focusedIndex !== null && focusedIndex !== idx && "opacity-20",
+                                  focusModeActive && focusedIndex === idx && "bg-yellow-200 rounded px-0.5",
+                                )}
+                              >
+                                {sentence}
+                              </span>
+                            );
+                          })}
+                        </p>
+                      );
+                    });
+                  })()}
                 </div>
               )}
             </div>
