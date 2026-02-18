@@ -5,10 +5,11 @@
 ## Zuletzt erledigt (diese Session)
 
 - **PR-013**: System-Prompt komplett überarbeitet — neuer didaktischer Rollen-Prompt als System-Message, Basis-Instruktionen für Inhaltserhaltung (Kohärenz, Fliesstextcharakter, keine Informationskürzung), Glossar-Feature (schwierige Begriffe werden inline + in Glossar am Textende erklärt), max_tokens auf 4096 erhöht
+- **Git Remote-URL** korrigiert: `Ceccaroni/textknacker` (Gross-/Kleinschreibung)
 
 ## Deployment
 
-Noch nicht deployed. Letzter Deploy: Commit `2afbb6f`.
+Änderungen auf GitHub gepusht (`2073f1c`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
 
 ## Erledigte Tickets
 
@@ -43,7 +44,6 @@ Noch nicht deployed. Letzter Deploy: Commit `2afbb6f`.
 2. **Ungenutzte Dependencies**: genkit, @google-cloud/vertexai, @google/generative-ai
 3. **GitHub Actions** referenziert GEMINI_API_KEY statt ANTHROPIC_API_KEY
 4. **GEMINI.md** kann gelöscht werden
-5. **GitHub Remote-URL** veraltet — GitHub meldet Repo-Umzug nach `Ceccaroni/textknacker`
 
 ## Wichtige Dateien
 

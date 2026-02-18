@@ -32,7 +32,7 @@ src/
 ├── app/
 │   ├── layout.tsx        # Root-Layout (Lexend Font, html lang="de")
 │   ├── page.tsx          # Einzige Seite — Desktop: Side-by-Side (Input|Result), Mobile: View-Switching
-│   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API
+│   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API (system prompt + Basis-Instruktionen + modus-spezifische Regeln)
 │   ├── globals.css       # Tailwind + shadcn/ui CSS-Variablen (oklch)
 │   └── favicon.ico
 ├── components/ui/        # shadcn/ui Komponenten (button, tabs, textarea, toggle, toggle-group)
