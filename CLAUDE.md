@@ -88,9 +88,23 @@ Kurzfassung der wichtigsten Farben:
 - **Morgenrot** `#E07A5F` — CTA/Accent, extrem sparsam (1x pro View)
 - **Horizon Green** `#6B9080` — Fortschritt/Validierung, sparsam
 
-## Tasks
+## Ticket-System
 
-Alle offenen Aufgaben sind in **[TASKS.md](./TASKS.md)** dokumentiert (T-01 bis T-11). Neue Session? Dort starten.
+Alle Aufgaben werden als Tickets in **[docs/tickets/TICKETS.md](./docs/tickets/TICKETS.md)** verwaltet. Format: `PR-XXX` (PR = PHORO Read).
+
+### Regeln
+
+- **Keine Arbeit ohne Ticket.** Jede Aufgabe bekommt ein Ticket, bevor mit der Arbeit begonnen wird.
+- Tickets werden fortlaufend nummeriert: `PR-001`, `PR-002`, ...
+- Ticket-Dateien liegen in `docs/tickets/`, Vorlage in `docs/tickets/TEMPLATE.md`.
+- **Vor Arbeitsbeginn:** Status auf 🟡 setzen, `TICKETS.md` aktualisieren.
+- **Nach Abschluss:** Status auf 🟢, Erledigungsdatum eintragen, Datei nach `docs/tickets/completed/` verschieben, `TICKETS.md` aktualisieren.
+- **Bei jedem Session-Start:** `TICKETS.md` lesen, um zu wissen, wo wir stehen.
+- Fällt dir etwas auf → Ticket vorschlagen, User bestätigt.
+
+### Legacy
+
+Alte Aufgaben (T-01 bis T-11) sind noch in **[TASKS.md](./TASKS.md)** dokumentiert. Neue Aufgaben werden ausschliesslich als Tickets angelegt.
 
 ## Dokumentationsstrategie
 
@@ -102,13 +116,15 @@ Dieses Projekt ist klein (Single-Page-App, Frühphase). Die Dokumentation soll *
 |---|---|
 | `CLAUDE.md` | **Zentrale Referenz.** Tech-Stack, Struktur, Regeln, bekannte Issues. Wird bei Architekturänderungen aktualisiert. |
 | `DESIGN-SYSTEM.md` | **Verbindliches Design-System.** Farben, Typografie, Abstände, Komponenten, Anti-Patterns. Bei allen UI-Entscheidungen konsultieren. |
-| `TASKS.md` | **Backlog.** Alle offenen Aufgaben, nummeriert (T-01 bis T-xx), mit Status und Abhängigkeiten. |
+| `docs/tickets/TICKETS.md` | **Ticket-Index.** Alle Aufgaben mit Status. Bei Session-Start hier starten. |
+| `docs/tickets/PR-XXX.md` | **Einzeltickets.** Beschreibung, Schritte, betroffene Dateien. Erledigte → `completed/`. |
+| `TASKS.md` | **Legacy-Backlog.** Alte Aufgaben (T-01 bis T-11). Keine neuen Einträge mehr. |
 | `STATUS.md` | **Session-Handoff.** Was wurde zuletzt gemacht? Was ist der nächste Schritt? Wird am Ende jeder Arbeitssession aktualisiert. |
 
 ### Regeln
 
 - `CLAUDE.md` beschreibt das **Was** (Architektur, Stack, Konventionen).
 - `STATUS.md` beschreibt das **Wo** (aktueller Stand, nächste Schritte).
-- Kein `docs/`-Verzeichnis nötig, solange die App eine Single-Page-App mit einer Handvoll Dateien ist.
+- `docs/tickets/` enthält das Ticket-System (siehe oben).
 - `blueprint.md` bleibt als ursprüngliche Spezifikation erhalten, wird aber nicht mehr aktiv gepflegt — `CLAUDE.md` + `STATUS.md` sind die lebenden Dokumente.
 - Bei signifikantem Wachstum (z.B. mehrere Routes, eigene API-Endpoints, Datenbankanbindung) kann ein `docs/`-Verzeichnis eingeführt werden.
