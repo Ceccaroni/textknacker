@@ -267,7 +267,12 @@ export default function Home() {
 
   async function svgToPngDataUrl(svgUrl: string, pixelWidth: number, pixelHeight: number): Promise<string> {
     const response = await fetch(svgUrl);
-    const svgText = await response.text();
+    let svgText = await response.text();
+    // Inject width/height so browsers render SVG at correct size on canvas
+    svgText = svgText.replace(
+      '<svg ',
+      `<svg width="${pixelWidth}" height="${pixelHeight}" `
+    );
     const svgBase64 = btoa(svgText);
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -373,6 +378,15 @@ export default function Home() {
 
     // ── 5. Content blocks ──
     for (const block of textBlocks) {
+      if (block.type === 'separator') {
+        y = checkPageBreak(y, 6);
+        y += 2;
+        doc.setDrawColor(SLATE.r, SLATE.g, SLATE.b);
+        doc.setLineWidth(0.2);
+        doc.line(ML + 20, y, PW - MR - 20, y);
+        y += 4;
+        continue;
+      }
       if (block.type === 'heading') {
         y = checkPageBreak(y, lineH(H_SIZE) + 6);
         y += 3;
@@ -421,7 +435,8 @@ export default function Home() {
   type TextBlock =
     | { type: 'heading'; text: string }
     | { type: 'paragraph'; sentences: string[] }
-    | { type: 'list'; ordered: boolean; items: string[] };
+    | { type: 'list'; ordered: boolean; items: string[] }
+    | { type: 'separator' };
 
   function parseHeading(line: string): string | null {
     const md = line.match(/^#{1,3}\s+(.+)$/);
@@ -453,6 +468,7 @@ export default function Home() {
     if (!currentText) return [];
     return currentText.split(/\n\n+/).filter(b => b.trim()).map(block => {
       const trimmed = block.trim();
+      if (/^(\*{3,}|-{3,}|_{3,})$/.test(trimmed)) return { type: 'separator' } as TextBlock;
       const heading = parseHeading(trimmed);
       if (heading) return { type: 'heading', text: heading };
       const lines = trimmed.split('\n');
@@ -636,6 +652,9 @@ export default function Home() {
                       {(() => {
                         let sentIdx = 0;
                         return textBlocks.map((block, blockI) => {
+                          if (block.type === 'separator') {
+                            return <hr key={blockI} className="my-4 border-phoro-slate/20" />;
+                          }
                           if (block.type === 'heading') {
                             return <h3 key={blockI} className="font-bold text-xl mt-6 first:mt-0 mb-2">{renderInlineMarkdown(block.text)}</h3>;
                           }
