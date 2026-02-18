@@ -2,7 +2,7 @@
 
 ## Beschreibung
 
-PHORO Read ist eine Web-App, die deutsche Texte mithilfe von KI vereinfacht (Leichte Sprache, A2-Niveau). Nutzer können Text eintippen oder ein Foto eines Dokuments machen. Die KI (Claude) extrahiert den Text per OCR und vereinfacht ihn — wahlweise als Fliesstext oder als Stichpunktliste.
+PHORO Read ist eine Web-App, die Texte mithilfe von KI vereinfacht (Einfache Sprache B1-B2 oder Leichte Sprache A1-A2). Nutzer können Text eintippen oder ein Foto eines Dokuments machen. Die KI (Claude) extrahiert den Text per OCR und vereinfacht ihn. Ausgabe immer in der Eingabesprache, bei Deutsch in Schweizer Rechtschreibung (ss statt ß).
 
 ## Tech-Stack
 
@@ -78,6 +78,17 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 4. **GitHub Actions Workflow referenziert `GEMINI_API_KEY`** — nicht mehr benötigt, sollte durch `ANTHROPIC_API_KEY` ersetzt oder entfernt werden.
 5. **GEMINI.md** — Veraltete Datei aus der Gemini-Phase, kann entfernt werden.
 
+## Design-System
+
+Alle visuellen Entscheidungen (Farben, Typografie, Abstände, Borders, Komponenten-Patterns, Anti-Patterns) sind in **[DESIGN-SYSTEM.md](./DESIGN-SYSTEM.md)** definiert. Diese Datei ist **verbindlich** für alle UI-Änderungen — bei Layout- oder Styling-Fragen immer zuerst dort nachschlagen.
+
+Kurzfassung der wichtigsten Farben:
+- **Warmbeige** `#F5F0E6` — Seitenhintergrund
+- **Pharos Blue** `#1A3550` — Titel, Buttons, Key-Elemente
+- **Slate** `#3D405B` — Fliesstext, Labels
+- **Morgenrot** `#E07A5F` — CTA/Accent, extrem sparsam (1x pro View)
+- **Horizon Green** `#6B9080` — Fortschritt/Validierung, sparsam
+
 ## Tasks
 
 Alle offenen Aufgaben sind in **[TASKS.md](./TASKS.md)** dokumentiert (T-01 bis T-11). Neue Session? Dort starten.
@@ -91,6 +102,7 @@ Dieses Projekt ist klein (Single-Page-App, Frühphase). Die Dokumentation soll *
 | Datei | Zweck |
 |---|---|
 | `CLAUDE.md` | **Zentrale Referenz.** Tech-Stack, Struktur, Regeln, bekannte Issues. Wird bei Architekturänderungen aktualisiert. |
+| `DESIGN-SYSTEM.md` | **Verbindliches Design-System.** Farben, Typografie, Abstände, Komponenten, Anti-Patterns. Bei allen UI-Entscheidungen konsultieren. |
 | `TASKS.md` | **Backlog.** Alle offenen Aufgaben, nummeriert (T-01 bis T-xx), mit Status und Abhängigkeiten. |
 | `STATUS.md` | **Session-Handoff.** Was wurde zuletzt gemacht? Was ist der nächste Schritt? Wird am Ende jeder Arbeitssession aktualisiert. |
 

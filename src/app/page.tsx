@@ -295,15 +295,15 @@ export default function Home() {
   // ── Render ──────────────────────────────────────────────────
 
   return (
-    <main className="h-dvh flex flex-col bg-white">
+    <main className="h-dvh flex flex-col bg-phoro-warmbeige">
       <div className="flex-1 flex flex-col overflow-hidden w-full max-w-2xl mx-auto">
 
         {/* ════════════════ STATE A: INPUT ════════════════ */}
         {view === 'input' && (
           <>
-            <header className="px-4 pt-4 pb-2 border-b bg-gray-100 flex flex-col items-center shrink-0">
+            <header className="px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex flex-col items-center shrink-0">
               <img src="/logo-phoro.svg" alt="PHORO Read" className="h-10" />
-              <p className="text-center text-gray-500 mt-1 text-sm">Fotografiere einen Text. Wir machen ihn einfach.</p>
+              <p className="text-center text-phoro-slate/60 mt-1 text-sm">Fotografiere einen Text. Wir machen ihn einfach.</p>
             </header>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden">
@@ -324,9 +324,9 @@ export default function Home() {
                 <div className="mt-3 text-center shrink-0">
                   {cameraError && <p className="text-sm text-red-600 mb-2">{cameraError}</p>}
                   <div>
-                    <label htmlFor="file-upload" className="cursor-pointer text-sm text-slate-600">
+                    <label htmlFor="file-upload" className="cursor-pointer text-sm text-phoro-slate/60">
                       Kamera funktioniert nicht?{' '}
-                      <span className="font-semibold text-blue-600 hover:underline">Bild hochladen.</span>
+                      <span className="font-semibold text-phoro-blue hover:underline">Bild hochladen.</span>
                     </label>
                     <input id="file-upload" type="file" accept="image/*" capture="environment" onChange={handleFileUpload} className="hidden" />
                   </div>
@@ -376,7 +376,7 @@ export default function Home() {
         {view === 'reading' && (
           <>
             {/* ── Header ── */}
-            <header className="px-4 py-3 border-b bg-gray-100 flex items-center shrink-0">
+            <header className="px-4 py-3 border-b border-phoro-slate/15 bg-[#EAE6DF] flex items-center shrink-0">
               <Button variant="ghost" size="icon" onClick={handleBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
@@ -386,13 +386,13 @@ export default function Home() {
 
             {/* ── Content ── */}
             <div className={cn(
-              "flex-1 overflow-y-auto p-6 text-lg leading-relaxed text-[#1c3d5a]",
+              "flex-1 overflow-y-auto p-6 text-lg leading-relaxed text-phoro-blue",
               wideSpacing && "tracking-[0.12em] leading-loose"
             )}>
               {isModeSwitching ? (
                 <div className="flex items-center justify-center py-16">
-                  <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
-                  <span className="ml-3 text-gray-500">Wird vereinfacht...</span>
+                  <LoaderCircle className="h-8 w-8 animate-spin text-phoro-slate/50" />
+                  <span className="ml-3 text-phoro-slate/60">Wird vereinfacht...</span>
                 </div>
               ) : (
                 <div>
@@ -414,7 +414,7 @@ export default function Home() {
                                   "transition-all",
                                   focusModeActive && "cursor-pointer",
                                   focusModeActive && focusedIndex !== null && focusedIndex !== idx && "opacity-20",
-                                  focusModeActive && focusedIndex === idx && "bg-yellow-200 rounded px-0.5",
+                                  focusModeActive && focusedIndex === idx && "bg-phoro-green/10 rounded px-0.5",
                                 )}
                               >
                                 {sentence}
@@ -430,7 +430,7 @@ export default function Home() {
             </div>
 
             {/* ── Toolbar ── */}
-            <div className="border-t bg-white p-3 space-y-2 shrink-0">
+            <div className="border-t border-phoro-slate/15 bg-white p-3 space-y-2 shrink-0">
               {/* Row 1: Level Switch */}
               <ToggleGroup
                 type="single"

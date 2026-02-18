@@ -54,9 +54,9 @@ Farbschema der gesamten App an PHORO-Branding anpassen. Betrifft:
 - Aktive/inaktive Zustände
 - Text- und Akzentfarben
 
-**Aktion nötig:** User nach konkreten Farbcodes fragen.
+Umgesetzt: PHORO Design System als `DESIGN-SYSTEM.md` im Repo abgelegt und in `CLAUDE.md` referenziert. shadcn/ui-Variablen in `globals.css` auf PHORO-Farben gemappt (Warmbeige, Pharos Blue, Slate, Morgenrot, Horizon Green). Alle hardcoded Farben in `page.tsx` durch PHORO-Tokens ersetzt. Dark Mode entfernt.
 
-**Status:** `[ ]`
+**Status:** `[x]`
 
 ---
 
