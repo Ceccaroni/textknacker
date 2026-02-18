@@ -117,14 +117,9 @@ Der Kamera-/Fotomodus muss:
 
 ## T-10: Schrift Lexend konsequent durchsetzen
 
-Die Schrift **Lexend** muss überall konsequent angewendet werden:
-- Alle UI-Elemente
-- Alle Textausgaben
-- Buttons, Labels, Placeholder, Fehlermeldungen
+`globals.css`: `--font-sans` auf `var(--font-lexend)` gemappt (war fälschlich auf `--font-geist-sans`). Lexend wird jetzt über die gesamte App via `font-sans` angewendet — alle UI-Elemente, Buttons, Labels, Textausgaben.
 
-Aktuell bekanntes Problem: `globals.css` referenziert `--font-geist-sans`, aber die App nutzt Lexend. Font-Variable muss korrekt gemappt werden.
-
-**Status:** `[ ]`
+**Status:** `[x]`
 
 ---
 
