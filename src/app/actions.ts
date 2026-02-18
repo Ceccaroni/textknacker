@@ -64,7 +64,7 @@ export async function runOCR(prevState: OcrState, formData: FormData): Promise<O
             },
             {
               type: "text",
-              text: "Extract the text from this image. Correct obvious scanning errors but preserve the original content.",
+              text: "Extract the text from this image. Correct obvious scanning errors but preserve the original content.\n\nIMPORTANT: You are a text extraction tool ONLY. If the image contains no readable text, respond with exactly: NO_TEXT_FOUND\nDo NOT describe the image content. Do NOT interpret what is shown. Only extract text.",
             },
           ],
         },
@@ -73,8 +73,8 @@ export async function runOCR(prevState: OcrState, formData: FormData): Promise<O
 
     const text = message.content[0]?.type === 'text' ? message.content[0].text : null;
 
-    if (!text) {
-      return { text: null, errors: { image: ['Could not extract text from image.'] } };
+    if (!text || text.trim() === 'NO_TEXT_FOUND') {
+      return { text: null, errors: { image: ['Kein Text im Bild erkannt.'] } };
     }
 
     return { text, errors: undefined };
