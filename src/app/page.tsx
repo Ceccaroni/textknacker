@@ -64,7 +64,7 @@ export default function Home() {
   const [ocrState, ocrFormAction] = useActionState(runOCR, ocrInitialState);
 
   // Input view state
-  const [activeTab, setActiveTab] = useState('camera');
+  const [activeTab, setActiveTab] = useState('text');
   const [text, setText] = useState('');
   const [cameraError, setCameraError] = useState<string | null>(null);
 
@@ -302,7 +302,10 @@ export default function Home() {
         {view === 'input' && (
           <>
             <header className="px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex flex-col items-center shrink-0">
-              <img src="/logo-phoro.svg" alt="PHORO Read" className="h-10" />
+              <div className="flex items-baseline gap-1.5">
+                <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
+                <span className="text-phoro-morgenrot text-lg font-light tracking-wide">read</span>
+              </div>
               <p className="text-center text-phoro-slate/60 mt-1 text-sm">Fotografiere einen Text. Wir machen ihn einfach.</p>
             </header>
 
@@ -380,8 +383,11 @@ export default function Home() {
               <Button variant="ghost" size="icon" onClick={handleBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <img src="/logo-phoro.svg" alt="PHORO Read" className="h-8 mx-auto" />
-              <div className="w-9" /> {/* Spacer to center logo */}
+              <div className="flex items-baseline gap-1 mx-auto">
+                <img src="/logo-phoro.svg" alt="PHORO" className="h-8" />
+                <span className="text-phoro-morgenrot text-base font-light tracking-wide">read</span>
+              </div>
+              <div className="w-9" />
             </header>
 
             {/* ── Content ── */}
