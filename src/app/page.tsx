@@ -243,25 +243,173 @@ export default function Home() {
 
   // ── Reading Mode: PDF Export ────────────────────────────────
 
+  type StyledSegment = { text: string; bold: boolean; italic: boolean };
+
+  function parseInlineSegments(text: string): StyledSegment[] {
+    const segments: StyledSegment[] = [];
+    const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*)/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        segments.push({ text: text.slice(lastIndex, match.index), bold: false, italic: false });
+      }
+      if (match[2]) segments.push({ text: match[2], bold: true, italic: true });
+      else if (match[3]) segments.push({ text: match[3], bold: true, italic: false });
+      else if (match[4]) segments.push({ text: match[4], bold: false, italic: true });
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      segments.push({ text: text.slice(lastIndex), bold: false, italic: false });
+    }
+    return segments.length > 0 ? segments : [{ text, bold: false, italic: false }];
+  }
+
+  async function svgToPngDataUrl(svgUrl: string, pixelWidth: number, pixelHeight: number): Promise<string> {
+    const response = await fetch(svgUrl);
+    const svgText = await response.text();
+    const svgBase64 = btoa(svgText);
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = pixelWidth;
+        canvas.height = pixelHeight;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0, pixelWidth, pixelHeight);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = reject;
+      img.src = `data:image/svg+xml;base64,${svgBase64}`;
+    });
+  }
+
   async function handlePdfExport() {
     const jsPDFModule = await import('jspdf');
     const doc = new jsPDFModule.default({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-    const currentText = resultCache[readingMode] || '';
-    const margin = 20;
-    const maxWidth = doc.internal.pageSize.getWidth() - 2 * margin;
+    // Layout constants
+    const PW = 210, PH = 297;
+    const ML = 20, MR = 20, MT = 20, MB = 20;
+    const CW = PW - ML - MR;
+    const BLUE = { r: 26, g: 53, b: 80 };
+    const SLATE = { r: 61, g: 64, b: 91 };
+    const H_SIZE = 14, B_SIZE = 11, M_SIZE = 9;
+    const LH = 1.5;
+    const LIST_INDENT = 8;
 
-    doc.setFontSize(18);
-    doc.text('PHORO Read', margin, margin);
+    function fontStyle(bold: boolean, italic: boolean): string {
+      if (bold && italic) return 'bolditalic';
+      if (bold) return 'bold';
+      if (italic) return 'italic';
+      return 'normal';
+    }
 
-    doc.setFontSize(10);
-    doc.setTextColor(128, 128, 128);
-    doc.text(readingMode === 'einfach' ? 'Einfache Sprache' : 'Leichte Sprache', margin, margin + 8);
+    function lineH(fontSize: number): number {
+      return fontSize * LH * 0.3528;
+    }
 
-    doc.setFontSize(13);
-    doc.setTextColor(0, 0, 0);
-    const lines = doc.splitTextToSize(currentText, maxWidth);
-    doc.text(lines, margin, margin + 18);
+    function checkPageBreak(y: number, needed: number): number {
+      if (y + needed > PH - MB) { doc.addPage(); return MT; }
+      return y;
+    }
+
+    function renderStyledText(
+      segments: StyledSegment[], startX: number, startY: number,
+      maxWidth: number, fontSize: number, color: { r: number; g: number; b: number }
+    ): number {
+      doc.setFontSize(fontSize);
+      doc.setTextColor(color.r, color.g, color.b);
+      const lh = lineH(fontSize);
+      let cx = startX, cy = startY;
+
+      for (const seg of segments) {
+        doc.setFont('Helvetica', fontStyle(seg.bold, seg.italic));
+        const words = seg.text.split(/(\s+)/);
+        for (const word of words) {
+          if (!word) continue;
+          const w = doc.getTextWidth(word);
+          if (cx > startX && cx + w > startX + maxWidth) {
+            cx = startX;
+            cy += lh;
+            cy = checkPageBreak(cy, lh);
+          }
+          if (word.trim()) {
+            doc.text(word, cx, cy);
+          }
+          cx += w;
+        }
+      }
+      return cy + lh;
+    }
+
+    let y = MT;
+
+    // ── 1. Logo (top-right) ──
+    try {
+      const logoPng = await svgToPngDataUrl('/logo-phoro.svg', 400, 137);
+      const logoW = 35, logoH = logoW / (192 / 66);
+      doc.addImage(logoPng, 'PNG', PW - MR - logoW, MT, logoW, logoH);
+    } catch { /* graceful degradation */ }
+
+    // ── 2. Title ──
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(BLUE.r, BLUE.g, BLUE.b);
+    doc.text('PHORO Read', ML, y + 7);
+
+    // ── 3. Subtitle ──
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(M_SIZE);
+    doc.setTextColor(SLATE.r, SLATE.g, SLATE.b);
+    doc.text(readingMode === 'einfach' ? 'Einfache Sprache' : 'Leichte Sprache', ML, y + 13);
+
+    // ── 4. Separator ──
+    y += 18;
+    doc.setDrawColor(BLUE.r, BLUE.g, BLUE.b);
+    doc.setLineWidth(0.4);
+    doc.line(ML, y, PW - MR, y);
+    y += 6;
+
+    // ── 5. Content blocks ──
+    for (const block of textBlocks) {
+      if (block.type === 'heading') {
+        y = checkPageBreak(y, lineH(H_SIZE) + 6);
+        y += 3;
+        const segs = parseInlineSegments(block.text).map(s => ({ ...s, bold: true }));
+        doc.setTextColor(BLUE.r, BLUE.g, BLUE.b);
+        y = renderStyledText(segs, ML, y, CW, H_SIZE, BLUE);
+        y += 1;
+      } else if (block.type === 'list') {
+        for (let i = 0; i < block.items.length; i++) {
+          y = checkPageBreak(y, lineH(B_SIZE));
+          doc.setFont('Helvetica', 'normal');
+          doc.setFontSize(B_SIZE);
+          doc.setTextColor(SLATE.r, SLATE.g, SLATE.b);
+          const prefix = block.ordered ? `${i + 1}.` : '\u2022';
+          doc.text(prefix, ML + 2, y);
+          const segs = parseInlineSegments(block.items[i]);
+          y = renderStyledText(segs, ML + LIST_INDENT, y, CW - LIST_INDENT, B_SIZE, SLATE);
+        }
+        y += 2;
+      } else if (block.type === 'paragraph') {
+        const fullText = block.sentences.join('');
+        const segs = parseInlineSegments(fullText);
+        y = checkPageBreak(y, lineH(B_SIZE));
+        y = renderStyledText(segs, ML, y, CW, B_SIZE, SLATE);
+        y += 2;
+      }
+    }
+
+    // ── 6. Page numbers ──
+    const totalPages = doc.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text(`${i} / ${totalPages}`, PW / 2, PH - 10, { align: 'center' });
+    }
 
     doc.save('phoro-read.pdf');
   }

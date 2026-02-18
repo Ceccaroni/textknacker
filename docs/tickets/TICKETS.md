@@ -15,7 +15,7 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| (keine) | | | |
+| [PR-006](PR-006.md) | 🐛 Bug | ⚡ Mittel | PDF-Export verbessern |
 
 ## 🟢 Erledigt
 
