@@ -41,7 +41,7 @@ src/
 
 public/                   # Statische Assets (SVGs)
 firebase.json             # Firebase Hosting Config (inkl. Secrets, Region, Service Account)
-.firebaserc               # Firebase Projekt-ID: textknacker-76464080-e8b74
+.firebaserc               # Firebase Projekt-ID
 .github/workflows/
   firebase-deploy.yml     # CI/CD: npm ci → build → deploy
 blueprint.md              # Ursprüngliche Feature-Spezifikation
@@ -59,7 +59,7 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 - **Ziel:** Firebase Hosting (SSR-fähig via `frameworksBackend`)
 - **Trigger:** Push auf `main` → GitHub Actions Workflow
 - **Pipeline:** Checkout → Node 20 → `npm ci` → `npm run build` → Firebase Deploy
-- **Live-URLs:** `textknacker-76464080-e8b74.web.app` / `.firebaseapp.com`
+- **Live-URLs:** Siehe Firebase Console (Hosting-URL)
 - **Secrets (GitHub):** `FIREBASE_SERVICE_ACCOUNT`, `GEMINI_API_KEY` (veraltet, sollte durch `ANTHROPIC_API_KEY` ersetzt werden)
 - **Secrets (Firebase):** `ANTHROPIC_API_KEY`
 

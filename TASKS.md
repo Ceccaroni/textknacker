@@ -96,15 +96,9 @@ Vereinfachten Text in folgenden Formaten zum Download anbieten:
 
 ## T-08: Name "Textknacker" vollständig entfernen
 
-Der Name "Textknacker" muss auf **sichtbarer Ebene gänzlich verschwinden**:
-- UI-Texte, Titel, Meta-Tags
-- README, Dokumentation
-- Blueprint, DEPLOYMENT.md
-- Alle Stellen prüfen (Grep durchführen)
+Alter Projektname aus allen sichtbaren Stellen entfernt. Verbleibende Referenzen sind ausschliesslich Firebase-Projekt-IDs in Infrastruktur-Configs (`.firebaserc`, `firebase.json`, `firebase-deploy.yml`) — diese können nur über die Firebase/GCP Console geändert werden.
 
-Hinweis: Firebase-Projekt-IDs (`textknacker-76464080-e8b74`) sind infrastruktur-gebunden und können nur über die Firebase Console geändert werden.
-
-**Status:** `[ ]`
+**Status:** `[x]`
 
 ---
 

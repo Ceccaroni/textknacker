@@ -2,7 +2,7 @@
 
 ## Overview
 
-"PHORO Read" (formerly "Textknacker") is a web application designed to simplify german texts using AI. It offers a streamlined, single-view user experience for text input (either typed or from a camera) and a reading mode for the simplified output, with various accessibility features.
+"PHORO Read" is a web application designed to simplify german texts using AI. It offers a streamlined, single-view user experience for text input (either typed or from a camera) and a reading mode for the simplified output, with various accessibility features.
 
 ## Project Outline
 
