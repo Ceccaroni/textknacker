@@ -4,36 +4,40 @@
 
 ## Zuletzt erledigt (diese Session)
 
-- **T-02**: Spracherkennung — Ausgabe immer in Eingabesprache
-- **T-03**: Regelwerk Einfache/Leichte Sprache in Prompts eingebettet
-- **T-04**: Toggle Einfach/Leicht ersetzt alten Text/Liste-Switch, Listenmodus entfernt
-- **T-05**: PHORO Design System als `DESIGN-SYSTEM.md` abgelegt, alle Farben auf PHORO-Branding umgestellt (globals.css + page.tsx)
-- **Schweizer Rechtschreibung** (ss statt ß) in beiden Simplify-Prompts erzwungen
-- **Default-Tab** auf Text (statt Kamera) geändert
-- **Branding**: "read" in Morgenrot-Akzentfarbe neben PHORO-Logo (beide Headers)
+- **Desktop Side-by-Side Layout**: Eingabe links, Ergebnis rechts (Mobile unverändert)
+- **Ticket-System** eingerichtet (`docs/tickets/`), 8 Tickets importiert, Regeln in CLAUDE.md
+- **PR-001**: "Read" Label vertikal an Logo-Textbaseline ausgerichtet
+- **PR-002**: Button "Text knacken" → "Vereinfachen", Icon entfernt
+- **PR-003**: Desktop-Banner edge-to-edge (volle Breite)
+- **PR-004**: Panel-Höhen auf Desktop angeglichen
+- **Desktop-Ergebnisfeld**: Rahmen passend zum Textarea, Toolbar aufgeteilt (Sprachniveau oben, Aktionen unten)
+- **Tab-Ausrichtung**: Kamera/Text-Tabs vom Banner gelöst, am Textfeldrand ausgerichtet
+- **Texte aktualisiert**: Tagline → "Gib mir einen Text – ich kümmere mich um den Rest.", Placeholder → "Hier Text reinkopieren oder Datei reinziehen."
+- **Session-Abschluss-Regeln** in CLAUDE.md dokumentiert
 
-## Deployment-Hinweis
+## Deployment
 
-Die letzten Änderungen (ab Commit `33762b2`) sind auf GitHub gepusht, aber **nicht in Firebase deployed**. GitHub Actions Deploy für T-02 (`8655bcf`) schlug fehl; nachfolgende Deploys liefen durch, aber der letzte Commit (`0eb47f7`) muss noch verifiziert werden.
+Alle Änderungen auf GitHub gepusht und via GitHub Actions auf Firebase deployed. Letzter Commit: `886f0f8`. Firebase Deploys laufen durch, brauchen aber ~5 Min.
 
-**Aktion nötig:** Firebase-Deployment prüfen bzw. manuell deployen (`firebase deploy`).
+## Erledigte Tickets
 
-## Erledigte Tasks
+- [x] PR-001: "Read" Label Alignment
+- [x] PR-002: Button umbenennen
+- [x] PR-003: Banner volle Breite
+- [x] PR-004: Panel-Höhe angleichen
 
-- [x] T-01: Responsive Fullscreen-Layout
-- [x] T-02: Ausgabe in Eingabesprache + CH-Rechtschreibung
-- [x] T-03: Einfache vs. Leichte Sprache Regelwerk
-- [x] T-04: Umschalter Einfache/Leichte Sprache
-- [x] T-05: Farbgestaltung PHORO-Branding + Design-System im Repo
-- [x] T-08: Name "Textknacker" entfernt
-- [x] T-10: Lexend konsequent durchgesetzt
-- [x] T-11: Textausgabe-Formatierung
+## Offene Tickets
 
-## Offene Tasks
+- [ ] **PR-005**: Funktionsleiste (Sprachniveaus) Redesign ⚡
+- [ ] **PR-006**: PDF-Export verbessern ⚡
+- [ ] **PR-007**: Zusätzliche Export-Formate (DOCX, MD, TXT) 💤
+- [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 
-- [ ] **T-06**: Datei-Upload (Word, PDF+OCR, ODT, TXT, MD)
-- [ ] **T-07**: Download-Optionen (Word, PDF, TXT, MD)
-- [ ] **T-09**: Fotomodus Vollbild + Crop + Helligkeit/Kontrast
+## Nächste Schritte
+
+1. **PR-005** — Toolbar-Redesign: Designvorschläge erarbeiten (Desktop + Mobile)
+2. **PR-006** — PDF-Export: Logo, A4-Format, Markdown-Rendering fixen
+3. Danach PR-007 (Export-Formate) und PR-008 (Open Dyslexic)
 
 ## Bekannte technische Schulden
 
@@ -41,12 +45,13 @@ Die letzten Änderungen (ab Commit `33762b2`) sind auf GitHub gepusht, aber **ni
 2. **Ungenutzte Dependencies**: genkit, @google-cloud/vertexai, @google/generative-ai
 3. **GitHub Actions** referenziert GEMINI_API_KEY statt ANTHROPIC_API_KEY
 4. **GEMINI.md** kann gelöscht werden
+5. **GitHub Remote-URL** veraltet — GitHub meldet Repo-Umzug nach `Ceccaroni/textknacker`
 
 ## Wichtige Dateien
 
-- `src/app/page.tsx` — Gesamte App-Logik (Input + Reading Mode)
+- `src/app/page.tsx` — Gesamte App-Logik (Desktop: Side-by-Side, Mobile: View-Switching)
 - `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API)
 - `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
-- `DESIGN-SYSTEM.md` — Verbindliches Design-System (Farben, Typo, Spacing, Anti-Patterns)
-- `TASKS.md` — Alle Tasks mit Status
+- `DESIGN-SYSTEM.md` — Verbindliches Design-System
+- `docs/tickets/TICKETS.md` — Ticket-Übersicht
 - `CLAUDE.md` — Architektur-Referenz

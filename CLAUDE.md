@@ -31,7 +31,7 @@ PHORO Read ist eine Web-App, die Texte mithilfe von KI vereinfacht (Einfache Spr
 src/
 ├── app/
 │   ├── layout.tsx        # Root-Layout (Lexend Font, html lang="de")
-│   ├── page.tsx          # Einzige Seite — Single-View mit Tabs (Text/Camera)
+│   ├── page.tsx          # Einzige Seite — Desktop: Side-by-Side (Input|Result), Mobile: View-Switching
 │   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API
 │   ├── globals.css       # Tailwind + shadcn/ui CSS-Variablen (oklch)
 │   └── favicon.ico
@@ -40,6 +40,11 @@ src/
     └── utils.ts          # cn() Helper (clsx + tailwind-merge)
 
 public/                   # Statische Assets (SVGs)
+docs/
+└── tickets/              # Ticket-System (PR-001 bis PR-xxx)
+    ├── TICKETS.md        # Ticket-Index
+    ├── TEMPLATE.md       # Vorlage für neue Tickets
+    └── completed/        # Erledigte Tickets
 firebase.json             # Firebase Hosting Config (inkl. Secrets, Region, Service Account)
 .firebaserc               # Firebase Projekt-ID
 .github/workflows/
@@ -101,6 +106,15 @@ Alle Aufgaben werden als Tickets in **[docs/tickets/TICKETS.md](./docs/tickets/T
 - **Nach Abschluss:** Status auf 🟢, Erledigungsdatum eintragen, Datei nach `docs/tickets/completed/` verschieben, `TICKETS.md` aktualisieren.
 - **Bei jedem Session-Start:** `TICKETS.md` lesen, um zu wissen, wo wir stehen.
 - Fällt dir etwas auf → Ticket vorschlagen, User bestätigt.
+
+### Session abschliessen
+
+Am Ende jeder Arbeitssession alle Projektdokumente aktualisieren:
+
+1. **`STATUS.md`** — Was wurde erledigt? Nächste Schritte? Deployment-Stand?
+2. **`docs/tickets/TICKETS.md`** — Stimmt die Übersicht? Alle Status korrekt? Erledigte Tickets in `completed/` verschoben?
+3. **`CLAUDE.md`** — Falls sich Architektur, Struktur oder Regeln geändert haben: anpassen. Falls nicht: so lassen.
+4. **Commit und Push** aller Doku-Änderungen.
 
 ### Legacy
 
