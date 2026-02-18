@@ -11,13 +11,11 @@
 | [PR-007](PR-007.md) | ✨ Feature | 💤 Niedrig | Zusätzliche Export-Formate (DOCX, MD, TXT) |
 | [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
 | [PR-009](PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
-| [PR-012](PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
-
 ## 🟡 In Arbeit
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| [PR-012](PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
+| (keine) | | | |
 
 ## 🟢 Erledigt
 
@@ -32,6 +30,7 @@
 | [PR-011](completed/PR-011.md) | 🐛 Bug | 🔥 Hoch | Bildbeschreibung bei Fotos ohne Text deaktivieren |
 | [PR-013](completed/PR-013.md) | 🐛 Bug / ✨ Feature | 🔥 Hoch | System-Prompt für Textvereinfachung überarbeiten |
 | [PR-014](completed/PR-014.md) | 🐛 Bug | 🔥 Hoch | Markdown-Formatierung in Textausgabe wird nicht gerendert |
+| [PR-012](completed/PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
 
 ## Abhängigkeiten
 
