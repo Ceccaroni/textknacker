@@ -324,14 +324,14 @@ export default function Home() {
               <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
             </header>
 
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden p-4 gap-4">
               <TabsList className="grid w-full grid-cols-2 shrink-0">
                 <TabsTrigger value="camera">Kamera</TabsTrigger>
                 <TabsTrigger value="text">Text eingeben</TabsTrigger>
               </TabsList>
 
               {/* ── Camera Tab ── */}
-              <TabsContent value="camera" className="flex flex-col overflow-y-auto p-4">
+              <TabsContent value="camera" className="flex-1 flex flex-col overflow-y-auto">
                 <form action={captureAndSubmit} className="flex-1 flex flex-col min-h-0">
                   <div className="relative flex-1 min-h-[12rem] bg-black rounded-lg overflow-hidden shadow-lg">
                     <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
@@ -359,7 +359,7 @@ export default function Home() {
               </TabsContent>
 
               {/* ── Text Tab ── */}
-              <TabsContent value="text" className="flex flex-col overflow-hidden p-4">
+              <TabsContent value="text" className="flex-1 flex flex-col overflow-hidden gap-4">
                 <form action={simplifyFormAction} className="flex-1 flex flex-col gap-4 min-h-0">
                   <div className="relative flex-1 min-h-0">
                     <Textarea
@@ -410,8 +410,8 @@ export default function Home() {
 
             {/* ── Right panel content: mirrors left panel structure ── */}
             <div className="flex-1 flex flex-col overflow-hidden p-4 gap-4">
-              {/* Top: Level Switch (mirrors TabsList height) */}
-              {(currentText || isModeSwitching) && (
+              {/* Top: Level Switch or spacer (mirrors TabsList height) */}
+              {(currentText || isModeSwitching) ? (
                 <div className="shrink-0">
                   <ToggleGroup
                     type="single"
@@ -432,6 +432,8 @@ export default function Home() {
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </div>
+              ) : (
+                <div className="shrink-0 h-9" />
               )}
 
               {/* Center: Result box (matches textarea size) */}
@@ -486,8 +488,8 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Bottom: Action buttons (mirrors "Vereinfachen" button position) */}
-              {(currentText || isModeSwitching) && (
+              {/* Bottom: Action buttons or spacer (mirrors "Vereinfachen" button position) */}
+              {(currentText || isModeSwitching) ? (
                 <div className="shrink-0">
                   <div className="flex gap-2">
                     <Button
@@ -531,6 +533,8 @@ export default function Home() {
                     </Button>
                   </div>
                 </div>
+              ) : (
+                <div className="shrink-0 h-9" />
               )}
             </div>
           </div>
