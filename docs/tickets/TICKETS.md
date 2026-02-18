@@ -17,7 +17,7 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| (keine) | | | |
+| [PR-012](PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
 
 ## 🟢 Erledigt
 

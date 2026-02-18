@@ -536,11 +536,11 @@ export default function Home() {
               {/* Bottom: Action buttons or spacer (mirrors "Vereinfachen" button position) */}
               {(currentText || isModeSwitching) ? (
                 <div className="shrink-0">
-                  <div className="flex gap-2">
+                  <div className="grid grid-cols-4 gap-2">
                     <Button
                       variant={isSpeaking ? 'default' : 'outline'}
                       size="sm"
-                      className="flex-1 gap-1.5"
+                      className="min-w-0 gap-1.5"
                       onClick={toggleTTS}
                     >
                       {isSpeaking ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
@@ -550,7 +550,7 @@ export default function Home() {
                     <Button
                       variant={focusModeActive ? 'default' : 'outline'}
                       size="sm"
-                      className="flex-1 gap-1.5"
+                      className="min-w-0 gap-1.5"
                       onClick={() => { setFocusModeActive(!focusModeActive); setFocusedIndex(null); }}
                     >
                       <Crosshair className="h-4 w-4" />
@@ -560,7 +560,7 @@ export default function Home() {
                     <Button
                       variant={wideSpacing ? 'default' : 'outline'}
                       size="sm"
-                      className="flex-1 gap-1.5"
+                      className="min-w-0 gap-1.5"
                       onClick={() => setWideSpacing(!wideSpacing)}
                     >
                       <Type className="h-4 w-4" />
@@ -570,7 +570,7 @@ export default function Home() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 gap-1.5"
+                      className="min-w-0 gap-1.5"
                       onClick={handlePdfExport}
                     >
                       <FileDown className="h-4 w-4" />
