@@ -115,7 +115,9 @@ Regeln:
 - Übersichtliche Gliederung mit Absätzen und Zwischentiteln (## Markdown-Headings)
 - Wichtige Informationen hervorheben
 
-WICHTIG: Antworte immer in der gleichen Sprache wie der Eingabetext.
+WICHTIG:
+- Antworte IMMER in der gleichen Sprache wie der Eingabetext.
+- Bei deutschen Texten: Verwende IMMER Schweizer Rechtschreibung (ss statt ß, z.B. «strasse» statt «straße», «gruss» statt «gruß»).
 Gib NUR den vereinfachten Text aus, keine Erklärungen oder Kommentare.
 
 Text: "${text}"`
@@ -153,7 +155,9 @@ Layout:
 - Übersichtliche Gliederung mit Zwischen-Titeln (## Markdown-Headings)
 - Absätze zwischen Themen-Blöcken
 
-WICHTIG: Antworte immer in der gleichen Sprache wie der Eingabetext.
+WICHTIG:
+- Antworte IMMER in der gleichen Sprache wie der Eingabetext.
+- Bei deutschen Texten: Verwende IMMER Schweizer Rechtschreibung (ss statt ß, z.B. «strasse» statt «straße», «gruss» statt «gruß»).
 Gib NUR den vereinfachten Text aus, keine Erklärungen oder Kommentare.
 
 Text: "${text}"`;
