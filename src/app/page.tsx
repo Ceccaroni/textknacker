@@ -524,8 +524,10 @@ export default function Home() {
               </>
             ) : (
               /* Desktop: empty placeholder. Mobile: panel is hidden anyway. */
-              <div className="flex-1 flex items-center justify-center">
-                <p className="text-phoro-slate/40 text-sm">Ergebnis erscheint hier.</p>
+              <div className="flex-1 flex items-center justify-center p-4">
+                <div className="w-full h-full rounded-md border border-input flex items-center justify-center">
+                  <p className="text-phoro-slate/40 text-sm">Ergebnis erscheint hier.</p>
+                </div>
               </div>
             )}
           </div>
