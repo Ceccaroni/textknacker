@@ -86,7 +86,7 @@ export async function runOCR(prevState: OcrState, formData: FormData): Promise<O
 
 const SimplifySchema = z.object({
   text: z.string().min(1, { message: "Text is required"}),
-  mode: z.enum(['text', 'list']),
+  mode: z.enum(['einfach', 'leicht']),
 });
 
 export async function simplifyText(prevState: SimplifyState, formData: FormData): Promise<SimplifyState> {
@@ -104,9 +104,59 @@ export async function simplifyText(prevState: SimplifyState, formData: FormData)
 
   const { text, mode } = validatedFields.data;
 
-  const prompt = mode === 'text'
-    ? `Rewrite the following text in simple language (A2 level). Use complete sentences. IMPORTANT: Always respond in the same language as the input text.\n\nText: "${text}"`
-    : `Summarize the following content in extremely simple bullet points. No long sentences. IMPORTANT: Always respond in the same language as the input text.\n\nContent: "${text}"`;
+  const prompt = mode === 'einfach'
+    ? `Du bist ein Experte für Textvereinfachung. Schreibe den folgenden Text in EINFACHER SPRACHE (Niveau B1-B2) um.
+
+Regeln:
+- Kürzere Sätze bevorzugen, aber komplexere Strukturen sind erlaubt
+- Einfache, bekannte Wörter verwenden
+- Fachbegriffe dürfen vorkommen, müssen aber erklärt werden
+- Konkrete, alltagsnahe Formulierungen bevorzugen
+- Übersichtliche Gliederung mit Absätzen und Zwischentiteln (## Markdown-Headings)
+- Wichtige Informationen hervorheben
+
+WICHTIG: Antworte immer in der gleichen Sprache wie der Eingabetext.
+Gib NUR den vereinfachten Text aus, keine Erklärungen oder Kommentare.
+
+Text: "${text}"`
+    : `Du bist ein Experte für Textvereinfachung. Schreibe den folgenden Text in LEICHTER SPRACHE (Niveau A1-A2) um.
+
+Strikte Regeln — halte dich an ALLE:
+
+Wörter:
+- Nur einfache, bekannte, kurze Wörter
+- Keine Fremd- und Fachwörter (wenn nötig: erklären)
+- Lange Wörter (mehr als 3 Silben) mit Binde-Strich trennen
+- Keine Synonyme — immer das gleiche Wort für die gleiche Sache
+- Keine Redewendungen oder bildhafte Sprache
+- Verben statt Hauptwörter verwenden
+
+Sätze:
+- Maximal 10–12 Wörter pro Satz
+- Pro Satz nur EINE Information
+- Einfacher Satzbau: Subjekt – Verb – Objekt
+- Keine Nebensätze
+- Neuer Satz = neue Zeile
+
+Stil:
+- Aktiv formulieren (kein Passiv)
+- Positiv formulieren (keine Verneinungen)
+- Kein Konjunktiv
+- Kein Genitiv
+- Leser persönlich ansprechen (Du/Sie beibehalten)
+
+Zahlen & Zeichen:
+- Arabische Zahlen verwenden (nicht ausschreiben)
+- Datum vereinfachen (z.B. 3. März 2016)
+
+Layout:
+- Übersichtliche Gliederung mit Zwischen-Titeln (## Markdown-Headings)
+- Absätze zwischen Themen-Blöcken
+
+WICHTIG: Antworte immer in der gleichen Sprache wie der Eingabetext.
+Gib NUR den vereinfachten Text aus, keine Erklärungen oder Kommentare.
+
+Text: "${text}"`;
 
   try {
     const message = await anthropic.messages.create({

@@ -11,7 +11,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import {
   Camera, LoaderCircle, Sparkles, X,
-  ArrowLeft, Play, Pause, Type, Crosshair, FileDown, List, AlignLeft,
+  ArrowLeft, Play, Pause, Type, Crosshair, FileDown, BookOpen, GraduationCap,
 } from 'lucide-react';
 
 // ── Initial States ──────────────────────────────────────────────
@@ -72,8 +72,8 @@ export default function Home() {
   const [view, setView] = useState<'input' | 'reading'>('input');
 
   // Reading mode state
-  const [readingMode, setReadingMode] = useState<'text' | 'list'>('text');
-  const [resultCache, setResultCache] = useState<{ text: string | null; list: string | null }>({ text: null, list: null });
+  const [readingMode, setReadingMode] = useState<'einfach' | 'leicht'>('einfach');
+  const [resultCache, setResultCache] = useState<{ einfach: string | null; leicht: string | null }>({ einfach: null, leicht: null });
   const [originalText, setOriginalText] = useState('');
   const [isModeSwitching, setIsModeSwitching] = useState(false);
 
@@ -127,8 +127,8 @@ export default function Home() {
   useEffect(() => {
     if (simplifyState?.message && !simplifyState?.errors) {
       setOriginalText(text);
-      setResultCache({ text: simplifyState.message, list: null });
-      setReadingMode('text');
+      setResultCache({ einfach: simplifyState.message, leicht: null });
+      setReadingMode('einfach');
       setView('reading');
     }
   }, [simplifyState]);
@@ -180,7 +180,7 @@ export default function Home() {
 
   // ── Reading Mode: Mode Switch with Cache ────────────────────
 
-  async function switchMode(newMode: 'text' | 'list') {
+  async function switchMode(newMode: 'einfach' | 'leicht') {
     if (newMode === readingMode) return;
 
     window.speechSynthesis.cancel();
@@ -257,7 +257,7 @@ export default function Home() {
 
     doc.setFontSize(10);
     doc.setTextColor(128, 128, 128);
-    doc.text(readingMode === 'text' ? 'Einfache Sprache' : 'Stichpunkte', margin, margin + 8);
+    doc.text(readingMode === 'einfach' ? 'Einfache Sprache' : 'Leichte Sprache', margin, margin + 8);
 
     doc.setFontSize(13);
     doc.setTextColor(0, 0, 0);
@@ -272,7 +272,6 @@ export default function Home() {
   const currentText = resultCache[readingMode] || '';
 
   type TextBlock = { type: 'heading'; text: string } | { type: 'paragraph'; sentences: string[] };
-  type ListBlock = { type: 'heading'; text: string } | { type: 'item'; text: string };
 
   function parseHeading(line: string): string | null {
     const md = line.match(/^#{1,3}\s+(.+)$/);
@@ -283,7 +282,7 @@ export default function Home() {
   }
 
   const textBlocks = useMemo((): TextBlock[] => {
-    if (!currentText || readingMode !== 'text') return [];
+    if (!currentText) return [];
     return currentText.split(/\n\n+/).filter(b => b.trim()).map(block => {
       const trimmed = block.trim();
       const heading = parseHeading(trimmed);
@@ -291,17 +290,7 @@ export default function Home() {
       const sentences = trimmed.match(/[^.!?]*[.!?]+[\s]?|[^.!?]+$/g)?.filter(s => s.trim()) || [trimmed];
       return { type: 'paragraph', sentences };
     });
-  }, [currentText, readingMode]);
-
-  const listBlocks = useMemo((): ListBlock[] => {
-    if (!currentText || readingMode !== 'list') return [];
-    return currentText.split('\n').filter(l => l.trim()).map(line => {
-      const trimmed = line.trim();
-      const heading = parseHeading(trimmed);
-      if (heading) return { type: 'heading', text: heading };
-      return { type: 'item', text: trimmed.replace(/^[-•*]\s*/, '') };
-    });
-  }, [currentText, readingMode]);
+  }, [currentText]);
 
   // ── Render ──────────────────────────────────────────────────
 
@@ -369,7 +358,7 @@ export default function Home() {
                     )}
                   </div>
                   <div className="shrink-0">
-                    <input type="hidden" name="mode" value="text" />
+                    <input type="hidden" name="mode" value="einfach" />
                     <SimplifySubmitButton />
                     {simplifyState?.errors?.text && (
                       <div className="p-2 text-center text-red-500">
@@ -404,32 +393,6 @@ export default function Home() {
                 <div className="flex items-center justify-center py-16">
                   <LoaderCircle className="h-8 w-8 animate-spin text-gray-400" />
                   <span className="ml-3 text-gray-500">Wird vereinfacht...</span>
-                </div>
-              ) : readingMode === 'list' ? (
-                <div className="space-y-3">
-                  {(() => {
-                    let itemIdx = 0;
-                    return listBlocks.map((block, i) => {
-                      if (block.type === 'heading') {
-                        return <h3 key={i} className="font-bold text-xl mt-5 first:mt-0 mb-1">{block.text}</h3>;
-                      }
-                      const idx = itemIdx++;
-                      return (
-                        <div
-                          key={i}
-                          onClick={() => focusModeActive && setFocusedIndex(focusedIndex === idx ? null : idx)}
-                          className={cn(
-                            "p-3 rounded-lg bg-gray-50 border border-gray-100 transition-all",
-                            focusModeActive && "cursor-pointer",
-                            focusModeActive && focusedIndex !== null && focusedIndex !== idx && "opacity-20",
-                            focusModeActive && focusedIndex === idx && "bg-yellow-100 border-yellow-300",
-                          )}
-                        >
-                          {block.text}
-                        </div>
-                      );
-                    });
-                  })()}
                 </div>
               ) : (
                 <div>
@@ -472,19 +435,19 @@ export default function Home() {
               <ToggleGroup
                 type="single"
                 value={readingMode}
-                onValueChange={(val) => val && switchMode(val as 'text' | 'list')}
+                onValueChange={(val) => val && switchMode(val as 'einfach' | 'leicht')}
                 variant="outline"
                 spacing={0}
                 className="w-full"
                 disabled={isModeSwitching}
               >
-                <ToggleGroupItem value="text" className="flex-1 gap-1.5">
-                  <AlignLeft className="h-4 w-4" />
-                  Text
+                <ToggleGroupItem value="einfach" className="flex-1 gap-1.5">
+                  <BookOpen className="h-4 w-4" />
+                  Einfach
                 </ToggleGroupItem>
-                <ToggleGroupItem value="list" className="flex-1 gap-1.5">
-                  <List className="h-4 w-4" />
-                  Liste
+                <ToggleGroupItem value="leicht" className="flex-1 gap-1.5">
+                  <GraduationCap className="h-4 w-4" />
+                  Leicht
                 </ToggleGroupItem>
               </ToggleGroup>
 

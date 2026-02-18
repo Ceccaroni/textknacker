@@ -19,13 +19,13 @@
 
 - [x] T-01: Responsive Fullscreen-Layout
 - [x] T-02: Ausgabe in Eingabesprache
+- [x] T-03: Einfache vs. Leichte Sprache Regelwerk
+- [x] T-04: Umschalter Einfache/Leichte Sprache
 - [x] T-08: Name "Textknacker" entfernt
 - [x] T-10: Lexend konsequent durchgesetzt
 - [x] T-11: Textausgabe-Formatierung
 
 ## Offene Tasks
-- [ ] **T-03**: Einfache vs. Leichte Sprache — Regelwerk (wartet auf MD vom User)
-- [ ] **T-04**: Umschalter Einfache/Leichte Sprache (braucht T-03)
 - [ ] **T-05**: Farbgestaltung PHORO-Branding (User nach Farbcodes fragen)
 - [ ] **T-06**: Datei-Upload (Word, PDF+OCR, ODT, TXT, MD)
 - [ ] **T-07**: Download-Optionen (Word, PDF, TXT, MD)

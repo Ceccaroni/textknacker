@@ -29,11 +29,9 @@ Zwei Vereinfachungsstufen:
 - **Einfache Sprache** (Standard)
 - **Leichte Sprache** (strikter, regelbasiert)
 
-Die konkreten Regeln für die Vereinfachung werden als **separate MD-Datei** vom User bereitgestellt. Erst dann kann dieser Task umgesetzt werden.
+Umgesetzt: Regelwerk aus User-Datei in die Prompts in `actions.ts` eingebettet. Einfache Sprache (B1-B2) mit lockereren Regeln, Leichte Sprache (A1-A2) mit strikten Regeln (max 10-12 Wörter/Satz, SVO, keine Fremdwörter, etc.).
 
-**Abhängigkeit:** MD-Datei mit Regelwerk muss vom User geliefert werden.
-
-**Status:** `[ ]`
+**Status:** `[x]`
 
 ---
 
@@ -43,11 +41,9 @@ Schieberegler oder Button zum Umschalten zwischen:
 - **Einfache Sprache** (Standard/Default)
 - **Leichte Sprache**
 
-Ersetzt den bisherigen "Text / Liste"-Toggle im Reading Mode.
+Umgesetzt: Toggle in der Toolbar ersetzt den bisherigen Text/Liste-Switch. Ergebnisse werden pro Modus gecached. Listenmodus entfernt — beide Stufen liefern Fliesstext mit Überschriften und Absätzen.
 
-**Abhängigkeit:** T-03 (Regelwerk muss definiert sein)
-
-**Status:** `[ ]`
+**Status:** `[x]`
 
 ---
 
