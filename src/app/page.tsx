@@ -312,7 +312,7 @@ export default function Home() {
           {/* Mobile: hidden when reading. Desktop: always visible. */}
           <div className={cn(
             "flex-1 flex flex-col overflow-hidden",
-            "md:w-1/2 md:self-stretch md:border-r md:border-phoro-slate/15",
+            "md:w-1/2 md:self-stretch",
             view === 'reading' && "max-md:hidden"
           )}>
             {/* Mobile-only Input Header */}
@@ -408,20 +408,45 @@ export default function Home() {
               <div className="w-9" />
             </header>
 
-            {/* Content or Empty Placeholder */}
-            {currentText || isModeSwitching ? (
-              <>
-                {/* ── Reading Content ── */}
+            {/* ── Right panel content: mirrors left panel structure ── */}
+            <div className="flex-1 flex flex-col overflow-hidden p-4 gap-4">
+              {/* Top: Level Switch (mirrors TabsList height) */}
+              {(currentText || isModeSwitching) && (
+                <div className="shrink-0">
+                  <ToggleGroup
+                    type="single"
+                    value={readingMode}
+                    onValueChange={(val) => val && switchMode(val as 'einfach' | 'leicht')}
+                    variant="outline"
+                    spacing={0}
+                    className="w-full"
+                    disabled={isModeSwitching}
+                  >
+                    <ToggleGroupItem value="einfach" className="flex-1 gap-1.5">
+                      <BookOpen className="h-4 w-4" />
+                      Einfach
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="leicht" className="flex-1 gap-1.5">
+                      <GraduationCap className="h-4 w-4" />
+                      Leicht
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+              )}
+
+              {/* Center: Result box (matches textarea size) */}
+              <div className="relative flex-1 min-h-0">
                 <div className={cn(
-                  "flex-1 overflow-y-auto p-6 text-lg leading-relaxed text-phoro-blue",
+                  "w-full h-full rounded-md border border-input overflow-y-auto p-4",
+                  "text-lg leading-relaxed text-phoro-blue",
                   wideSpacing && "tracking-[0.12em] leading-loose"
                 )}>
                   {isModeSwitching ? (
-                    <div className="flex items-center justify-center py-16">
+                    <div className="flex items-center justify-center h-full">
                       <LoaderCircle className="h-8 w-8 animate-spin text-phoro-slate/50" />
                       <span className="ml-3 text-phoro-slate/60">Wird vereinfacht...</span>
                     </div>
-                  ) : (
+                  ) : currentText ? (
                     <div>
                       {(() => {
                         let sentIdx = 0;
@@ -453,32 +478,17 @@ export default function Home() {
                         });
                       })()}
                     </div>
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <p className="text-phoro-slate/40 text-sm">Ergebnis erscheint hier.</p>
+                    </div>
                   )}
                 </div>
+              </div>
 
-                {/* ── Toolbar ── */}
-                <div className="border-t border-phoro-slate/15 bg-white p-3 space-y-2 shrink-0">
-                  {/* Row 1: Level Switch */}
-                  <ToggleGroup
-                    type="single"
-                    value={readingMode}
-                    onValueChange={(val) => val && switchMode(val as 'einfach' | 'leicht')}
-                    variant="outline"
-                    spacing={0}
-                    className="w-full"
-                    disabled={isModeSwitching}
-                  >
-                    <ToggleGroupItem value="einfach" className="flex-1 gap-1.5">
-                      <BookOpen className="h-4 w-4" />
-                      Einfach
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="leicht" className="flex-1 gap-1.5">
-                      <GraduationCap className="h-4 w-4" />
-                      Leicht
-                    </ToggleGroupItem>
-                  </ToggleGroup>
-
-                  {/* Row 2: Action Buttons */}
+              {/* Bottom: Action buttons (mirrors "Vereinfachen" button position) */}
+              {(currentText || isModeSwitching) && (
+                <div className="shrink-0">
                   <div className="flex gap-2">
                     <Button
                       variant={isSpeaking ? 'default' : 'outline'}
@@ -521,15 +531,8 @@ export default function Home() {
                     </Button>
                   </div>
                 </div>
-              </>
-            ) : (
-              /* Desktop: empty placeholder. Mobile: panel is hidden anyway. */
-              <div className="flex-1 flex items-center justify-center p-4">
-                <div className="w-full h-full rounded-md border border-input flex items-center justify-center">
-                  <p className="text-phoro-slate/40 text-sm">Ergebnis erscheint hier.</p>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
       </div>
