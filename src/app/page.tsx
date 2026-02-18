@@ -302,7 +302,7 @@ export default function Home() {
           <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
           <span className="text-phoro-morgenrot text-lg font-light tracking-wide mb-2">read</span>
         </div>
-        <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
+        <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich mache den Rest.</p>
       </header>
 
       <div className="flex-1 flex flex-col md:flex-row md:items-stretch overflow-hidden w-full max-w-2xl md:max-w-6xl mx-auto">
@@ -320,7 +320,7 @@ export default function Home() {
                 <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
                 <span className="text-phoro-morgenrot text-lg font-light tracking-wide mb-2">read</span>
               </div>
-              <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
+              <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich mache den Rest.</p>
             </header>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden p-4 gap-4">

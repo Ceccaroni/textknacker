@@ -11,7 +11,6 @@
 | [PR-007](PR-007.md) | ✨ Feature | 💤 Niedrig | Zusätzliche Export-Formate (DOCX, MD, TXT) |
 | [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
 | [PR-009](PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
-| [PR-010](PR-010.md) | 🔧 Refactor | 🔥 Hoch | Header-Text anpassen |
 | [PR-011](PR-011.md) | 🐛 Bug | 🔥 Hoch | Bildbeschreibung bei Fotos ohne Text deaktivieren |
 | [PR-012](PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
 | [PR-013](PR-013.md) | 🐛 Bug / ✨ Feature | 🔥 Hoch | System-Prompt für Textvereinfachung überarbeiten |
@@ -32,6 +31,7 @@
 | [PR-003](completed/PR-003.md) | 🐛 Bug | 🔥 Hoch | Banner volle Breite auf Desktop |
 | [PR-004](completed/PR-004.md) | 🐛 Bug | 🔥 Hoch | Rechtes Panel an linkes Panel angleichen (Desktop) |
 | [PR-005](completed/PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
+| [PR-010](completed/PR-010.md) | 🔧 Refactor | 🔥 Hoch | Header-Text anpassen |
 
 ## Abhängigkeiten
 
