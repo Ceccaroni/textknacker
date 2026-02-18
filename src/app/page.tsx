@@ -7,11 +7,10 @@ import { runOCR, simplifyText, OcrState, SimplifyState } from './actions';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import {
   Camera, LoaderCircle, Sparkles, X,
-  ArrowLeft, Play, Pause, Type, Crosshair, FileDown, BookOpen, GraduationCap,
+  ArrowLeft, Play, Pause, Type, Crosshair, FileDown,
 } from 'lucide-react';
 
 // ── Initial States ──────────────────────────────────────────────
@@ -413,24 +412,42 @@ export default function Home() {
               {/* Top: Level Switch or spacer (mirrors TabsList height) */}
               {(currentText || isModeSwitching) ? (
                 <div className="shrink-0">
-                  <ToggleGroup
-                    type="single"
-                    value={readingMode}
-                    onValueChange={(val) => val && switchMode(val as 'einfach' | 'leicht')}
-                    variant="outline"
-                    spacing={0}
-                    className="w-full"
-                    disabled={isModeSwitching}
-                  >
-                    <ToggleGroupItem value="einfach" className="flex-1 gap-1.5">
-                      <BookOpen className="h-4 w-4" />
-                      Einfach
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="leicht" className="flex-1 gap-1.5">
-                      <GraduationCap className="h-4 w-4" />
-                      Leicht
-                    </ToggleGroupItem>
-                  </ToggleGroup>
+                  <div className="flex rounded-[6px] border border-phoro-slate/20 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => switchMode('einfach')}
+                      disabled={isModeSwitching}
+                      className={cn(
+                        "flex-1 flex flex-col items-center py-2 transition-colors disabled:opacity-50",
+                        readingMode === 'einfach'
+                          ? "bg-phoro-blue text-white"
+                          : "text-phoro-slate hover:bg-phoro-blue/5"
+                      )}
+                    >
+                      <span className="text-sm font-medium">Einfach</span>
+                      <span className={cn(
+                        "text-[11px]",
+                        readingMode === 'einfach' ? "text-white/60" : "text-phoro-slate/50"
+                      )}>B1 – B2</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => switchMode('leicht')}
+                      disabled={isModeSwitching}
+                      className={cn(
+                        "flex-1 flex flex-col items-center py-2 transition-colors disabled:opacity-50",
+                        readingMode === 'leicht'
+                          ? "bg-phoro-blue text-white"
+                          : "text-phoro-slate hover:bg-phoro-blue/5"
+                      )}
+                    >
+                      <span className="text-sm font-medium">Leicht</span>
+                      <span className={cn(
+                        "text-[11px]",
+                        readingMode === 'leicht' ? "text-white/60" : "text-phoro-slate/50"
+                      )}>A1 – A2</span>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="shrink-0 h-9" />

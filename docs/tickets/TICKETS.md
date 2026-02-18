@@ -7,7 +7,6 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| [PR-005](PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
 | [PR-006](PR-006.md) | 🐛 Bug | ⚡ Mittel | PDF-Export verbessern |
 | [PR-007](PR-007.md) | ✨ Feature | 💤 Niedrig | Zusätzliche Export-Formate (DOCX, MD, TXT) |
 | [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
@@ -16,7 +15,7 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| (keine) | | | |
+| [PR-005](PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
 
 ## 🟢 Erledigt
 
