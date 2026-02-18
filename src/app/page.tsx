@@ -46,8 +46,8 @@ function SimplifySubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" disabled={pending} className="w-full">
-      {pending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
-      Text knacken
+      {pending && <LoaderCircle className="h-5 w-5 animate-spin" />}
+      Vereinfachen
     </Button>
   );
 }
@@ -296,32 +296,30 @@ export default function Home() {
 
   return (
     <main className="h-dvh flex flex-col bg-phoro-warmbeige">
-      <div className="flex-1 flex flex-col overflow-hidden w-full max-w-2xl md:max-w-6xl mx-auto">
 
-        {/* ── Desktop Header (shared, full width) ── */}
-        <header className="hidden md:flex px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex-col items-center shrink-0">
-          <div className="flex items-baseline gap-1.5">
-            <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
-            <span className="text-phoro-morgenrot text-lg font-light tracking-wide">read</span>
-          </div>
-          <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
-        </header>
+      {/* ── Desktop Header (full width, outside max-w container) ── */}
+      <header className="hidden md:flex px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex-col items-center shrink-0">
+        <div className="flex items-end gap-1.5">
+          <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
+          <span className="text-phoro-morgenrot text-lg font-light tracking-wide mb-2">read</span>
+        </div>
+        <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
+      </header>
 
-        {/* ── Content Area ── */}
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row md:items-stretch overflow-hidden w-full max-w-2xl md:max-w-6xl mx-auto">
 
           {/* ════════════════ LEFT PANEL: INPUT ════════════════ */}
           {/* Mobile: hidden when reading. Desktop: always visible. */}
           <div className={cn(
             "flex-1 flex flex-col overflow-hidden",
-            "md:w-1/2 md:border-r md:border-phoro-slate/15",
+            "md:w-1/2 md:self-stretch md:border-r md:border-phoro-slate/15",
             view === 'reading' && "max-md:hidden"
           )}>
             {/* Mobile-only Input Header */}
             <header className="md:hidden px-4 pt-4 pb-2 border-b border-phoro-slate/15 bg-[#EAE6DF] flex flex-col items-center shrink-0">
-              <div className="flex items-baseline gap-1.5">
+              <div className="flex items-end gap-1.5">
                 <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
-                <span className="text-phoro-morgenrot text-lg font-light tracking-wide">read</span>
+                <span className="text-phoro-morgenrot text-lg font-light tracking-wide mb-2">read</span>
               </div>
               <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
             </header>
@@ -395,7 +393,7 @@ export default function Home() {
           {/* Mobile: hidden when input. Desktop: always visible. */}
           <div className={cn(
             "flex-1 flex flex-col overflow-hidden",
-            "md:w-1/2",
+            "md:w-1/2 md:self-stretch",
             view === 'input' && "max-md:hidden"
           )}>
             {/* Mobile-only Reading Header */}
@@ -403,9 +401,9 @@ export default function Home() {
               <Button variant="ghost" size="icon" onClick={handleBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div className="flex items-baseline gap-1 mx-auto">
+              <div className="flex items-end gap-1 mx-auto">
                 <img src="/logo-phoro.svg" alt="PHORO" className="h-8" />
-                <span className="text-phoro-morgenrot text-base font-light tracking-wide">read</span>
+                <span className="text-phoro-morgenrot text-base font-light tracking-wide mb-1.5">read</span>
               </div>
               <div className="w-9" />
             </header>
@@ -532,7 +530,6 @@ export default function Home() {
             )}
           </div>
 
-        </div>
       </div>
     </main>
   );
