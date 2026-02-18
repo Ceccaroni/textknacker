@@ -282,36 +282,33 @@ export default function Home() {
   // ── Render ──────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      <div className={cn(
-        "w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden",
-        view === 'reading' && "flex flex-col max-h-[90vh]"
-      )}>
+    <main className="h-dvh flex flex-col bg-white">
+      <div className="flex-1 flex flex-col overflow-hidden w-full max-w-2xl mx-auto">
 
         {/* ════════════════ STATE A: INPUT ════════════════ */}
         {view === 'input' && (
           <>
-            <header className="p-4 border-b bg-gray-100 flex flex-col items-center">
+            <header className="px-4 pt-4 pb-2 border-b bg-gray-100 flex flex-col items-center shrink-0">
               <img src="/logo-phoro.svg" alt="PHORO Read" className="h-10" />
-              <p className="text-center text-gray-500 mt-1">Fotografiere einen Text. Wir machen ihn einfach.</p>
+              <p className="text-center text-gray-500 mt-1 text-sm">Fotografiere einen Text. Wir machen ihn einfach.</p>
             </header>
 
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden">
+              <TabsList className="grid w-full grid-cols-2 shrink-0">
                 <TabsTrigger value="camera">Kamera</TabsTrigger>
                 <TabsTrigger value="text">Text eingeben</TabsTrigger>
               </TabsList>
 
               {/* ── Camera Tab ── */}
-              <TabsContent value="camera" className="p-4">
-                <form action={captureAndSubmit}>
-                  <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
-                    <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
+              <TabsContent value="camera" className="flex flex-col overflow-y-auto p-4">
+                <form action={captureAndSubmit} className="flex-1 flex flex-col min-h-0">
+                  <div className="relative flex-1 min-h-[12rem] bg-black rounded-lg overflow-hidden shadow-lg">
+                    <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
                     <OcrFormContent />
                   </div>
                 </form>
 
-                <div className="mt-4 text-center">
+                <div className="mt-3 text-center shrink-0">
                   {cameraError && <p className="text-sm text-red-600 mb-2">{cameraError}</p>}
                   <div>
                     <label htmlFor="file-upload" className="cursor-pointer text-sm text-slate-600">
@@ -323,7 +320,7 @@ export default function Home() {
                 </div>
 
                 {ocrState.errors?.image && (
-                  <div className="mt-2 p-2 text-center text-red-500">
+                  <div className="mt-2 p-2 text-center text-red-500 shrink-0">
                     <p>{ocrState.errors.image[0]}</p>
                   </div>
                 )}
@@ -331,15 +328,15 @@ export default function Home() {
               </TabsContent>
 
               {/* ── Text Tab ── */}
-              <TabsContent value="text" className="p-4">
-                <form action={simplifyFormAction} className="space-y-4">
-                  <div className="relative">
+              <TabsContent value="text" className="flex flex-col overflow-hidden p-4">
+                <form action={simplifyFormAction} className="flex-1 flex flex-col gap-4 min-h-0">
+                  <div className="relative flex-1 min-h-0">
                     <Textarea
                       name="text"
                       value={text}
                       onChange={(e) => setText(e.target.value)}
                       placeholder="Hier erscheint der Text aus deinem Foto..."
-                      className="w-full h-60 text-lg"
+                      className="w-full h-full min-h-[8rem] resize-none text-lg"
                     />
                     {text && (
                       <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7" onClick={() => setText('')}>
@@ -347,13 +344,15 @@ export default function Home() {
                       </Button>
                     )}
                   </div>
-                  <input type="hidden" name="mode" value="text" />
-                  <SimplifySubmitButton />
-                  {simplifyState?.errors?.text && (
-                    <div className="p-2 text-center text-red-500">
-                      <p>{simplifyState.errors.text[0]}</p>
-                    </div>
-                  )}
+                  <div className="shrink-0">
+                    <input type="hidden" name="mode" value="text" />
+                    <SimplifySubmitButton />
+                    {simplifyState?.errors?.text && (
+                      <div className="p-2 text-center text-red-500">
+                        <p>{simplifyState.errors.text[0]}</p>
+                      </div>
+                    )}
+                  </div>
                 </form>
               </TabsContent>
             </Tabs>
@@ -364,7 +363,7 @@ export default function Home() {
         {view === 'reading' && (
           <>
             {/* ── Header ── */}
-            <header className="p-4 border-b bg-gray-100 flex items-center shrink-0">
+            <header className="px-4 py-3 border-b bg-gray-100 flex items-center shrink-0">
               <Button variant="ghost" size="icon" onClick={handleBack}>
                 <ArrowLeft className="h-5 w-5" />
               </Button>
@@ -487,10 +486,6 @@ export default function Home() {
           </>
         )}
       </div>
-
-      <footer className="mt-6 text-center text-gray-500 text-sm">
-        <p>Unterstützt von Claude & Firebase</p>
-      </footer>
     </main>
   );
 }

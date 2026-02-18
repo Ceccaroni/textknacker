@@ -7,14 +7,9 @@
 
 ## T-01: Responsive Fullscreen-Layout
 
-Die Seite muss auf **allen Geräten bildschirmfüllend** funktionieren:
-- Mobil (Hochformat + Querformat)
-- Tablet (Hochformat + Querformat)
-- Desktop
+App füllt den gesamten Viewport (`h-dvh`) auf allen Geräten. Kein äusseres Scrollen — Content scrollt intern. Kamera und Textarea wachsen mit dem verfügbaren Platz (`flex-1`). Footer entfernt. Auf Desktop begrenzt `max-w-2xl` die Breite für Lesbarkeit.
 
-Kein Scrollen der äusseren Seite — die App füllt den Viewport. Content scrollt intern.
-
-**Status:** `[ ]`
+**Status:** `[x]`
 
 ---
 
