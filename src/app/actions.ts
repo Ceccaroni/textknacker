@@ -104,8 +104,20 @@ export async function simplifyText(prevState: SimplifyState, formData: FormData)
 
   const { text, mode } = validatedFields.data;
 
-  const prompt = mode === 'einfach'
-    ? `Du bist ein Experte für Textvereinfachung. Schreibe den folgenden Text in EINFACHER SPRACHE (Niveau B1-B2) um.
+  // System prompt: Rolle (für beide Modi gleich)
+  const systemPrompt = `Du bist ein Analytiker für didaktische Materialien, der darauf spezialisiert ist, Sach- und Fliesstexte zu überarbeiten. Du hilfst dabei, die sprachliche Verständlichkeit für Schüler:innen zu verbessern, ohne den Inhalt zu kürzen oder den Fliesstextcharakter zu verlieren. Du erklärst schwierige Begriffe im Text und zusätzlich in einem Glossar, das nach Vorkommen sortiert ist. Du vereinfachst aktiv, ohne fachliche Präzision zu verlieren.`;
+
+  // Basis-Instruktionen (für beide Modi gleich)
+  const baseInstructions = `Folge diesen Schritten:
+
+1. Analysiere jeweils nur eine Seite oder logisch zusammenhängende Abschnitte.
+2. Erkenne automatisch, ob es sich um einen Fliesstext handelt. Bei Fliesstexten: Erhalte Struktur, Kohärenz und Satzfluss.
+3. Vereinfache aktiv sprachlich schwierige Stellen, ohne Informationen zu kürzen. Fachliche Genauigkeit hat Priorität.
+4. Erkläre schwierige Begriffe direkt im Text (z.B. durch Klammerergänzungen oder kurze Nebensätze) und zusätzlich in einem Glossar am Ende, das nach Vorkommen im Text sortiert ist.`;
+
+  // Modus-spezifische Regeln
+  const modeRules = mode === 'einfach'
+    ? `Zielniveau: EINFACHE SPRACHE (B1-B2)
 
 Regeln:
 - Kürzere Sätze bevorzugen, aber komplexere Strukturen sind erlaubt
@@ -113,15 +125,8 @@ Regeln:
 - Fachbegriffe dürfen vorkommen, müssen aber erklärt werden
 - Konkrete, alltagsnahe Formulierungen bevorzugen
 - Übersichtliche Gliederung mit Absätzen und Zwischentiteln (## Markdown-Headings)
-- Wichtige Informationen hervorheben
-
-WICHTIG:
-- Antworte IMMER in der gleichen Sprache wie der Eingabetext.
-- Bei deutschen Texten: Verwende IMMER Schweizer Rechtschreibung (ss statt ß, z.B. «strasse» statt «straße», «gruss» statt «gruß»).
-Gib NUR den vereinfachten Text aus, keine Erklärungen oder Kommentare.
-
-Text: "${text}"`
-    : `Du bist ein Experte für Textvereinfachung. Schreibe den folgenden Text in LEICHTER SPRACHE (Niveau A1-A2) um.
+- Wichtige Informationen hervorheben`
+    : `Zielniveau: LEICHTE SPRACHE (A1-A2)
 
 Strikte Regeln — halte dich an ALLE:
 
@@ -153,19 +158,24 @@ Zahlen & Zeichen:
 
 Layout:
 - Übersichtliche Gliederung mit Zwischen-Titeln (## Markdown-Headings)
-- Absätze zwischen Themen-Blöcken
+- Absätze zwischen Themen-Blöcken`;
+
+  const prompt = `${baseInstructions}
+
+${modeRules}
 
 WICHTIG:
 - Antworte IMMER in der gleichen Sprache wie der Eingabetext.
 - Bei deutschen Texten: Verwende IMMER Schweizer Rechtschreibung (ss statt ß, z.B. «strasse» statt «straße», «gruss» statt «gruß»).
-Gib NUR den vereinfachten Text aus, keine Erklärungen oder Kommentare.
+- Gib den vereinfachten Text aus, gefolgt vom Glossar. Keine weiteren Erklärungen oder Kommentare.
 
 Text: "${text}"`;
 
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-5-20250929",
-      max_tokens: 1024,
+      max_tokens: 4096,
+      system: systemPrompt,
       messages: [
         {
           role: "user",

@@ -4,15 +4,11 @@
 
 ## Zuletzt erledigt (diese Session)
 
-- **PR-005**: Sprachniveau-Leiste redesigned — Segmented Control mit Pharos Blue Active-State, Labels "Einfache Sprache" / "Leichte Sprache", Icons entfernt, Höhe exakt an linke Tabs angeglichen (h-9)
-- **PR-010**: Header-Tagline geändert → "Gib mir einen Text – ich mache den Rest."
-- **PR-011**: OCR-Prompt angepasst — textlose Bilder liefern "Kein Text im Bild erkannt." statt Bildbeschreibung
-- **PR-014**: Markdown-Rendering in Textausgabe — inline **fett**, *kursiv*, ***fett+kursiv*** + Listen (ol/ul) werden jetzt korrekt gerendert, Fokus-Modus bleibt funktional
-- **6 neue Tickets importiert** (PR-009 bis PR-014), Prioritäten gesetzt
+- **PR-013**: System-Prompt komplett überarbeitet — neuer didaktischer Rollen-Prompt als System-Message, Basis-Instruktionen für Inhaltserhaltung (Kohärenz, Fliesstextcharakter, keine Informationskürzung), Glossar-Feature (schwierige Begriffe werden inline + in Glossar am Textende erklärt), max_tokens auf 4096 erhöht
 
 ## Deployment
 
-Alle Änderungen auf GitHub gepusht und via GitHub Actions auf Firebase deployed. Letzter Commit: `2afbb6f`. Firebase Deploys laufen durch, brauchen aber ~5 Min.
+Noch nicht deployed. Letzter Deploy: Commit `2afbb6f`.
 
 ## Erledigte Tickets
 
@@ -23,6 +19,7 @@ Alle Änderungen auf GitHub gepusht und via GitHub Actions auf Firebase deployed
 - [x] PR-005: Sprachniveau Segmented Control
 - [x] PR-010: Header-Text anpassen
 - [x] PR-011: Bildbeschreibung bei textlosen Fotos deaktivieren
+- [x] PR-013: System-Prompt für Textvereinfachung überarbeiten
 - [x] PR-014: Markdown-Rendering in Textausgabe
 
 ## Offene Tickets
@@ -32,15 +29,13 @@ Alle Änderungen auf GitHub gepusht und via GitHub Actions auf Firebase deployed
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 - [ ] **PR-009**: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) ⚡
 - [ ] **PR-012**: iOS – Buttons auf Textrahmenbreite ausrichten ⚡
-- [ ] **PR-013**: System-Prompt für Textvereinfachung überarbeiten 🔥 (wartet auf User-Input)
 
 ## Nächste Schritte
 
-1. **PR-013** — System-Prompt überarbeiten (wartet auf neuen Prompt vom User)
-2. **PR-006** — PDF-Export: Logo, A4-Format, Markdown-Rendering
-3. **PR-012** — iOS Button-Alignment (kleiner Fix)
-4. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
-5. Danach PR-007 (Export-Formate) und PR-008 (Open Dyslexic)
+1. **PR-006** — PDF-Export: Logo, A4-Format, Markdown-Rendering
+2. **PR-012** — iOS Button-Alignment (kleiner Fix)
+3. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
+4. Danach PR-007 (Export-Formate) und PR-008 (Open Dyslexic)
 
 ## Bekannte technische Schulden
 

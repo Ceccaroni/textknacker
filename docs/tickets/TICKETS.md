@@ -12,7 +12,6 @@
 | [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
 | [PR-009](PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
 | [PR-012](PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
-| [PR-013](PR-013.md) | 🐛 Bug / ✨ Feature | 🔥 Hoch | System-Prompt für Textvereinfachung überarbeiten |
 
 ## 🟡 In Arbeit
 
@@ -31,11 +30,11 @@
 | [PR-005](completed/PR-005.md) | ✨ Feature | ⚡ Mittel | Funktionsleiste (Sprachniveaus) Redesign |
 | [PR-010](completed/PR-010.md) | 🔧 Refactor | 🔥 Hoch | Header-Text anpassen |
 | [PR-011](completed/PR-011.md) | 🐛 Bug | 🔥 Hoch | Bildbeschreibung bei Fotos ohne Text deaktivieren |
+| [PR-013](completed/PR-013.md) | 🐛 Bug / ✨ Feature | 🔥 Hoch | System-Prompt für Textvereinfachung überarbeiten |
 | [PR-014](completed/PR-014.md) | 🐛 Bug | 🔥 Hoch | Markdown-Formatierung in Textausgabe wird nicht gerendert |
 
 ## Abhängigkeiten
 
 - PR-007 hängt ab von PR-006 (PDF-Verbesserungen zuerst)
 - PR-008 hängt ab von PR-006 + PR-007 (Export-Schriftintegration)
-- PR-013 wartet auf User-Input (neuer Prompt wird geliefert)
 - PR-014 hat Bezug zu PR-006 + PR-007 (Markdown-Rendering in App + Exporten)
