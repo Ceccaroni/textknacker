@@ -306,7 +306,7 @@ export default function Home() {
                 <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
                 <span className="text-phoro-morgenrot text-lg font-light tracking-wide">read</span>
               </div>
-              <p className="text-center text-phoro-slate/60 mt-1 text-sm">Fotografiere einen Text. Wir machen ihn einfach.</p>
+              <p className="text-center text-phoro-slate/60 mt-1 text-sm">Gib mir einen Text – ich kümmere mich um den Rest.</p>
             </header>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden">
@@ -351,7 +351,7 @@ export default function Home() {
                       name="text"
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      placeholder="Hier erscheint der Text aus deinem Foto..."
+                      placeholder="Hier Text reinkopieren oder Datei reinziehen."
                       className="w-full h-full min-h-[8rem] resize-none text-lg"
                     />
                     {text && (
