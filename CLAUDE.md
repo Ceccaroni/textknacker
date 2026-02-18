@@ -70,15 +70,17 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 - **Dokumentation aktuell halten** — insbesondere diese Datei und STATUS.md (siehe Dokumentationsstrategie).
 - **Firebase-Projekt-IDs und Service-Account-Referenzen NICHT umbenennen** — diese sind an das Google-Cloud-Projekt gebunden und dürfen nur über die Firebase/GCP Console geändert werden.
 
-## Bekannte Issues / TODOs
+## Bekannte Issues
 
 1. **Zod nicht in package.json** — `actions.ts` importiert `zod`, aber es ist keine explizite Dependency. Funktioniert nur transitiv. Sollte explizit hinzugefügt werden.
 2. **Font-Mismatch in globals.css** — CSS referenziert `--font-geist-sans`/`--font-geist-mono`, aber die App nutzt Lexend (`--font-lexend`). Font wird vermutlich nicht korrekt angewendet.
 3. **Ungenutzte Dependencies** — `genkit`, `@google-cloud/vertexai`, `@google/generative-ai` können entfernt werden (Altlast aus Gemini-Phase).
 4. **GitHub Actions Workflow referenziert `GEMINI_API_KEY`** — nicht mehr benötigt, sollte durch `ANTHROPIC_API_KEY` ersetzt oder entfernt werden.
-5. **Reading Mode nicht implementiert** — Blueprint beschreibt State B (Reading Mode mit Toolbar: Level-Switch, TTS, Focus-Mode, Spacing, PDF-Export), ist aber noch nicht gebaut.
-6. **jsPDF installiert aber nicht genutzt** — gehört zum geplanten PDF-Export im Reading Mode.
-7. **GEMINI.md** — Veraltete Datei aus der Gemini-Phase, kann entfernt werden.
+5. **GEMINI.md** — Veraltete Datei aus der Gemini-Phase, kann entfernt werden.
+
+## Tasks
+
+Alle offenen Aufgaben sind in **[TASKS.md](./TASKS.md)** dokumentiert (T-01 bis T-11). Neue Session? Dort starten.
 
 ## Dokumentationsstrategie
 
@@ -89,6 +91,7 @@ Dieses Projekt ist klein (Single-Page-App, Frühphase). Die Dokumentation soll *
 | Datei | Zweck |
 |---|---|
 | `CLAUDE.md` | **Zentrale Referenz.** Tech-Stack, Struktur, Regeln, bekannte Issues. Wird bei Architekturänderungen aktualisiert. |
+| `TASKS.md` | **Backlog.** Alle offenen Aufgaben, nummeriert (T-01 bis T-xx), mit Status und Abhängigkeiten. |
 | `STATUS.md` | **Session-Handoff.** Was wurde zuletzt gemacht? Was ist der nächste Schritt? Wird am Ende jeder Arbeitssession aktualisiert. |
 
 ### Regeln
