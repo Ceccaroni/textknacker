@@ -412,13 +412,13 @@ export default function Home() {
               {/* Top: Level Switch or spacer (mirrors TabsList height) */}
               {(currentText || isModeSwitching) ? (
                 <div className="shrink-0">
-                  <div className="flex rounded-[6px] border border-phoro-slate/20 overflow-hidden">
+                  <div className="flex h-9 rounded-[6px] border border-phoro-slate/20 overflow-hidden">
                     <button
                       type="button"
                       onClick={() => switchMode('einfach')}
                       disabled={isModeSwitching}
                       className={cn(
-                        "flex-1 flex items-center justify-center py-2 text-sm font-medium transition-colors disabled:opacity-50",
+                        "flex-1 flex items-center justify-center text-sm font-medium transition-colors disabled:opacity-50",
                         readingMode === 'einfach'
                           ? "bg-phoro-blue text-white"
                           : "text-phoro-slate hover:bg-phoro-blue/5"
@@ -431,7 +431,7 @@ export default function Home() {
                       onClick={() => switchMode('leicht')}
                       disabled={isModeSwitching}
                       className={cn(
-                        "flex-1 flex items-center justify-center py-2 text-sm font-medium transition-colors disabled:opacity-50",
+                        "flex-1 flex items-center justify-center text-sm font-medium transition-colors disabled:opacity-50",
                         readingMode === 'leicht'
                           ? "bg-phoro-blue text-white"
                           : "text-phoro-slate hover:bg-phoro-blue/5"
