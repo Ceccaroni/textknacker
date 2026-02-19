@@ -69,13 +69,14 @@ export default function Home() {
 
   // Server action states
   const [simplifyState, simplifyFormAction] = useActionState(simplifyText, simplifyInitialState);
-  const [ocrState, ocrFormAction, isOcrPending] = useActionState(runOCR, ocrInitialState);
+  const [ocrState, ocrFormAction] = useActionState(runOCR, ocrInitialState);
 
   // Input view state
   const [activeTab, setActiveTab] = useState('text');
   const [text, setText] = useState('');
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [isEditorProcessing, setIsEditorProcessing] = useState(false);
 
   // View state
   const [view, setView] = useState<'input' | 'reading'>('input');
@@ -136,10 +137,15 @@ export default function Home() {
   useEffect(() => {
     if (ocrState.text) {
       setCapturedImage(null);
+      setIsEditorProcessing(false);
       setText(ocrState.text);
       setActiveTab('text');
     }
-  }, [ocrState.text]);
+    if (ocrState.errors) {
+      setCapturedImage(null);
+      setIsEditorProcessing(false);
+    }
+  }, [ocrState]);
 
   // ── Simplification Result → Reading Mode ────────────────────
 
@@ -198,6 +204,7 @@ export default function Home() {
   // ── Image Editor Handlers ──────────────────────────────────
 
   const handleEditorConfirm = (editedBase64: string) => {
+    setIsEditorProcessing(true);
     const fd = new FormData();
     fd.set('image', editedBase64);
     ocrFormAction(fd);
@@ -350,7 +357,7 @@ export default function Home() {
                 {capturedImage ? (
                   <ImageEditor
                     imageDataUrl={capturedImage}
-                    isProcessing={isOcrPending}
+                    isProcessing={isEditorProcessing}
                     onConfirm={handleEditorConfirm}
                     onCancel={handleEditorCancel}
                   />
@@ -359,14 +366,6 @@ export default function Home() {
                     <form action={captureAndSubmit} className="flex-1 flex flex-col min-h-0">
                       <div className="relative flex-1 min-h-[12rem] bg-black rounded-lg overflow-hidden shadow-lg">
                         <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
-                        {isOcrPending && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-10">
-                            <div className="flex flex-col items-center text-white">
-                              <LoaderCircle className="h-12 w-12 animate-spin text-white" />
-                              <p className="mt-4 text-lg font-semibold">Text wird erkannt...</p>
-                            </div>
-                          </div>
-                        )}
                         <OcrFormContent />
                       </div>
                     </form>
