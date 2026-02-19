@@ -198,7 +198,6 @@ export default function Home() {
   // ── Image Editor Handlers ──────────────────────────────────
 
   const handleEditorConfirm = (editedBase64: string) => {
-    setCapturedImage(null);
     const fd = new FormData();
     fd.set('image', editedBase64);
     ocrFormAction(fd);
@@ -351,6 +350,7 @@ export default function Home() {
                 {capturedImage ? (
                   <ImageEditor
                     imageDataUrl={capturedImage}
+                    isProcessing={isOcrPending}
                     onConfirm={handleEditorConfirm}
                     onCancel={handleEditorCancel}
                   />
