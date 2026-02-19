@@ -136,16 +136,10 @@ export default function Home() {
 
   useEffect(() => {
     if (ocrState.text) {
-      setCapturedImage(null);
-      setIsEditorProcessing(false);
       setText(ocrState.text);
       setActiveTab('text');
     }
-    if (ocrState.errors) {
-      setCapturedImage(null);
-      setIsEditorProcessing(false);
-    }
-  }, [ocrState]);
+  }, [ocrState.text]);
 
   // ── Simplification Result → Reading Mode ────────────────────
 
@@ -203,11 +197,27 @@ export default function Home() {
 
   // ── Image Editor Handlers ──────────────────────────────────
 
-  const handleEditorConfirm = (editedBase64: string) => {
+  const handleEditorConfirm = async (editedBase64: string) => {
     setIsEditorProcessing(true);
-    const fd = new FormData();
-    fd.set('image', editedBase64);
-    ocrFormAction(fd);
+    try {
+      const fd = new FormData();
+      fd.set('image', editedBase64);
+      const result = await runOCR(ocrInitialState, fd);
+      if (result.text) {
+        setCapturedImage(null);
+        setIsEditorProcessing(false);
+        setText(result.text);
+        setActiveTab('text');
+      } else {
+        setCapturedImage(null);
+        setIsEditorProcessing(false);
+        setCameraError(result.errors?.image?.[0] || 'Kein Text erkannt.');
+      }
+    } catch {
+      setCapturedImage(null);
+      setIsEditorProcessing(false);
+      setCameraError('Fehler bei der Texterkennung.');
+    }
   };
 
   const handleEditorCancel = () => {
