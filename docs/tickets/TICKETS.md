@@ -13,7 +13,7 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| (keine) | | | |
+| [PR-009](PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
 
 ## 🟢 Erledigt
 
@@ -32,7 +32,6 @@
 | [PR-014](completed/PR-014.md) | 🐛 Bug | 🔥 Hoch | Markdown-Formatierung in Textausgabe wird nicht gerendert |
 | [PR-012](completed/PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
 | [PR-015](completed/PR-015.md) | ✨ Feature | ⚡ Mittel | Footer mit Copyright, Impressum und Datenschutz |
-| [PR-009](completed/PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
 
 ## Abhängigkeiten
 

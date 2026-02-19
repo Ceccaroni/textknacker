@@ -2,21 +2,28 @@
 
 > Letzte Aktualisierung: 2026-02-19
 
-## Zuletzt erledigt (diese Session)
+## Zuletzt bearbeitet (diese Session)
 
-- **PR-009**: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast)
-  - Neuer ImageEditor-Zwischenschritt nach Foto-Aufnahme/Bild-Upload, vor OCR
-  - Crop: Frei ziehbare Rechteck-Auswahl via `react-image-crop`
-  - Helligkeit/Kontrast: Slider (50–150%), Live-Vorschau via CSS-Filter
-  - Canvas-Verarbeitung bei Bestätigung (Crop + Filter → base64 JPEG)
-  - Kamera-Stream wird gestoppt wenn Editor offen
+- **PR-009**: Bildbearbeitung vor Analyse — **teilweise implementiert**
+  - **Funktioniert:** ImageEditor-UI (Crop, Helligkeit, Kontrast, Live-Vorschau, Fehleranzeige, Loading-State)
+  - **Blockiert:** OCR-Übermittlung nach "Übernehmen" — bearbeitetes Bild kommt nicht bei der Claude API an
+  - Mehrere Ansätze getestet (programmatischer Dispatch, direkter Server-Action-Aufruf, Hidden Form) — alle scheitern mit "Server error: Failed to connect to Claude API"
+  - Textvereinfachung funktioniert → API-Key ist OK → Problem liegt bei der Bild-Übermittlung via Server Action
+  - **Vermutung:** Next.js Server Action Body-Size-Limit (Standard 1 MB) oder FormData-Serialisierung bei grossen base64-Bildern
   - Neue Dateien: `src/components/image-editor.tsx`, `src/components/ui/slider.tsx`
   - Neue Dependency: `react-image-crop`
-  - CSS-Overrides für Crop-Border in Pharos Blue
+
+## Nächste Schritte (Priorität)
+
+1. **PR-009 fertigstellen** — OCR-Submission fixen:
+   - `serverActions.bodySizeLimit` in next.config erhöhen (z.B. `'5mb'`)
+   - Falls das nicht reicht: Bild vor Übermittlung herunterskalieren oder chunken
+   - Server-Logs auf Firebase prüfen für den tatsächlichen Fehler
+2. **PR-008** — Open Dyslexic Schriftoption
 
 ## Deployment
 
-Änderungen commited, noch nicht gepusht. Nach Push deployt GitHub Actions automatisch auf Firebase (~5 Min).
+Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Min).
 
 ## Erledigte Tickets
 
@@ -27,7 +34,6 @@
 - [x] PR-005: Sprachniveau Segmented Control
 - [x] PR-006: PDF-Export verbessern (Logo + Markdown)
 - [x] PR-007: Export-Formate (DOCX, MD, TXT)
-- [x] PR-009: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast)
 - [x] PR-010: Header-Text anpassen
 - [x] PR-011: Bildbeschreibung bei textlosen Fotos deaktivieren
 - [x] PR-012: iOS – Buttons auf Textrahmenbreite ausrichten
@@ -35,13 +41,10 @@
 - [x] PR-014: Markdown-Rendering in Textausgabe
 - [x] PR-015: Footer mit Copyright, Impressum und Datenschutz
 
-## Offene Tickets
+## Offene / In Arbeit
 
+- [ ] **PR-009**: Bildbearbeitung vor Analyse 🟡 (UI fertig, OCR-Submission blockiert)
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
-
-## Nächste Schritte
-
-1. **PR-008** — Open Dyslexic Schriftoption
 
 ## Bekannte technische Schulden
 
@@ -49,6 +52,7 @@
 2. **Ungenutzte Dependencies**: genkit, @google-cloud/vertexai, @google/generative-ai
 3. **GitHub Actions** referenziert GEMINI_API_KEY statt ANTHROPIC_API_KEY
 4. **GEMINI.md** kann gelöscht werden
+5. **Next.js Server Action Body-Size-Limit** prüfen — möglicherweise Ursache für OCR-Fehler bei Bildern aus dem ImageEditor
 
 ## Wichtige Dateien
 
