@@ -52,13 +52,23 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
       sh = completedCrop.height * scaleY;
     }
 
-    canvas.width = sw;
-    canvas.height = sh;
+    // Downscale for OCR — max 2048px on longest side
+    const MAX_DIM = 2048;
+    let dw = sw;
+    let dh = sh;
+    if (sw > MAX_DIM || sh > MAX_DIM) {
+      const scale = MAX_DIM / Math.max(sw, sh);
+      dw = Math.round(sw * scale);
+      dh = Math.round(sh * scale);
+    }
+
+    canvas.width = dw;
+    canvas.height = dh;
 
     ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
-    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, sw, sh);
+    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, dw, dh);
 
-    const base64 = canvas.toDataURL('image/jpeg', 0.9).split(',')[1];
+    const base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
     onConfirm(base64);
   }
 

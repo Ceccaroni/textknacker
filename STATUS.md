@@ -4,22 +4,14 @@
 
 ## Zuletzt bearbeitet (diese Session)
 
-- **PR-009**: Bildbearbeitung vor Analyse — **teilweise implementiert**
-  - **Funktioniert:** ImageEditor-UI (Crop, Helligkeit, Kontrast, Live-Vorschau, Fehleranzeige, Loading-State)
-  - **Blockiert:** OCR-Übermittlung nach "Übernehmen" — bearbeitetes Bild kommt nicht bei der Claude API an
-  - Mehrere Ansätze getestet (programmatischer Dispatch, direkter Server-Action-Aufruf, Hidden Form) — alle scheitern mit "Server error: Failed to connect to Claude API"
-  - Textvereinfachung funktioniert → API-Key ist OK → Problem liegt bei der Bild-Übermittlung via Server Action
-  - **Vermutung:** Next.js Server Action Body-Size-Limit (Standard 1 MB) oder FormData-Serialisierung bei grossen base64-Bildern
-  - Neue Dateien: `src/components/image-editor.tsx`, `src/components/ui/slider.tsx`
-  - Neue Dependency: `react-image-crop`
+- **PR-009**: Bildbearbeitung vor Analyse — **erledigt** ✅
+  - **Ursache des OCR-Fehlers:** Next.js Server Action Body-Size-Limit (Default 1 MB) — iPhone-Fotos als base64 waren 3–7 MB
+  - **Fix 1:** `experimental.serverActions.bodySizeLimit: '10mb'` in `next.config.ts`
+  - **Fix 2:** Bild-Downscaling auf max 2048px + JPEG-Qualität 0.85 vor Senden (~200–500 KB)
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-009 fertigstellen** — OCR-Submission fixen:
-   - `serverActions.bodySizeLimit` in next.config erhöhen (z.B. `'5mb'`)
-   - Falls das nicht reicht: Bild vor Übermittlung herunterskalieren oder chunken
-   - Server-Logs auf Firebase prüfen für den tatsächlichen Fehler
-2. **PR-008** — Open Dyslexic Schriftoption
+1. **PR-008** — Open Dyslexic Schriftoption (niedrige Prio)
 
 ## Deployment
 
@@ -34,6 +26,7 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 - [x] PR-005: Sprachniveau Segmented Control
 - [x] PR-006: PDF-Export verbessern (Logo + Markdown)
 - [x] PR-007: Export-Formate (DOCX, MD, TXT)
+- [x] PR-009: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast, OCR-Fix)
 - [x] PR-010: Header-Text anpassen
 - [x] PR-011: Bildbeschreibung bei textlosen Fotos deaktivieren
 - [x] PR-012: iOS – Buttons auf Textrahmenbreite ausrichten
@@ -43,7 +36,6 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 
 ## Offene / In Arbeit
 
-- [ ] **PR-009**: Bildbearbeitung vor Analyse 🟡 (UI fertig, OCR-Submission blockiert)
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 
 ## Bekannte technische Schulden
@@ -52,7 +44,6 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 2. **Ungenutzte Dependencies**: genkit, @google-cloud/vertexai, @google/generative-ai
 3. **GitHub Actions** referenziert GEMINI_API_KEY statt ANTHROPIC_API_KEY
 4. **GEMINI.md** kann gelöscht werden
-5. **Next.js Server Action Body-Size-Limit** prüfen — möglicherweise Ursache für OCR-Fehler bei Bildern aus dem ImageEditor
 
 ## Wichtige Dateien
 
@@ -62,6 +53,7 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 - `src/lib/text-parser.ts` — Shared Parsing-Logik (TextBlock, parseTextBlocks, parseInlineSegments, stripMarkdown)
 - `src/lib/export.ts` — Alle Export-Funktionen (PDF, DOCX, MD, TXT)
 - `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
+- `next.config.ts` — Server Actions Body-Size-Limit (10mb)
 - `DESIGN-SYSTEM.md` — Verbindliches Design-System
 - `docs/tickets/TICKETS.md` — Ticket-Übersicht
 - `CLAUDE.md` — Architektur-Referenz
