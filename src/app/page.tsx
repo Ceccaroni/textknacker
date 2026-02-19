@@ -268,12 +268,9 @@ export default function Home() {
   async function svgToPngDataUrl(svgUrl: string, pixelWidth: number, pixelHeight: number): Promise<string> {
     const response = await fetch(svgUrl);
     let svgText = await response.text();
-    // Inject width/height so browsers render SVG at correct size on canvas
-    svgText = svgText.replace(
-      '<svg ',
-      `<svg width="${pixelWidth}" height="${pixelHeight}" `
-    );
-    const svgBase64 = btoa(svgText);
+    svgText = svgText.replace('<svg ', `<svg width="${pixelWidth}" height="${pixelHeight}" `);
+    const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
@@ -282,10 +279,11 @@ export default function Home() {
         canvas.height = pixelHeight;
         const ctx = canvas.getContext('2d')!;
         ctx.drawImage(img, 0, 0, pixelWidth, pixelHeight);
+        URL.revokeObjectURL(url);
         resolve(canvas.toDataURL('image/png'));
       };
-      img.onerror = reject;
-      img.src = `data:image/svg+xml;base64,${svgBase64}`;
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('SVG conversion failed')); };
+      img.src = url;
     });
   }
 
@@ -466,7 +464,9 @@ export default function Home() {
 
   const textBlocks = useMemo((): TextBlock[] => {
     if (!currentText) return [];
-    return currentText.split(/\n\n+/).filter(b => b.trim()).map(block => {
+    // Normalize line endings, then split blocks by blank lines
+    const normalized = currentText.replace(/\r\n/g, '\n');
+    return normalized.split(/\n\n+/).filter(b => b.trim()).map(block => {
       const trimmed = block.trim();
       if (/^(\*{3,}|-{3,}|_{3,})$/.test(trimmed)) return { type: 'separator' } as TextBlock;
       const heading = parseHeading(trimmed);
