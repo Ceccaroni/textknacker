@@ -17,7 +17,8 @@ PHORO Read ist eine Web-App, die Texte mithilfe von KI vereinfacht (Einfache Spr
 | Font | Lexend (Google Fonts) | via next/font |
 | AI-Backend | Anthropic Claude API (Sonnet 4.5) | SDK ^0.32.1 |
 | Validierung | Zod | transitiv (nicht explizit in package.json!) |
-| PDF | jsPDF | ^4.0.0 (installiert, noch nicht genutzt) |
+| PDF | jsPDF | ^4.0.0 |
+| DOCX | docx | ^9.x (dynamisch importiert) |
 | Hosting | Firebase Hosting (SSR via frameworksBackend) | Region us-central1 |
 | CI/CD | GitHub Actions → Firebase Deploy | bei Push auf main |
 
@@ -37,7 +38,9 @@ src/
 │   └── favicon.ico
 ├── components/ui/        # shadcn/ui Komponenten (button, tabs, textarea, toggle, toggle-group)
 └── lib/
-    └── utils.ts          # cn() Helper (clsx + tailwind-merge)
+    ├── utils.ts          # cn() Helper (clsx + tailwind-merge)
+    ├── text-parser.ts    # Shared Typen (TextBlock, StyledSegment) + Parsing-Funktionen
+    └── export.ts         # Export-Funktionen (PDF, DOCX, MD, TXT)
 
 public/                   # Statische Assets (SVGs)
 docs/

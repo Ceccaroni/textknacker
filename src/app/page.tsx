@@ -9,9 +9,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
 import {
-  Camera, LoaderCircle, Sparkles, X,
-  ArrowLeft, Play, Pause, Type, Crosshair, FileDown,
+  Camera, LoaderCircle, X,
+  ArrowLeft, Play, Pause, Type, Crosshair, FileDown, ChevronDown,
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
+import { parseTextBlocks, type TextBlock } from '@/lib/text-parser';
+import { exportPdf, exportDocx, exportMarkdown, exportPlainText, type ExportParams } from '@/lib/export';
 
 // ── Initial States ──────────────────────────────────────────────
 
@@ -241,208 +249,9 @@ export default function Home() {
     setIsSpeaking(true);
   }
 
-  // ── Reading Mode: PDF Export ────────────────────────────────
-
-  type StyledSegment = { text: string; bold: boolean; italic: boolean };
-
-  function parseInlineSegments(text: string): StyledSegment[] {
-    const segments: StyledSegment[] = [];
-    const regex = /(\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*)/g;
-    let lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      if (match.index > lastIndex) {
-        segments.push({ text: text.slice(lastIndex, match.index), bold: false, italic: false });
-      }
-      if (match[2]) segments.push({ text: match[2], bold: true, italic: true });
-      else if (match[3]) segments.push({ text: match[3], bold: true, italic: false });
-      else if (match[4]) segments.push({ text: match[4], bold: false, italic: true });
-      lastIndex = regex.lastIndex;
-    }
-    if (lastIndex < text.length) {
-      segments.push({ text: text.slice(lastIndex), bold: false, italic: false });
-    }
-    return segments.length > 0 ? segments : [{ text, bold: false, italic: false }];
-  }
-
-  async function svgToPngDataUrl(svgUrl: string, pixelWidth: number, pixelHeight: number): Promise<string> {
-    const response = await fetch(svgUrl);
-    let svgText = await response.text();
-    svgText = svgText.replace('<svg ', `<svg width="${pixelWidth}" height="${pixelHeight}" `);
-    const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = pixelWidth;
-        canvas.height = pixelHeight;
-        const ctx = canvas.getContext('2d')!;
-        ctx.drawImage(img, 0, 0, pixelWidth, pixelHeight);
-        URL.revokeObjectURL(url);
-        resolve(canvas.toDataURL('image/png'));
-      };
-      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('SVG conversion failed')); };
-      img.src = url;
-    });
-  }
-
-  async function handlePdfExport() {
-    const jsPDFModule = await import('jspdf');
-    const doc = new jsPDFModule.default({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-    // Layout constants
-    const PW = 210, PH = 297;
-    const ML = 20, MR = 20, MT = 20, MB = 20;
-    const CW = PW - ML - MR;
-    const BLUE = { r: 26, g: 53, b: 80 };
-    const SLATE = { r: 61, g: 64, b: 91 };
-    const H_SIZE = 14, B_SIZE = 11, M_SIZE = 9;
-    const LH = 1.5;
-    const LIST_INDENT = 8;
-
-    function fontStyle(bold: boolean, italic: boolean): string {
-      if (bold && italic) return 'bolditalic';
-      if (bold) return 'bold';
-      if (italic) return 'italic';
-      return 'normal';
-    }
-
-    function lineH(fontSize: number): number {
-      return fontSize * LH * 0.3528;
-    }
-
-    function checkPageBreak(y: number, needed: number): number {
-      if (y + needed > PH - MB) { doc.addPage(); return MT; }
-      return y;
-    }
-
-    function renderStyledText(
-      segments: StyledSegment[], startX: number, startY: number,
-      maxWidth: number, fontSize: number, color: { r: number; g: number; b: number }
-    ): number {
-      doc.setFontSize(fontSize);
-      doc.setTextColor(color.r, color.g, color.b);
-      const lh = lineH(fontSize);
-      let cx = startX, cy = startY;
-
-      for (const seg of segments) {
-        doc.setFont('Helvetica', fontStyle(seg.bold, seg.italic));
-        const words = seg.text.split(/(\s+)/);
-        for (const word of words) {
-          if (!word) continue;
-          const w = doc.getTextWidth(word);
-          if (cx > startX && cx + w > startX + maxWidth) {
-            cx = startX;
-            cy += lh;
-            cy = checkPageBreak(cy, lh);
-          }
-          if (word.trim()) {
-            doc.text(word, cx, cy);
-          }
-          cx += w;
-        }
-      }
-      return cy + lh;
-    }
-
-    let y = MT;
-
-    // ── 1. Logo (top-right) ──
-    try {
-      const logoPng = await svgToPngDataUrl('/logo-phoro.svg', 400, 137);
-      const logoW = 35, logoH = logoW / (192 / 66);
-      doc.addImage(logoPng, 'PNG', PW - MR - logoW, MT, logoW, logoH);
-    } catch { /* graceful degradation */ }
-
-    // ── 2. Title ──
-    doc.setFont('Helvetica', 'bold');
-    doc.setFontSize(20);
-    doc.setTextColor(BLUE.r, BLUE.g, BLUE.b);
-    doc.text('PHORO Read', ML, y + 7);
-
-    // ── 3. Subtitle ──
-    doc.setFont('Helvetica', 'normal');
-    doc.setFontSize(M_SIZE);
-    doc.setTextColor(SLATE.r, SLATE.g, SLATE.b);
-    doc.text(readingMode === 'einfach' ? 'Einfache Sprache' : 'Leichte Sprache', ML, y + 13);
-
-    // ── 4. Separator ──
-    y += 18;
-    doc.setDrawColor(BLUE.r, BLUE.g, BLUE.b);
-    doc.setLineWidth(0.4);
-    doc.line(ML, y, PW - MR, y);
-    y += 6;
-
-    // ── 5. Content blocks ──
-    for (const block of textBlocks) {
-      if (block.type === 'separator') {
-        y = checkPageBreak(y, 6);
-        y += 2;
-        doc.setDrawColor(SLATE.r, SLATE.g, SLATE.b);
-        doc.setLineWidth(0.2);
-        doc.line(ML + 20, y, PW - MR - 20, y);
-        y += 4;
-        continue;
-      }
-      if (block.type === 'heading') {
-        y = checkPageBreak(y, lineH(H_SIZE) + 6);
-        y += 3;
-        const segs = parseInlineSegments(block.text).map(s => ({ ...s, bold: true }));
-        doc.setTextColor(BLUE.r, BLUE.g, BLUE.b);
-        y = renderStyledText(segs, ML, y, CW, H_SIZE, BLUE);
-        y += 1;
-      } else if (block.type === 'list') {
-        for (let i = 0; i < block.items.length; i++) {
-          y = checkPageBreak(y, lineH(B_SIZE));
-          doc.setFont('Helvetica', 'normal');
-          doc.setFontSize(B_SIZE);
-          doc.setTextColor(SLATE.r, SLATE.g, SLATE.b);
-          const prefix = block.ordered ? `${i + 1}.` : '\u2022';
-          doc.text(prefix, ML + 2, y);
-          const segs = parseInlineSegments(block.items[i]);
-          y = renderStyledText(segs, ML + LIST_INDENT, y, CW - LIST_INDENT, B_SIZE, SLATE);
-        }
-        y += 2;
-      } else if (block.type === 'paragraph') {
-        const fullText = block.sentences.join('');
-        const segs = parseInlineSegments(fullText);
-        y = checkPageBreak(y, lineH(B_SIZE));
-        y = renderStyledText(segs, ML, y, CW, B_SIZE, SLATE);
-        y += 2;
-      }
-    }
-
-    // ── 6. Page numbers ──
-    const totalPages = doc.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
-      doc.setPage(i);
-      doc.setFont('Helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(150, 150, 150);
-      doc.text(`${i} / ${totalPages}`, PW / 2, PH - 10, { align: 'center' });
-    }
-
-    doc.save('phoro-read.pdf');
-  }
-
   // ── Reading Mode: Block Parsing ─────────────────────────────
 
   const currentText = resultCache[readingMode] || '';
-
-  type TextBlock =
-    | { type: 'heading'; text: string }
-    | { type: 'paragraph'; sentences: string[] }
-    | { type: 'list'; ordered: boolean; items: string[] }
-    | { type: 'separator' };
-
-  function parseHeading(line: string): string | null {
-    const md = line.match(/^#{1,3}\s+(.+)$/);
-    if (md) return md[1];
-    const bold = line.match(/^\*\*(.+)\*\*$/);
-    if (bold) return bold[1];
-    return null;
-  }
 
   function renderInlineMarkdown(text: string): React.ReactNode[] {
     const result: React.ReactNode[] = [];
@@ -462,24 +271,19 @@ export default function Home() {
     return result.length > 0 ? result : [text];
   }
 
-  const textBlocks = useMemo((): TextBlock[] => {
-    if (!currentText) return [];
-    // Normalize line endings, then split blocks by blank lines
-    const normalized = currentText.replace(/\r\n/g, '\n');
-    return normalized.split(/\n\n+/).filter(b => b.trim()).map(block => {
-      const trimmed = block.trim();
-      if (/^(\*{3,}|-{3,}|_{3,})$/.test(trimmed)) return { type: 'separator' } as TextBlock;
-      const heading = parseHeading(trimmed);
-      if (heading) return { type: 'heading', text: heading };
-      const lines = trimmed.split('\n');
-      const isUnordered = lines.every(l => /^[-*]\s+/.test(l.trim()));
-      const isOrdered = lines.every(l => /^\d+[.)]\s+/.test(l.trim()));
-      if (isUnordered) return { type: 'list', ordered: false, items: lines.map(l => l.trim().replace(/^[-*]\s+/, '')) };
-      if (isOrdered) return { type: 'list', ordered: true, items: lines.map(l => l.trim().replace(/^\d+[.)]\s+/, '')) };
-      const sentences = trimmed.match(/[^.!?]*[.!?]+[\s]?|[^.!?]+$/g)?.filter(s => s.trim()) || [trimmed];
-      return { type: 'paragraph', sentences };
-    });
-  }, [currentText]);
+  const textBlocks = useMemo(() => parseTextBlocks(currentText), [currentText]);
+
+  // ── Export Handler ──────────────────────────────────────────
+
+  function handleExport(format: 'pdf' | 'docx' | 'md' | 'txt') {
+    const params: ExportParams = { textBlocks, currentText, readingMode };
+    switch (format) {
+      case 'pdf': exportPdf(params); break;
+      case 'docx': exportDocx(params); break;
+      case 'md': exportMarkdown(params); break;
+      case 'txt': exportPlainText(params); break;
+    }
+  }
 
   // ── Render ──────────────────────────────────────────────────
 
@@ -734,15 +538,21 @@ export default function Home() {
                       Abstand
                     </Button>
 
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="min-w-0 gap-1.5"
-                      onClick={handlePdfExport}
-                    >
-                      <FileDown className="h-4 w-4" />
-                      PDF
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="min-w-0 gap-1.5">
+                          <FileDown className="h-4 w-4" />
+                          Export
+                          <ChevronDown className="h-3 w-3 opacity-50" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-36">
+                        <DropdownMenuItem onClick={() => handleExport('pdf')}>PDF</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleExport('docx')}>Word (DOCX)</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleExport('md')}>Markdown</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleExport('txt')}>Text</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               ) : (
