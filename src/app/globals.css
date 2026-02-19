@@ -100,3 +100,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* react-image-crop – PHORO Design Overrides */
+.ReactCrop__crop-selection {
+  border-color: #1A3550;
+}
+.ReactCrop__drag-handle::after {
+  border-color: #1A3550;
+}

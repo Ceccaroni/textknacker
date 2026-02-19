@@ -19,6 +19,7 @@ PHORO Read ist eine Web-App, die Texte mithilfe von KI vereinfacht (Einfache Spr
 | Validierung | Zod | transitiv (nicht explizit in package.json!) |
 | PDF | jsPDF | ^4.0.0 |
 | DOCX | docx | ^9.x (dynamisch importiert) |
+| Bildbearbeitung | react-image-crop | ^11.x |
 | Hosting | Firebase Hosting (SSR via frameworksBackend) | Region us-central1 |
 | CI/CD | GitHub Actions → Firebase Deploy | bei Push auf main |
 
@@ -36,7 +37,9 @@ src/
 │   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API (system prompt + Basis-Instruktionen + modus-spezifische Regeln)
 │   ├── globals.css       # Tailwind + shadcn/ui CSS-Variablen (oklch)
 │   └── favicon.ico
-├── components/ui/        # shadcn/ui Komponenten (button, dropdown-menu, tabs, textarea, toggle, toggle-group)
+├── components/
+│   ├── image-editor.tsx  # Bildbearbeitung (Crop, Helligkeit, Kontrast) vor OCR — react-image-crop + Canvas
+│   └── ui/               # shadcn/ui Komponenten (button, dropdown-menu, slider, tabs, textarea, toggle, toggle-group)
 └── lib/
     ├── utils.ts          # cn() Helper (clsx + tailwind-merge)
     ├── text-parser.ts    # Shared Typen (TextBlock, StyledSegment) + Parsing-Funktionen

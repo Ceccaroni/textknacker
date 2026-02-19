@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { parseTextBlocks, type TextBlock } from '@/lib/text-parser';
 import { exportPdf, exportDocx, exportMarkdown, exportPlainText, type ExportParams } from '@/lib/export';
+import { ImageEditor } from '@/components/image-editor';
 
 // ── Initial States ──────────────────────────────────────────────
 
@@ -68,12 +69,13 @@ export default function Home() {
 
   // Server action states
   const [simplifyState, simplifyFormAction] = useActionState(simplifyText, simplifyInitialState);
-  const [ocrState, ocrFormAction] = useActionState(runOCR, ocrInitialState);
+  const [ocrState, ocrFormAction, isOcrPending] = useActionState(runOCR, ocrInitialState);
 
   // Input view state
   const [activeTab, setActiveTab] = useState('text');
   const [text, setText] = useState('');
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   // View state
   const [view, setView] = useState<'input' | 'reading'>('input');
@@ -93,6 +95,15 @@ export default function Home() {
   // ── Camera Setup ────────────────────────────────────────────
 
   useEffect(() => {
+    // Stop camera when image editor is open
+    if (capturedImage) {
+      if (videoRef.current?.srcObject) {
+        (videoRef.current.srcObject as MediaStream).getTracks().forEach(t => t.stop());
+        videoRef.current.srcObject = null;
+      }
+      return;
+    }
+
     async function setupCamera() {
       setCameraError(null);
       try {
@@ -118,12 +129,13 @@ export default function Home() {
         (videoRef.current.srcObject as MediaStream).getTracks().forEach(t => t.stop());
       }
     };
-  }, [activeTab, view]);
+  }, [activeTab, view, capturedImage]);
 
   // ── OCR Result → Text Tab ───────────────────────────────────
 
   useEffect(() => {
     if (ocrState.text) {
+      setCapturedImage(null);
       setText(ocrState.text);
       setActiveTab('text');
     }
@@ -155,7 +167,7 @@ export default function Home() {
 
   // ── Camera Capture ──────────────────────────────────────────
 
-  const captureAndSubmit = (formData: FormData) => {
+  const captureAndSubmit = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (video && canvas && video.readyState >= 2) {
@@ -164,8 +176,7 @@ export default function Home() {
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        formData.set('image', canvas.toDataURL('image/jpeg', 0.9).split(',')[1]);
-        ocrFormAction(formData);
+        setCapturedImage(canvas.toDataURL('image/jpeg', 0.9));
       }
     }
   };
@@ -175,14 +186,26 @@ export default function Home() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (e) => {
-      const base64 = (e.target?.result as string)?.split(',')[1];
-      if (base64) {
-        const fd = new FormData();
-        fd.set('image', base64);
-        ocrFormAction(fd);
+      const dataUrl = e.target?.result as string;
+      if (dataUrl) {
+        setCapturedImage(dataUrl);
+        setActiveTab('camera');
       }
     };
     reader.readAsDataURL(file);
+  };
+
+  // ── Image Editor Handlers ──────────────────────────────────
+
+  const handleEditorConfirm = (editedBase64: string) => {
+    setCapturedImage(null);
+    const fd = new FormData();
+    fd.set('image', editedBase64);
+    ocrFormAction(fd);
+  };
+
+  const handleEditorCancel = () => {
+    setCapturedImage(null);
   };
 
   // ── Reading Mode: Mode Switch with Cache ────────────────────
@@ -325,28 +348,46 @@ export default function Home() {
 
               {/* ── Camera Tab ── */}
               <TabsContent value="camera" className="flex-1 flex flex-col overflow-y-auto">
-                <form action={captureAndSubmit} className="flex-1 flex flex-col min-h-0">
-                  <div className="relative flex-1 min-h-[12rem] bg-black rounded-lg overflow-hidden shadow-lg">
-                    <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
-                    <OcrFormContent />
-                  </div>
-                </form>
+                {capturedImage ? (
+                  <ImageEditor
+                    imageDataUrl={capturedImage}
+                    onConfirm={handleEditorConfirm}
+                    onCancel={handleEditorCancel}
+                  />
+                ) : (
+                  <>
+                    <form action={captureAndSubmit} className="flex-1 flex flex-col min-h-0">
+                      <div className="relative flex-1 min-h-[12rem] bg-black rounded-lg overflow-hidden shadow-lg">
+                        <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
+                        {isOcrPending && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-10">
+                            <div className="flex flex-col items-center text-white">
+                              <LoaderCircle className="h-12 w-12 animate-spin text-white" />
+                              <p className="mt-4 text-lg font-semibold">Text wird erkannt...</p>
+                            </div>
+                          </div>
+                        )}
+                        <OcrFormContent />
+                      </div>
+                    </form>
 
-                <div className="mt-3 text-center shrink-0">
-                  {cameraError && <p className="text-sm text-red-600 mb-2">{cameraError}</p>}
-                  <div>
-                    <label htmlFor="file-upload" className="cursor-pointer text-sm text-phoro-slate/60">
-                      Kamera funktioniert nicht?{' '}
-                      <span className="font-semibold text-phoro-blue hover:underline">Bild hochladen.</span>
-                    </label>
-                    <input id="file-upload" type="file" accept="image/*" capture="environment" onChange={handleFileUpload} className="hidden" />
-                  </div>
-                </div>
+                    <div className="mt-3 text-center shrink-0">
+                      {cameraError && <p className="text-sm text-red-600 mb-2">{cameraError}</p>}
+                      <div>
+                        <label htmlFor="file-upload" className="cursor-pointer text-sm text-phoro-slate/60">
+                          Kamera funktioniert nicht?{' '}
+                          <span className="font-semibold text-phoro-blue hover:underline">Bild hochladen.</span>
+                        </label>
+                        <input id="file-upload" type="file" accept="image/*" capture="environment" onChange={handleFileUpload} className="hidden" />
+                      </div>
+                    </div>
 
-                {ocrState.errors?.image && (
-                  <div className="mt-2 p-2 text-center text-red-500 shrink-0">
-                    <p>{ocrState.errors.image[0]}</p>
-                  </div>
+                    {ocrState.errors?.image && (
+                      <div className="mt-2 p-2 text-center text-red-500 shrink-0">
+                        <p>{ocrState.errors.image[0]}</p>
+                      </div>
+                    )}
+                  </>
                 )}
                 <canvas ref={canvasRef} className="hidden" />
               </TabsContent>

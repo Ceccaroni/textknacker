@@ -4,26 +4,19 @@
 
 ## Zuletzt erledigt (diese Session)
 
-- **PR-006**: PDF-Export gefixt
-  - SVG Logo von CSS-Klassen auf inline `fill`-Attribute umgestellt (Canvas-Rendering ignoriert `<style>` in SVGs)
-  - Markdown-Rendering war bereits korrekt (parseTextBlocks + parseInlineSegments)
-  - A4-Format war bereits korrekt
-- **PR-007**: Export-Formate (DOCX, MD, TXT) implementiert
-  - Neues Export-Dropdown ersetzt den alten PDF-Button: `[Vorlesen] [Fokus] [Abstand] [Export ▾]`
-  - 4 Formate: PDF, Word (DOCX), Markdown, Text
-  - Code-Refactoring: Export-Logik + Parsing aus `page.tsx` extrahiert (~200 Zeilen weniger)
-  - Neue Dateien: `src/lib/text-parser.ts`, `src/lib/export.ts`
-  - Neue Dependencies: `docx`, `@radix-ui/react-dropdown-menu`
-  - `@types/jspdf` entfernt (veraltet, kollidierte mit jsPDF v4)
-  - shadcn/ui `dropdown-menu` Komponente hinzugefügt
-- **PR-015**: Footer mit Copyright, Impressum und Datenschutz
-  - `© 2026 PHORO · phoro.ch · Impressum · Datenschutz`
-  - Alle Links extern auf phoro.ch, `target="_blank"`
-  - Design: 11px, Slate 60%, phoro-meta Stil
+- **PR-009**: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast)
+  - Neuer ImageEditor-Zwischenschritt nach Foto-Aufnahme/Bild-Upload, vor OCR
+  - Crop: Frei ziehbare Rechteck-Auswahl via `react-image-crop`
+  - Helligkeit/Kontrast: Slider (50–150%), Live-Vorschau via CSS-Filter
+  - Canvas-Verarbeitung bei Bestätigung (Crop + Filter → base64 JPEG)
+  - Kamera-Stream wird gestoppt wenn Editor offen
+  - Neue Dateien: `src/components/image-editor.tsx`, `src/components/ui/slider.tsx`
+  - Neue Dependency: `react-image-crop`
+  - CSS-Overrides für Crop-Border in Pharos Blue
 
 ## Deployment
 
-Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Min).
+Änderungen commited, noch nicht gepusht. Nach Push deployt GitHub Actions automatisch auf Firebase (~5 Min).
 
 ## Erledigte Tickets
 
@@ -34,6 +27,7 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 - [x] PR-005: Sprachniveau Segmented Control
 - [x] PR-006: PDF-Export verbessern (Logo + Markdown)
 - [x] PR-007: Export-Formate (DOCX, MD, TXT)
+- [x] PR-009: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast)
 - [x] PR-010: Header-Text anpassen
 - [x] PR-011: Bildbeschreibung bei textlosen Fotos deaktivieren
 - [x] PR-012: iOS – Buttons auf Textrahmenbreite ausrichten
@@ -44,12 +38,10 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 ## Offene Tickets
 
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
-- [ ] **PR-009**: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) ⚡
 
 ## Nächste Schritte
 
-1. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
-2. **PR-008** — Open Dyslexic Schriftoption
+1. **PR-008** — Open Dyslexic Schriftoption
 
 ## Bekannte technische Schulden
 
@@ -62,6 +54,7 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 
 - `src/app/page.tsx` — Gesamte App-Logik (Desktop: Side-by-Side, Mobile: View-Switching)
 - `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API)
+- `src/components/image-editor.tsx` — Bildbearbeitung (Crop, Helligkeit, Kontrast) vor OCR
 - `src/lib/text-parser.ts` — Shared Parsing-Logik (TextBlock, parseTextBlocks, parseInlineSegments, stripMarkdown)
 - `src/lib/export.ts` — Alle Export-Funktionen (PDF, DOCX, MD, TXT)
 - `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
