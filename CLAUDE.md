@@ -36,7 +36,7 @@ src/
 │   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API (system prompt + Basis-Instruktionen + modus-spezifische Regeln)
 │   ├── globals.css       # Tailwind + shadcn/ui CSS-Variablen (oklch)
 │   └── favicon.ico
-├── components/ui/        # shadcn/ui Komponenten (button, tabs, textarea, toggle, toggle-group)
+├── components/ui/        # shadcn/ui Komponenten (button, dropdown-menu, tabs, textarea, toggle, toggle-group)
 └── lib/
     ├── utils.ts          # cn() Helper (clsx + tailwind-merge)
     ├── text-parser.ts    # Shared Typen (TextBlock, StyledSegment) + Parsing-Funktionen

@@ -4,6 +4,10 @@
 
 ## Zuletzt erledigt (diese Session)
 
+- **PR-006**: PDF-Export gefixt
+  - SVG Logo von CSS-Klassen auf inline `fill`-Attribute umgestellt (Canvas-Rendering ignoriert `<style>` in SVGs)
+  - Markdown-Rendering war bereits korrekt (parseTextBlocks + parseInlineSegments)
+  - A4-Format war bereits korrekt
 - **PR-007**: Export-Formate (DOCX, MD, TXT) implementiert
   - Neues Export-Dropdown ersetzt den alten PDF-Button: `[Vorlesen] [Fokus] [Abstand] [Export ▾]`
   - 4 Formate: PDF, Word (DOCX), Markdown, Text
@@ -13,14 +17,13 @@
   - `@types/jspdf` entfernt (veraltet, kollidierte mit jsPDF v4)
   - shadcn/ui `dropdown-menu` Komponente hinzugefügt
 - **PR-015**: Footer mit Copyright, Impressum und Datenschutz
-- **PR-006**: PDF-Export gefixt — SVG Logo von CSS-Klassen auf inline `fill`-Attribute umgestellt (Canvas-Rendering ignoriert `<style>` in SVGs). Markdown-Rendering war bereits korrekt.
   - `© 2026 PHORO · phoro.ch · Impressum · Datenschutz`
   - Alle Links extern auf phoro.ch, `target="_blank"`
   - Design: 11px, Slate 60%, phoro-meta Stil
 
 ## Deployment
 
-Gepusht (`dc96518`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
+Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Min).
 
 ## Erledigte Tickets
 
@@ -29,6 +32,7 @@ Gepusht (`dc96518`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
 - [x] PR-003: Banner volle Breite
 - [x] PR-004: Panel-Höhe angleichen
 - [x] PR-005: Sprachniveau Segmented Control
+- [x] PR-006: PDF-Export verbessern (Logo + Markdown)
 - [x] PR-007: Export-Formate (DOCX, MD, TXT)
 - [x] PR-010: Header-Text anpassen
 - [x] PR-011: Bildbeschreibung bei textlosen Fotos deaktivieren
