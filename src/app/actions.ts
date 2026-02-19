@@ -32,6 +32,14 @@ const OcrSchema = z.object({
   image: z.string().min(1, { message: "An image is required." }),
 });
 
+function detectMediaType(base64: string): 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' {
+  if (base64.startsWith('/9j/')) return 'image/jpeg';
+  if (base64.startsWith('iVBOR')) return 'image/png';
+  if (base64.startsWith('R0lGOD')) return 'image/gif';
+  if (base64.startsWith('UklGR')) return 'image/webp';
+  return 'image/jpeg';
+}
+
 export async function runOCR(prevState: OcrState, formData: FormData): Promise<OcrState> {
   const validatedFields = OcrSchema.safeParse({
     image: formData.get('image'),
@@ -58,7 +66,7 @@ export async function runOCR(prevState: OcrState, formData: FormData): Promise<O
               type: "image",
               source: {
                 type: "base64",
-                media_type: "image/jpeg",
+                media_type: detectMediaType(image),
                 data: image,
               },
             },

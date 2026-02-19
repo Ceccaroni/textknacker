@@ -21,6 +21,7 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
+  const [editorError, setEditorError] = useState<string | null>(null);
 
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     imgRef.current = e.currentTarget;
@@ -35,7 +36,10 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
 
   function handleConfirm() {
     const image = imgRef.current;
-    if (!image) return;
+    if (!image || !image.complete || image.naturalWidth === 0) {
+      setEditorError('Bild noch nicht geladen. Bitte kurz warten und erneut versuchen.');
+      return;
+    }
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -68,7 +72,15 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
     ctx.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
     ctx.drawImage(image, sx, sy, sw, sh, 0, 0, dw, dh);
 
-    const base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+    if (!dataUrl.startsWith('data:image/jpeg')) {
+      setEditorError('Bild konnte nicht als JPEG konvertiert werden. Bitte ein anderes Bild verwenden.');
+      return;
+    }
+
+    setEditorError(null);
+    const base64 = dataUrl.split(',')[1];
     onConfirm(base64);
   }
 
@@ -89,9 +101,9 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
       </div>
 
       {/* Error message */}
-      {errorMessage && !isProcessing && (
+      {(editorError || (errorMessage && !isProcessing)) && (
         <div className="shrink-0 py-2 text-center text-sm text-red-600">
-          {errorMessage} — Bitte erneut versuchen.
+          {editorError || errorMessage} — Bitte erneut versuchen.
         </div>
       )}
 
