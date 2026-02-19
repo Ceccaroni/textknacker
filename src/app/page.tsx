@@ -66,6 +66,8 @@ export default function Home() {
   // Camera refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ocrFormRef = useRef<HTMLFormElement>(null);
+  const ocrInputRef = useRef<HTMLInputElement>(null);
 
   // Server action states
   const [simplifyState, simplifyFormAction] = useActionState(simplifyText, simplifyInitialState);
@@ -136,10 +138,16 @@ export default function Home() {
 
   useEffect(() => {
     if (ocrState.text) {
+      setCapturedImage(null);
+      setIsEditorProcessing(false);
       setText(ocrState.text);
       setActiveTab('text');
     }
-  }, [ocrState.text]);
+    if (ocrState.errors) {
+      setIsEditorProcessing(false);
+      // Don't close editor on error — user can retry or cancel
+    }
+  }, [ocrState]);
 
   // ── Simplification Result → Reading Mode ────────────────────
 
@@ -197,26 +205,11 @@ export default function Home() {
 
   // ── Image Editor Handlers ──────────────────────────────────
 
-  const handleEditorConfirm = async (editedBase64: string) => {
+  const handleEditorConfirm = (editedBase64: string) => {
     setIsEditorProcessing(true);
-    try {
-      const fd = new FormData();
-      fd.set('image', editedBase64);
-      const result = await runOCR(ocrInitialState, fd);
-      if (result.text) {
-        setCapturedImage(null);
-        setIsEditorProcessing(false);
-        setText(result.text);
-        setActiveTab('text');
-      } else {
-        setCapturedImage(null);
-        setIsEditorProcessing(false);
-        setCameraError(result.errors?.image?.[0] || 'Kein Text erkannt.');
-      }
-    } catch {
-      setCapturedImage(null);
-      setIsEditorProcessing(false);
-      setCameraError('Fehler bei der Texterkennung.');
+    if (ocrInputRef.current && ocrFormRef.current) {
+      ocrInputRef.current.value = editedBase64;
+      ocrFormRef.current.requestSubmit();
     }
   };
 
@@ -365,12 +358,15 @@ export default function Home() {
               {/* ── Camera Tab ── */}
               <TabsContent value="camera" className="flex-1 flex flex-col overflow-y-auto">
                 {capturedImage ? (
-                  <ImageEditor
-                    imageDataUrl={capturedImage}
-                    isProcessing={isEditorProcessing}
-                    onConfirm={handleEditorConfirm}
-                    onCancel={handleEditorCancel}
-                  />
+                  <>
+                    <ImageEditor
+                      imageDataUrl={capturedImage}
+                      isProcessing={isEditorProcessing}
+                      errorMessage={ocrState.errors?.image?.[0]}
+                      onConfirm={handleEditorConfirm}
+                      onCancel={handleEditorCancel}
+                    />
+                  </>
                 ) : (
                   <>
                     <form action={captureAndSubmit} className="flex-1 flex flex-col min-h-0">
@@ -399,6 +395,9 @@ export default function Home() {
                   </>
                 )}
                 <canvas ref={canvasRef} className="hidden" />
+                <form ref={ocrFormRef} action={ocrFormAction} className="hidden">
+                  <input ref={ocrInputRef} type="hidden" name="image" />
+                </form>
               </TabsContent>
 
               {/* ── Text Tab ── */}

@@ -10,11 +10,12 @@ import { X, Check, RotateCcw, LoaderCircle } from 'lucide-react';
 interface ImageEditorProps {
   imageDataUrl: string;
   isProcessing?: boolean;
+  errorMessage?: string;
   onConfirm: (editedBase64: string) => void;
   onCancel: () => void;
 }
 
-export function ImageEditor({ imageDataUrl, isProcessing, onConfirm, onCancel }: ImageEditorProps) {
+export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfirm, onCancel }: ImageEditorProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
@@ -76,6 +77,13 @@ export function ImageEditor({ imageDataUrl, isProcessing, onConfirm, onCancel }:
           {isProcessing ? 'Text wird erkannt...' : 'Übernehmen'}
         </Button>
       </div>
+
+      {/* Error message */}
+      {errorMessage && !isProcessing && (
+        <div className="shrink-0 py-2 text-center text-sm text-red-600">
+          {errorMessage} — Bitte erneut versuchen.
+        </div>
+      )}
 
       {/* Image with crop overlay */}
       <div className="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden rounded-lg bg-black/5">
