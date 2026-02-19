@@ -11,6 +11,7 @@
 | [PR-007](PR-007.md) | ✨ Feature | 💤 Niedrig | Zusätzliche Export-Formate (DOCX, MD, TXT) |
 | [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
 | [PR-009](PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
+
 ## 🟡 In Arbeit
 
 | Ticket | Typ | Priorität | Titel |

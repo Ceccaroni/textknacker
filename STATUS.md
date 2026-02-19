@@ -1,15 +1,17 @@
 # PHORO Read — Status
 
-> Letzte Aktualisierung: 2026-02-18
+> Letzte Aktualisierung: 2026-02-19
 
 ## Zuletzt erledigt (diese Session)
 
-- **PR-013**: System-Prompt komplett überarbeitet — neuer didaktischer Rollen-Prompt als System-Message, Basis-Instruktionen für Inhaltserhaltung (Kohärenz, Fliesstextcharakter, keine Informationskürzung), Glossar-Feature (schwierige Begriffe werden inline + in Glossar am Textende erklärt), max_tokens auf 4096 erhöht
-- **Git Remote-URL** korrigiert: `Ceccaroni/textknacker` (Gross-/Kleinschreibung)
+- **PR-012**: iOS Button-Alignment gefixt — Button-Container von `flex` auf `grid grid-cols-4` umgestellt, `min-w-0` auf Buttons für korrekte Breitenberechnung (überschreibt shadcn `shrink-0`/`whitespace-nowrap`)
+- **PR-006 (WIP, zurückgestellt)**: PDF-Export überarbeitet — neue Hilfsfunktionen (`parseInlineSegments`, `svgToPngDataUrl`, `renderStyledText`, `checkPageBreak`), Markdown-Rendering (Headings, Listen, Bold/Italic), Logo-Einbettung via SVG→Canvas→PNG, Design-System-Farben, Seitenzahlen. **Funktioniert aber noch nicht korrekt** (Logo erscheint nicht, Markdown-Zeichen werden roh ausgegeben). Braucht lokales Debugging mit Browser-DevTools.
+- **Separator-Support**: `***`/`---`/`___` werden jetzt als Trennlinien erkannt (neuer `separator`-Blocktyp) statt als roher Text — betrifft sowohl UI (`<hr>`) als auch PDF (feine Linie)
+- **Zeilenenden-Normalisierung**: `\r\n` → `\n` im Block-Parser, falls Claude-API Windows-Zeilenenden liefert
 
 ## Deployment
 
-Änderungen auf GitHub gepusht (`2073f1c`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
+Änderungen auf GitHub gepusht (`bc33397`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
 
 ## Erledigte Tickets
 
@@ -20,23 +22,22 @@
 - [x] PR-005: Sprachniveau Segmented Control
 - [x] PR-010: Header-Text anpassen
 - [x] PR-011: Bildbeschreibung bei textlosen Fotos deaktivieren
+- [x] PR-012: iOS – Buttons auf Textrahmenbreite ausrichten
 - [x] PR-013: System-Prompt für Textvereinfachung überarbeiten
 - [x] PR-014: Markdown-Rendering in Textausgabe
 
 ## Offene Tickets
 
-- [ ] **PR-006**: PDF-Export verbessern ⚡
+- [ ] **PR-006**: PDF-Export verbessern ⚡ — Code ist da, aber Logo + Markdown-Rendering funktionieren nicht. Lokales Debugging nötig.
 - [ ] **PR-007**: Zusätzliche Export-Formate (DOCX, MD, TXT) 💤
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 - [ ] **PR-009**: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) ⚡
-- [ ] **PR-012**: iOS – Buttons auf Textrahmenbreite ausrichten ⚡
 
 ## Nächste Schritte
 
-1. **PR-006** — PDF-Export: Logo, A4-Format, Markdown-Rendering
-2. **PR-012** — iOS Button-Alignment (kleiner Fix)
-3. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
-4. Danach PR-007 (Export-Formate) und PR-008 (Open Dyslexic)
+1. **PR-006** — PDF-Export debuggen (lokal mit DevTools: Logo-Konvertierung prüfen, textBlocks-Inhalt loggen, Rendering-Pipeline testen)
+2. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
+3. Danach PR-007 (Export-Formate) und PR-008 (Open Dyslexic)
 
 ## Bekannte technische Schulden
 
