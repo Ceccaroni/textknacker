@@ -32,6 +32,7 @@
 | [PR-013](completed/PR-013.md) | 🐛 Bug / ✨ Feature | 🔥 Hoch | System-Prompt für Textvereinfachung überarbeiten |
 | [PR-014](completed/PR-014.md) | 🐛 Bug | 🔥 Hoch | Markdown-Formatierung in Textausgabe wird nicht gerendert |
 | [PR-012](completed/PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
+| [PR-015](completed/PR-015.md) | ✨ Feature | ⚡ Mittel | Footer mit Copyright, Impressum und Datenschutz |
 
 ## Abhängigkeiten
 

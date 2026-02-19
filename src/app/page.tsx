@@ -562,6 +562,17 @@ export default function Home() {
           </div>
 
       </div>
+
+      {/* ── Footer ── */}
+      <footer className="shrink-0 px-4 py-2 text-center text-[11px] tracking-[0.02em] text-phoro-slate/60">
+        © 2026 PHORO
+        <span className="mx-1.5">·</span>
+        <a href="https://www.phoro.ch" target="_blank" rel="noopener noreferrer" className="hover:text-phoro-slate transition-colors">phoro.ch</a>
+        <span className="mx-1.5">·</span>
+        <a href="https://www.phoro.ch/impressum" target="_blank" rel="noopener noreferrer" className="hover:text-phoro-slate transition-colors">Impressum</a>
+        <span className="mx-1.5">·</span>
+        <a href="https://www.phoro.ch/datenschutz" target="_blank" rel="noopener noreferrer" className="hover:text-phoro-slate transition-colors">Datenschutz</a>
+      </footer>
     </main>
   );
 }
