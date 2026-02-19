@@ -38,6 +38,7 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 - [x] PR-013: System-Prompt für Textvereinfachung überarbeiten
 - [x] PR-014: Markdown-Rendering in Textausgabe
 - [x] PR-015: Footer mit Copyright, Impressum und Datenschutz
+- [x] PR-017: Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone)
 
 ## Offene / In Arbeit
 

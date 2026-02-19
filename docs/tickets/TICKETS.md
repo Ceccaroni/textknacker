@@ -31,6 +31,7 @@ _Keine_
 | [PR-012](completed/PR-012.md) | 🐛 Bug | ⚡ Mittel | iOS – Buttons auf Textrahmenbreite ausrichten |
 | [PR-015](completed/PR-015.md) | ✨ Feature | ⚡ Mittel | Footer mit Copyright, Impressum und Datenschutz |
 | [PR-009](completed/PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
+| [PR-017](completed/PR-017.md) | 🐛 Bug | 🔥 Hoch | Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone) |
 
 ## Abhängigkeiten
 
