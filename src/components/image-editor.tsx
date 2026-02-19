@@ -11,7 +11,7 @@ interface ImageEditorProps {
   imageDataUrl: string;
   isProcessing?: boolean;
   errorMessage?: string;
-  onConfirm: (editedBase64: string) => void;
+  onConfirm: (editedBase64: string, mediaType: string) => void;
   onCancel: () => void;
 }
 
@@ -21,7 +21,6 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
-  const [editorError, setEditorError] = useState<string | null>(null);
 
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     imgRef.current = e.currentTarget;
@@ -37,7 +36,6 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
   function handleConfirm() {
     const image = imgRef.current;
     if (!image || !image.complete || image.naturalWidth === 0) {
-      setEditorError('Bild noch nicht geladen. Bitte kurz warten und erneut versuchen.');
       return;
     }
 
@@ -74,14 +72,11 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-    if (!dataUrl.startsWith('data:image/jpeg')) {
-      setEditorError('Bild konnte nicht als JPEG konvertiert werden. Bitte ein anderes Bild verwenden.');
-      return;
-    }
-
-    setEditorError(null);
+    // JPEG or PNG fallback — both are fine for Claude API
+    const mediaType = dataUrl.startsWith('data:image/jpeg') ? 'image/jpeg' : 'image/png';
     const base64 = dataUrl.split(',')[1];
-    onConfirm(base64);
+
+    onConfirm(base64, mediaType);
   }
 
   const hasChanges = brightness !== 100 || contrast !== 100 || !!completedCrop;
@@ -101,9 +96,9 @@ export function ImageEditor({ imageDataUrl, isProcessing, errorMessage, onConfir
       </div>
 
       {/* Error message */}
-      {(editorError || (errorMessage && !isProcessing)) && (
+      {errorMessage && !isProcessing && (
         <div className="shrink-0 py-2 text-center text-sm text-red-600">
-          {editorError || errorMessage} — Bitte erneut versuchen.
+          {errorMessage} — Bitte erneut versuchen.
         </div>
       )}
 

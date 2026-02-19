@@ -205,10 +205,12 @@ export default function Home() {
 
   // ── Image Editor Handlers ──────────────────────────────────
 
-  const handleEditorConfirm = (editedBase64: string) => {
+  const handleEditorConfirm = (editedBase64: string, mediaType: string) => {
     setIsEditorProcessing(true);
     if (ocrInputRef.current && ocrFormRef.current) {
       ocrInputRef.current.value = editedBase64;
+      const mtInput = ocrFormRef.current.querySelector<HTMLInputElement>('input[name="mediaType"]');
+      if (mtInput) mtInput.value = mediaType;
       ocrFormRef.current.requestSubmit();
     }
   };
@@ -397,6 +399,7 @@ export default function Home() {
                 <canvas ref={canvasRef} className="hidden" />
                 <form ref={ocrFormRef} action={ocrFormAction} className="hidden">
                   <input ref={ocrInputRef} type="hidden" name="image" />
+                  <input type="hidden" name="mediaType" value="image/jpeg" />
                 </form>
               </TabsContent>
 
