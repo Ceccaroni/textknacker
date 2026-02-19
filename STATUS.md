@@ -13,6 +13,7 @@
   - `@types/jspdf` entfernt (veraltet, kollidierte mit jsPDF v4)
   - shadcn/ui `dropdown-menu` Komponente hinzugefügt
 - **PR-015**: Footer mit Copyright, Impressum und Datenschutz
+- **PR-006**: PDF-Export gefixt — SVG Logo von CSS-Klassen auf inline `fill`-Attribute umgestellt (Canvas-Rendering ignoriert `<style>` in SVGs). Markdown-Rendering war bereits korrekt.
   - `© 2026 PHORO · phoro.ch · Impressum · Datenschutz`
   - Alle Links extern auf phoro.ch, `target="_blank"`
   - Design: 11px, Slate 60%, phoro-meta Stil
@@ -38,15 +39,13 @@ Gepusht (`dc96518`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
 
 ## Offene Tickets
 
-- [ ] **PR-006**: PDF-Export verbessern ⚡ — Code ist da, aber Logo + Markdown-Rendering funktionieren nicht. Lokales Debugging nötig.
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 - [ ] **PR-009**: Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) ⚡
 
 ## Nächste Schritte
 
-1. **PR-006** — PDF-Export debuggen (lokal mit DevTools: Logo-Konvertierung prüfen, textBlocks-Inhalt loggen, Rendering-Pipeline testen)
-2. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
-3. Danach PR-008 (Open Dyslexic)
+1. **PR-009** — Bildbearbeitung (Crop, Helligkeit, Kontrast) — grösseres Feature
+2. **PR-008** — Open Dyslexic Schriftoption
 
 ## Bekannte technische Schulden
 
