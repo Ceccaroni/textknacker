@@ -80,7 +80,8 @@ export async function runOCR(prevState: OcrState, formData: FormData): Promise<O
     return { text, errors: undefined };
   } catch (error) {
     console.error("--- CLAUDE API ERROR (OCR) ---", error);
-    return { text: null, errors: { image: ['Server error: Failed to connect to Claude API.'] } };
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return { text: null, errors: { image: [`OCR-Fehler: ${errorMessage}`] } };
   }
 }
 
