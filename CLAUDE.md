@@ -81,6 +81,13 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 - **Dokumentation aktuell halten** — insbesondere diese Datei und STATUS.md (siehe Dokumentationsstrategie).
 - **Firebase-Projekt-IDs und Service-Account-Referenzen NICHT umbenennen** — diese sind an das Google-Cloud-Projekt gebunden und dürfen nur über die Firebase/GCP Console geändert werden.
 
+**Regressionsschutz:**
+- Vor JEDER Änderung: Bestehende Funktionalität testen und dokumentieren was funktioniert
+- Nach JEDER Änderung: Alle betroffenen Flows nochmal testen (nicht nur den geänderten)
+- Insbesondere bei Bild-Upload: Auf iPhone mit Kamera-Foto testen
+- Wenn ein Fix Seiteneffekte hat → sofort melden, nicht stillschweigend weitermachen
+- NIEMALS eine funktionierende Funktion anfassen ohne Grund und ohne Rücksprache
+
 ## Bekannte Issues
 
 1. **Zod nicht in package.json** — `actions.ts` importiert `zod`, aber es ist keine explizite Dependency. Funktioniert nur transitiv. Sollte explizit hinzugefügt werden.

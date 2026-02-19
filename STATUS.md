@@ -5,13 +5,18 @@
 ## Zuletzt bearbeitet (diese Session)
 
 - **PR-009**: Bildbearbeitung vor Analyse — **erledigt** ✅
-  - **Ursache des OCR-Fehlers:** Next.js Server Action Body-Size-Limit (Default 1 MB) — iPhone-Fotos als base64 waren 3–7 MB
-  - **Fix 1:** `experimental.serverActions.bodySizeLimit: '10mb'` in `next.config.ts`
-  - **Fix 2:** Bild-Downscaling auf max 2048px + JPEG-Qualität 0.85 vor Senden (~200–500 KB)
+  - **Eigentliche Ursache des OCR-Fehlers:** Hardcoded `media_type: "image/jpeg"` in `actions.ts`, aber das tatsächliche Bildformat stimmte nicht überein (Anthropic API: "Image does not match the provided media type image/jpeg")
+  - **Fix 1 (Hauptfix):** `actions.ts` — `detectMediaType()` erkennt Format aus base64 Magic Bytes statt hardcoded `image/jpeg`
+  - **Fix 2:** `image-editor.tsx` — Prüft `image.complete` vor Canvas-Zugriff, verifiziert JPEG-Output nach `toDataURL()`, zeigt Fehlermeldung bei Konvertierungsproblemen
+  - **Fix 3:** `next.config.ts` — `experimental.serverActions.bodySizeLimit: '10mb'` (präventiv, Default war 1 MB)
+  - **Fix 4:** `image-editor.tsx` — Bild-Downscaling auf max 2048px + JPEG-Qualität 0.85 (Bandbreite)
+  - **Diagnose-Verbesserung:** Catch-Block in `runOCR()` gibt jetzt echte Fehlermeldung zurück statt generischem String
+- **CLAUDE.md**: Regressionsschutz-Regeln hinzugefügt
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-008** — Open Dyslexic Schriftoption (niedrige Prio)
+1. **PR-009 auf iPhone verifizieren** — Deploy abwarten, Kamera-Foto testen
+2. **PR-008** — Open Dyslexic Schriftoption (niedrige Prio)
 
 ## Deployment
 
@@ -48,8 +53,8 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 ## Wichtige Dateien
 
 - `src/app/page.tsx` — Gesamte App-Logik (Desktop: Side-by-Side, Mobile: View-Switching)
-- `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API)
-- `src/components/image-editor.tsx` — Bildbearbeitung (Crop, Helligkeit, Kontrast) vor OCR
+- `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API), media_type-Erkennung via Magic Bytes
+- `src/components/image-editor.tsx` — Bildbearbeitung (Crop, Helligkeit, Kontrast) vor OCR, JPEG-Verifikation
 - `src/lib/text-parser.ts` — Shared Parsing-Logik (TextBlock, parseTextBlocks, parseInlineSegments, stripMarkdown)
 - `src/lib/export.ts` — Alle Export-Funktionen (PDF, DOCX, MD, TXT)
 - `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
