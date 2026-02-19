@@ -12,10 +12,14 @@
   - Neue Dependencies: `docx`, `@radix-ui/react-dropdown-menu`
   - `@types/jspdf` entfernt (veraltet, kollidierte mit jsPDF v4)
   - shadcn/ui `dropdown-menu` Komponente hinzugefügt
+- **PR-015**: Footer mit Copyright, Impressum und Datenschutz
+  - `© 2026 PHORO · phoro.ch · Impressum · Datenschutz`
+  - Alle Links extern auf phoro.ch, `target="_blank"`
+  - Design: 11px, Slate 60%, phoro-meta Stil
 
 ## Deployment
 
-Noch nicht gepusht. Nach Commit + Push deployt GitHub Actions automatisch auf Firebase (~5 Min).
+Gepusht (`dc96518`). GitHub Actions deployt automatisch auf Firebase (~5 Min).
 
 ## Erledigte Tickets
 
@@ -30,6 +34,7 @@ Noch nicht gepusht. Nach Commit + Push deployt GitHub Actions automatisch auf Fi
 - [x] PR-012: iOS – Buttons auf Textrahmenbreite ausrichten
 - [x] PR-013: System-Prompt für Textvereinfachung überarbeiten
 - [x] PR-014: Markdown-Rendering in Textausgabe
+- [x] PR-015: Footer mit Copyright, Impressum und Datenschutz
 
 ## Offene Tickets
 
