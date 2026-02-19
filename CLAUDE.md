@@ -88,6 +88,16 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 - Wenn ein Fix Seiteneffekte hat → sofort melden, nicht stillschweigend weitermachen
 - NIEMALS eine funktionierende Funktion anfassen ohne Grund und ohne Rücksprache
 
+**Checkpoints & Rollback:**
+- Vor grösseren Änderungen: Checkpoint-Stand notieren
+- Wenn ein Fix nach 2 Versuchen nicht funktioniert: STOPP, Rollback zum letzten funktionierenden Stand, User informieren
+- Nicht endlos am selben Problem herumschrauben und dabei anderes kaputt machen
+
+**Error Handling:**
+- Catch-Blocks dürfen NIEMALS generische Fehlermeldungen ausgeben
+- Immer den echten Fehler (error.message, error.status) weiterreichen
+- "Failed to connect" oder "Server error" ohne Details ist verboten
+
 ## Bekannte Issues
 
 1. **Zod nicht in package.json** — `actions.ts` importiert `zod`, aber es ist keine explizite Dependency. Funktioniert nur transitiv. Sollte explizit hinzugefügt werden.
