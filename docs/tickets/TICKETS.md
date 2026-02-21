@@ -38,6 +38,7 @@
 | [PR-019](completed/PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
 | [PR-020](completed/PR-020.md) | 🔧 Refactor | ⚡ Mittel | Technische Schulden aufräumen (Zod, Gemini-Deps, GEMINI_API_KEY) |
 | [PR-021](completed/PR-021.md) | ✨ Feature | ⚡ Mittel | Russisch und Ukrainisch als Sprachen hinzufügen |
+| [PR-022](completed/PR-022.md) | ✨ Feature | ⚡ Mittel | Copy-Button im Ergebnis-Textrahmen |
 
 ## ⚪ Verworfen
 

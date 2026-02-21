@@ -10,6 +10,12 @@
   - Regeln aus Section 7 der Regelwerke extrahiert (Leichte Sprache + Einfache Sprache)
   - Alle Referenzen von 13 → 15 Sprachen aktualisiert
   - Build verifiziert: OK
+- **PR-022**: Copy-Button im Ergebnis-Textrahmen ✅
+  - Clipboard-Icon (Lucide `Copy`) oben rechts im Ergebnis-Textrahmen
+  - Kopiert Plaintext (via `stripMarkdown`) in die Zwischenablage
+  - Visuelles Feedback: Icon wechselt zu Häkchen (`Check`, grün) für 2s
+  - Dezent: `text-phoro-slate/40` → Hover: `text-phoro-blue`
+  - Build verifiziert: OK
 
 ## Nächste Schritte (Priorität)
 
@@ -40,6 +46,7 @@ Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase.
 - [x] PR-019: Vorlesefunktion auf OpenAI TTS umgestellt
 - [x] PR-020: Technische Schulden aufräumen (Zod, Gemini-Deps, GEMINI_API_KEY, GEMINI.md)
 - [x] PR-021: Russisch und Ukrainisch als Sprachen hinzufügen (13 → 15)
+- [x] PR-022: Copy-Button im Ergebnis-Textrahmen
 
 ## Offene / In Arbeit
 

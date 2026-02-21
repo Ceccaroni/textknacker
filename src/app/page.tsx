@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import {
   Camera, LoaderCircle, X,
   ArrowLeft, Play, Pause, Type, Crosshair, FileDown, ChevronDown,
+  Copy, Check,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -18,7 +19,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { parseTextBlocks, type TextBlock } from '@/lib/text-parser';
+import { parseTextBlocks, stripMarkdown, type TextBlock } from '@/lib/text-parser';
 import { exportPdf, exportDocx, exportMarkdown, exportPlainText, type ExportParams } from '@/lib/export';
 import { ImageEditor } from '@/components/image-editor';
 
@@ -94,6 +95,7 @@ export default function Home() {
   const [focusModeActive, setFocusModeActive] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [wideSpacing, setWideSpacing] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // ── Camera Setup ────────────────────────────────────────────
 
@@ -537,6 +539,22 @@ export default function Home() {
 
               {/* Center: Result box (matches textarea size) */}
               <div className="relative flex-1 min-h-0">
+                {currentText && !isModeSwitching && (
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(stripMarkdown(currentText));
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="absolute top-3 right-3 z-10 p-1 rounded transition-colors text-phoro-slate/40 hover:text-phoro-blue cursor-pointer"
+                    aria-label="In Zwischenablage kopieren"
+                  >
+                    {copied
+                      ? <Check className="h-[18px] w-[18px] text-phoro-green" />
+                      : <Copy className="h-[18px] w-[18px]" />
+                    }
+                  </button>
+                )}
                 <div className={cn(
                   "w-full h-full rounded-md border border-input overflow-y-auto p-4",
                   "text-lg leading-relaxed text-phoro-blue",
