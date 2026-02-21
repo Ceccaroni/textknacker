@@ -149,23 +149,35 @@ export default function Home() {
     }
   }, [ocrState]);
 
-  // ── Simplification Result → Reading Mode ────────────────────
-
-  useEffect(() => {
-    if (simplifyState?.message && !simplifyState?.errors) {
-      setOriginalText(text);
-      setResultCache({ einfach: simplifyState.message, leicht: null });
-      setReadingMode('einfach');
-      setView('reading');
-    }
-  }, [simplifyState]);
-
   // ── TTS Audio Refs ─────────────────────────────────────────
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioBlobUrlRef = useRef<string | null>(null);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [isAudioPaused, setIsAudioPaused] = useState(false);
+
+  // ── Simplification Result → Reading Mode ────────────────────
+
+  useEffect(() => {
+    if (simplifyState?.message && !simplifyState?.errors) {
+      // Stop any playing audio from previous text
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      if (audioBlobUrlRef.current) {
+        URL.revokeObjectURL(audioBlobUrlRef.current);
+        audioBlobUrlRef.current = null;
+      }
+      setIsSpeaking(false);
+      setIsAudioPaused(false);
+
+      setOriginalText(text);
+      setResultCache({ einfach: simplifyState.message, leicht: null });
+      setReadingMode('einfach');
+      setView('reading');
+    }
+  }, [simplifyState]);
 
   // ── Camera Capture ──────────────────────────────────────────
 
