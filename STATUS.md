@@ -39,6 +39,7 @@ Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase.
 - [x] PR-017: Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone)
 - [x] PR-018: Vereinfachung ignoriert Quellsprache – 13 Sprachen implementiert
 - [x] PR-019: Vorlesefunktion auf OpenAI TTS umgestellt
+- [x] PR-020: Technische Schulden aufräumen (Zod, Gemini-Deps, GEMINI_API_KEY, GEMINI.md)
 
 ## Offene / In Arbeit
 

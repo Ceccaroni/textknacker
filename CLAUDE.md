@@ -87,7 +87,7 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 - **Pipeline:** Checkout → Node 20 → `npm ci` → `npm run build` → Firebase Deploy
 - **Live-URLs:** Siehe Firebase Console (Hosting-URL)
 - **Secrets (GitHub):** `FIREBASE_SERVICE_ACCOUNT`
-- **Secrets (Firebase):** `ANTHROPIC_API_KEY`
+- **Secrets (Firebase):** `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`
 
 ## Wichtige Regeln
 
