@@ -36,6 +36,7 @@
 | [PR-017](completed/PR-017.md) | 🐛 Bug | 🔥 Hoch | Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone) |
 | [PR-018](completed/PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
 | [PR-019](completed/PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
+| [PR-020](completed/PR-020.md) | 🔧 Refactor | ⚡ Mittel | Technische Schulden aufräumen (Zod, Gemini-Deps, GEMINI_API_KEY) |
 
 ## ⚪ Verworfen
 

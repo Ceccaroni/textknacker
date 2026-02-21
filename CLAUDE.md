@@ -17,16 +17,12 @@ PHORO Read ist eine Web-App, die Texte mithilfe von KI vereinfacht (Einfache Spr
 | Font | Lexend (Google Fonts) | via next/font |
 | AI-Backend | Anthropic Claude API (Sonnet 4.5) | SDK ^0.32.1 |
 | TTS | OpenAI TTS API (tts-1, Stimme: nova) | via fetch (kein SDK) |
-| Validierung | Zod | transitiv (nicht explizit in package.json!) |
+| Validierung | Zod | ^3.25.0 |
 | PDF | jsPDF | ^4.0.0 |
 | DOCX | docx | ^9.x (dynamisch importiert) |
 | Bildbearbeitung | react-image-crop | ^11.x |
 | Hosting | Firebase Hosting (SSR via frameworksBackend) | Region us-central1 |
 | CI/CD | GitHub Actions → Firebase Deploy | bei Push auf main |
-
-### Ungenutzte Dependencies (Altlasten)
-
-- `genkit`, `@google-cloud/vertexai`, `@google/generative-ai` — Überbleibsel aus einer früheren Gemini-Phase, werden nirgends importiert.
 
 ## Projektstruktur
 
@@ -90,7 +86,7 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 - **Trigger:** Push auf `main` → GitHub Actions Workflow
 - **Pipeline:** Checkout → Node 20 → `npm ci` → `npm run build` → Firebase Deploy
 - **Live-URLs:** Siehe Firebase Console (Hosting-URL)
-- **Secrets (GitHub):** `FIREBASE_SERVICE_ACCOUNT`, `GEMINI_API_KEY` (veraltet, sollte durch `ANTHROPIC_API_KEY` ersetzt werden)
+- **Secrets (GitHub):** `FIREBASE_SERVICE_ACCOUNT`
 - **Secrets (Firebase):** `ANTHROPIC_API_KEY`
 
 ## Wichtige Regeln
@@ -119,10 +115,7 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 
 ## Bekannte Issues
 
-1. **Zod nicht in package.json** — `actions.ts` importiert `zod`, aber es ist keine explizite Dependency. Funktioniert nur transitiv. Sollte explizit hinzugefügt werden.
-2. **Ungenutzte Dependencies** — `genkit`, `@google-cloud/vertexai`, `@google/generative-ai` können entfernt werden (Altlast aus Gemini-Phase).
-3. **GitHub Actions Workflow referenziert `GEMINI_API_KEY`** — nicht mehr benötigt, sollte durch `ANTHROPIC_API_KEY` ersetzt oder entfernt werden.
-4. **GEMINI.md** — Veraltete Datei aus der Gemini-Phase, kann entfernt werden.
+Keine offenen Issues.
 
 ## Design-System
 

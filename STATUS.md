@@ -1,21 +1,16 @@
 # PHORO Read — Status
 
-> Letzte Aktualisierung: 2026-02-21
+> Letzte Aktualisierung: 2026-02-22
 
 ## Zuletzt bearbeitet (diese Session)
 
-- **PR-018**: Mehrsprachige Vereinfachung — ERLEDIGT ✅
-  - Bug: Schweizer Rechtschreibung (`ss statt ß`) war generisch für alle Sprachen → drängte Claude Richtung Deutsch
-  - 13 Regelwerke implementiert, User bestätigt: «funktioniert in allen Sprachen»
-  - Ticket geschlossen und nach `completed/` verschoben
-- **PR-019**: Vorlesefunktion auf OpenAI TTS umgestellt ✅
-  - `src/app/api/tts/route.ts` NEU: API-Route (OpenAI TTS, tts-1, Stimme nova, mp3)
-  - `src/app/page.tsx`: Web Speech API → Audio-Objekt mit echtem Pause/Resume
-  - `src/lib/text-parser.ts`: `truncateAtSentenceBoundary()` für 4096-Zeichen-Limit
-  - `firebase.json`: OPENAI_API_KEY zu secrets hinzugefügt
-  - Fix: Build-Fehler (env-check von module-level zu runtime verschoben)
-  - Fix: Audio-Cleanup bei neuem Text (altes Audio wird gestoppt/freigegeben)
-  - Deployed und getestet: Arabisch ✅, Französisch ✅
+- **PR-020**: Technische Schulden aufräumen ✅
+  - Zod als explizite Dependency hinzugefügt (`^3.25.0`)
+  - Ungenutzte Dependencies entfernt: `genkit`, `@google-cloud/vertexai`, `@google/generative-ai` (417 Pakete weniger)
+  - `GEMINI_API_KEY` aus GitHub Actions Workflow entfernt
+  - `GEMINI.md` gelöscht
+  - CLAUDE.md + STATUS.md aktualisiert (bekannte Issues bereinigt)
+  - Build verifiziert: OK
 
 ## Nächste Schritte (Priorität)
 
@@ -51,10 +46,7 @@ Keine offenen Tickets.
 
 ## Bekannte technische Schulden
 
-1. **Zod** nicht explizit in package.json (nur transitiv)
-2. **Ungenutzte Dependencies**: genkit, @google-cloud/vertexai, @google/generative-ai
-3. **GitHub Actions** referenziert GEMINI_API_KEY statt ANTHROPIC_API_KEY
-4. **GEMINI.md** kann gelöscht werden
+Keine offenen Schulden.
 
 ## Wichtige Dateien
 
