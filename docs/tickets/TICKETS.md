@@ -13,7 +13,6 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| [PR-018](PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
 | [PR-019](PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
 
 ## 🟢 Erledigt
@@ -35,6 +34,7 @@
 | [PR-015](completed/PR-015.md) | ✨ Feature | ⚡ Mittel | Footer mit Copyright, Impressum und Datenschutz |
 | [PR-009](completed/PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
 | [PR-017](completed/PR-017.md) | 🐛 Bug | 🔥 Hoch | Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone) |
+| [PR-018](completed/PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
 
 ## Abhängigkeiten
 

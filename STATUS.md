@@ -4,25 +4,27 @@
 
 ## Zuletzt bearbeitet (diese Session)
 
-- **PR-018 Teil 1+2**: Mehrsprachige Vereinfachung implementiert ✅ (committed + gepusht)
+- **PR-018**: Mehrsprachige Vereinfachung — ERLEDIGT ✅
+  - Bug: Schweizer Rechtschreibung (`ss statt ß`) war generisch für alle Sprachen → drängte Claude Richtung Deutsch
+  - 13 Regelwerke implementiert, User bestätigt: «funktioniert in allen Sprachen»
+  - Ticket geschlossen und nach `completed/` verschoben
 - **PR-019**: Vorlesefunktion auf OpenAI TTS umgestellt ✅
   - `src/app/api/tts/route.ts` NEU: API-Route (OpenAI TTS, tts-1, Stimme nova, mp3)
   - `src/app/page.tsx`: Web Speech API → Audio-Objekt mit echtem Pause/Resume
   - `src/lib/text-parser.ts`: `truncateAtSentenceBoundary()` für 4096-Zeichen-Limit
   - `firebase.json`: OPENAI_API_KEY zu secrets hinzugefügt
-  - API lokal getestet: DE + FR → 200 OK, mp3 zurück ✅
-  - Build erfolgreich ✅
+  - Fix: Build-Fehler (env-check von module-level zu runtime verschoben)
+  - Fix: Audio-Cleanup bei neuem Text (altes Audio wird gestoppt/freigegeben)
+  - Deployed und getestet: Arabisch ✅, Französisch ✅
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-018 Teil 3** — Mehrsprachige Vereinfachung manuell testen (🔥 Hoch)
-2. **PR-019** — TTS in der App testen (DE, FR, IT, EN, Pause/Resume) (🔥 Hoch)
-3. **Firebase Secret setzen**: `firebase functions:secrets:set OPENAI_API_KEY`
-4. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
+1. **PR-019** — TTS weitere Sprachen testen (DE, IT, EN, Pause/Resume) (⚡ Mittel)
+2. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
 
 ## Deployment
 
-PR-018 committed + gepusht. PR-019 noch NICHT committed.
+Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase.
 
 ## Erledigte Tickets
 
@@ -41,11 +43,11 @@ PR-018 committed + gepusht. PR-019 noch NICHT committed.
 - [x] PR-014: Markdown-Rendering in Textausgabe
 - [x] PR-015: Footer mit Copyright, Impressum und Datenschutz
 - [x] PR-017: Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone)
+- [x] PR-018: Vereinfachung ignoriert Quellsprache – 13 Sprachen implementiert
 
 ## Offene / In Arbeit
 
-- [ ] **PR-018**: Vereinfachung ignoriert Quellsprache – Teil 3 Testen noch offen 🔥
-- [ ] **PR-019**: Vorlesefunktion auf OpenAI TTS umstellen 🔥
+- [ ] **PR-019**: Vorlesefunktion auf OpenAI TTS umstellen (Implementation ✅, Testen läuft) 🔥
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 
 ## Bekannte technische Schulden
