@@ -160,18 +160,12 @@ export default function Home() {
     }
   }, [simplifyState]);
 
-  // ── TTS Voice Loading ───────────────────────────────────────
+  // ── TTS Audio Refs ─────────────────────────────────────────
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    window.speechSynthesis.getVoices();
-    const handler = () => window.speechSynthesis.getVoices();
-    window.speechSynthesis.addEventListener('voiceschanged', handler);
-    return () => {
-      window.speechSynthesis.removeEventListener('voiceschanged', handler);
-      window.speechSynthesis.cancel();
-    };
-  }, []);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioBlobUrlRef = useRef<string | null>(null);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
+  const [isAudioPaused, setIsAudioPaused] = useState(false);
 
   // ── Camera Capture ──────────────────────────────────────────
 
@@ -224,8 +218,7 @@ export default function Home() {
   async function switchMode(newMode: 'einfach' | 'leicht') {
     if (newMode === readingMode) return;
 
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
+    stopAudio();
     setFocusedIndex(null);
 
     if (resultCache[newMode]) {
@@ -249,38 +242,77 @@ export default function Home() {
   // ── Reading Mode: Back ──────────────────────────────────────
 
   function handleBack() {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
+    stopAudio();
     setFocusModeActive(false);
     setFocusedIndex(null);
     setWideSpacing(false);
     setView('input');
   }
 
-  // ── Reading Mode: TTS ──────────────────────────────────────
+  // ── Reading Mode: TTS (OpenAI) ─────────────────────────────
 
-  function toggleTTS() {
-    const synth = window.speechSynthesis;
-    if (isSpeaking) {
-      synth.cancel();
-      setIsSpeaking(false);
+  function stopAudio() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    if (audioBlobUrlRef.current) {
+      URL.revokeObjectURL(audioBlobUrlRef.current);
+      audioBlobUrlRef.current = null;
+    }
+    setIsSpeaking(false);
+    setIsAudioPaused(false);
+  }
+
+  async function toggleTTS() {
+    // Currently playing → pause
+    if (isSpeaking && !isAudioPaused) {
+      audioRef.current?.pause();
+      setIsAudioPaused(true);
       return;
     }
+    // Currently paused → resume
+    if (isSpeaking && isAudioPaused) {
+      audioRef.current?.play();
+      setIsAudioPaused(false);
+      return;
+    }
+    // Not playing → fetch and play
+    const textToSpeak = resultCache[readingMode] || '';
+    if (!textToSpeak) return;
 
-    const currentText = resultCache[readingMode] || '';
-    const utterance = new SpeechSynthesisUtterance(currentText);
-    utterance.lang = 'de-DE';
-    utterance.rate = 0.9;
+    setIsAudioLoading(true);
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: textToSpeak }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
 
-    const voices = synth.getVoices();
-    const germanVoice = voices.find(v => v.lang.startsWith('de'));
-    if (germanVoice) utterance.voice = germanVoice;
+      // Clean up previous audio
+      if (audioBlobUrlRef.current) {
+        URL.revokeObjectURL(audioBlobUrlRef.current);
+      }
+      audioBlobUrlRef.current = url;
 
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    synth.speak(utterance);
-    setIsSpeaking(true);
+      const audio = new Audio(url);
+      audio.onended = () => { setIsSpeaking(false); setIsAudioPaused(false); };
+      audio.onerror = () => { setIsSpeaking(false); setIsAudioPaused(false); };
+      audioRef.current = audio;
+      await audio.play();
+      setIsSpeaking(true);
+    } catch (error) {
+      console.error('TTS error:', error);
+      setIsSpeaking(false);
+    } finally {
+      setIsAudioLoading(false);
+    }
   }
 
   // ── Reading Mode: Block Parsing ─────────────────────────────
@@ -565,9 +597,10 @@ export default function Home() {
                       size="sm"
                       className="min-w-0 gap-1.5"
                       onClick={toggleTTS}
+                      disabled={isAudioLoading}
                     >
-                      {isSpeaking ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                      {isSpeaking ? 'Pause' : 'Vorlesen'}
+                      {isAudioLoading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : isSpeaking && !isAudioPaused ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                      {isAudioLoading ? 'Laden...' : isSpeaking && !isAudioPaused ? 'Pause' : 'Vorlesen'}
                     </Button>
 
                     <Button

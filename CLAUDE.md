@@ -16,6 +16,7 @@ PHORO Read ist eine Web-App, die Texte mithilfe von KI vereinfacht (Einfache Spr
 | Icons | Lucide React | ^0.563.0 |
 | Font | Lexend (Google Fonts) | via next/font |
 | AI-Backend | Anthropic Claude API (Sonnet 4.5) | SDK ^0.32.1 |
+| TTS | OpenAI TTS API (tts-1, Stimme: nova) | via fetch (kein SDK) |
 | Validierung | Zod | transitiv (nicht explizit in package.json!) |
 | PDF | jsPDF | ^4.0.0 |
 | DOCX | docx | ^9.x (dynamisch importiert) |
@@ -35,6 +36,8 @@ src/
 │   ├── layout.tsx        # Root-Layout (Lexend Font, html lang="de")
 │   ├── page.tsx          # Einzige Seite — Desktop: Side-by-Side (Input|Result), Mobile: View-Switching
 │   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API (system prompt + sprachspezifische Regeln + modus-spezifische Regeln)
+│   ├── api/
+│   │   └── tts/route.ts  # API-Route: OpenAI TTS (Text → mp3 Audio-Stream)
 │   ├── globals.css       # Tailwind + shadcn/ui CSS-Variablen (oklch)
 │   └── favicon.ico
 ├── components/
@@ -77,6 +80,7 @@ DEPLOYMENT.md             # Deployment-Anleitung (GitHub Secrets etc.)
 ## API Keys / Services
 
 - **Anthropic Claude API** — Textvereinfachung + OCR (Vision). Key wird als `ANTHROPIC_API_KEY` über Firebase Secrets bereitgestellt.
+- **OpenAI TTS API** — Vorlesefunktion (Text-to-Speech). Key wird als `OPENAI_API_KEY` über Firebase Secrets bereitgestellt.
 - **Firebase Hosting** — Deployment mit SSR-Backend (frameworksBackend).
 - **GitHub Actions** — CI/CD, nutzt `FIREBASE_SERVICE_ACCOUNT` Secret.
 

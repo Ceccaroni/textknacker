@@ -4,30 +4,25 @@
 
 ## Zuletzt bearbeitet (diese Session)
 
-- **PR-018 Teil 1**: Bug-Ursache identifiziert ✅
-  - Schweizer Rechtschreibungsregel (`ss statt ß`) war generisch für ALLE Sprachen → drängte Claude Richtung Deutsch
-  - Keine sprachspezifischen Regelwerke vorhanden, nur generische englische Regeln
-- **PR-018 Teil 2**: Mehrsprachige Regelwerke implementiert ✅
-  - 13 Regelwerke (vom User erstellt) in `docs/rules/` abgelegt
-  - `src/lib/language-rules.ts` NEU: Kondensierte Prompt-Bausteine für alle 13 Sprachen
-  - `src/app/actions.ts` refaktoriert: System-Prompt mit sprachspezifischen Regeln, verstärkte Spracherkennung, Schweizer Rechtschreibung nur noch in `de`-Regeln
+- **PR-018 Teil 1+2**: Mehrsprachige Vereinfachung implementiert ✅ (committed + gepusht)
+- **PR-019**: Vorlesefunktion auf OpenAI TTS umgestellt ✅
+  - `src/app/api/tts/route.ts` NEU: API-Route (OpenAI TTS, tts-1, Stimme nova, mp3)
+  - `src/app/page.tsx`: Web Speech API → Audio-Objekt mit echtem Pause/Resume
+  - `src/lib/text-parser.ts`: `truncateAtSentenceBoundary()` für 4096-Zeichen-Limit
+  - `firebase.json`: OPENAI_API_KEY zu secrets hinzugefügt
+  - API lokal getestet: DE + FR → 200 OK, mp3 zurück ✅
   - Build erfolgreich ✅
-- **PR-018 Teil 3**: Testen — NOCH OFFEN 🔴
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-018 Teil 3** — Manuell testen (🔥 Hoch)
-   - Französischer Text → FR-Vereinfachung?
-   - Italienischer Text → IT-Vereinfachung?
-   - Englischer Text → EN-Vereinfachung?
-   - Deutscher Text → DE-Vereinfachung (Regression)?
-   - Rätoromanisch testen
-   - Stichproben: ES, TR, NL, etc.
-2. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
+1. **PR-018 Teil 3** — Mehrsprachige Vereinfachung manuell testen (🔥 Hoch)
+2. **PR-019** — TTS in der App testen (DE, FR, IT, EN, Pause/Resume) (🔥 Hoch)
+3. **Firebase Secret setzen**: `firebase functions:secrets:set OPENAI_API_KEY`
+4. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
 
 ## Deployment
 
-Lokale Änderungen noch NICHT committed/gepusht. Build läuft lokal durch.
+PR-018 committed + gepusht. PR-019 noch NICHT committed.
 
 ## Erledigte Tickets
 
@@ -49,7 +44,8 @@ Lokale Änderungen noch NICHT committed/gepusht. Build läuft lokal durch.
 
 ## Offene / In Arbeit
 
-- [ ] **PR-018**: Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch 🔥
+- [ ] **PR-018**: Vereinfachung ignoriert Quellsprache – Teil 3 Testen noch offen 🔥
+- [ ] **PR-019**: Vorlesefunktion auf OpenAI TTS umstellen 🔥
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 
 ## Bekannte technische Schulden
@@ -65,7 +61,8 @@ Lokale Änderungen noch NICHT committed/gepusht. Build läuft lokal durch.
 - `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API), sprachspezifische Regeln, media_type-Erkennung via Magic Bytes
 - `src/lib/language-rules.ts` — Sprachspezifische Vereinfachungsregeln für 13 Sprachen (Prompt-Bausteine)
 - `src/components/image-editor.tsx` — Bildbearbeitung (Crop, Helligkeit, Kontrast) vor OCR, JPEG-Verifikation
-- `src/lib/text-parser.ts` — Shared Parsing-Logik (TextBlock, parseTextBlocks, parseInlineSegments, stripMarkdown)
+- `src/app/api/tts/route.ts` — API-Route: OpenAI TTS (Text → mp3 Audio-Stream)
+- `src/lib/text-parser.ts` — Shared Parsing-Logik (TextBlock, parseTextBlocks, parseInlineSegments, stripMarkdown, truncateAtSentenceBoundary)
 - `src/lib/export.ts` — Alle Export-Funktionen (PDF, DOCX, MD, TXT)
 - `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
 - `next.config.ts` — Server Actions Body-Size-Limit (10mb)

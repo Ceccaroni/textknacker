@@ -58,6 +58,25 @@ export function parseTextBlocks(rawText: string): TextBlock[] {
   });
 }
 
+// ── Text Truncation (for TTS) ────────────────────────────────────
+
+export function truncateAtSentenceBoundary(text: string, maxLength: number): { text: string; truncated: boolean } {
+  if (text.length <= maxLength) return { text, truncated: false };
+  const truncated = text.slice(0, maxLength);
+  const lastSentenceEnd = Math.max(
+    truncated.lastIndexOf('. '),
+    truncated.lastIndexOf('! '),
+    truncated.lastIndexOf('? '),
+    truncated.lastIndexOf('.\n'),
+    truncated.lastIndexOf('!\n'),
+    truncated.lastIndexOf('?\n'),
+  );
+  const cutText = lastSentenceEnd > maxLength * 0.5
+    ? truncated.slice(0, lastSentenceEnd + 1)
+    : truncated;
+  return { text: cutText, truncated: true };
+}
+
 // ── Markdown Stripper (for TXT export) ───────────────────────────
 
 export function stripMarkdown(text: string): string {

@@ -14,6 +14,7 @@
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
 | [PR-018](PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
+| [PR-019](PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
 
 ## 🟢 Erledigt
 
