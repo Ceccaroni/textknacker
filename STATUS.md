@@ -19,8 +19,7 @@
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-019** — TTS weitere Sprachen testen (DE, IT, EN, Pause/Resume) (⚡ Mittel)
-2. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
+Keine offenen Schritte. Alle Tickets erledigt oder verworfen.
 
 ## Deployment
 
@@ -44,11 +43,11 @@ Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase.
 - [x] PR-015: Footer mit Copyright, Impressum und Datenschutz
 - [x] PR-017: Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone)
 - [x] PR-018: Vereinfachung ignoriert Quellsprache – 13 Sprachen implementiert
+- [x] PR-019: Vorlesefunktion auf OpenAI TTS umgestellt
 
 ## Offene / In Arbeit
 
-- [ ] **PR-019**: Vorlesefunktion auf OpenAI TTS umstellen (Implementation ✅, Testen läuft) 🔥
-- [ ] **PR-008**: Open Dyslexic Schriftoption 💤
+Keine offenen Tickets.
 
 ## Bekannte technische Schulden
 

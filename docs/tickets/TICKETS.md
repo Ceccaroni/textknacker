@@ -7,13 +7,13 @@
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
+| — | — | — | — |
 
 ## 🟡 In Arbeit
 
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
-| [PR-019](PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
+| — | — | — | — |
 
 ## 🟢 Erledigt
 
@@ -35,6 +35,13 @@
 | [PR-009](completed/PR-009.md) | ✨ Feature | ⚡ Mittel | Bildbearbeitung vor Analyse (Crop, Helligkeit, Kontrast) |
 | [PR-017](completed/PR-017.md) | 🐛 Bug | 🔥 Hoch | Bugfix – HEIC/JPEG Media-Type Mismatch bei Bild-Upload (iPhone) |
 | [PR-018](completed/PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
+| [PR-019](completed/PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
+
+## ⚪ Verworfen
+
+| Ticket | Typ | Priorität | Titel |
+|--------|-----|-----------|-------|
+| [PR-008](completed/PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption (dagegen entschieden) |
 
 ## Abhängigkeiten
 
