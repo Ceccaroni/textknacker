@@ -3,11 +3,6 @@ import { z } from 'zod';
 import { stripMarkdown } from '@/lib/text-parser';
 import { truncateAtSentenceBoundary } from '@/lib/text-parser';
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("FATAL: OPENAI_API_KEY environment variable is not set.");
-}
-
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_TTS_URL = 'https://api.openai.com/v1/audio/speech';
 const MAX_INPUT_LENGTH = 4096;
 
@@ -18,6 +13,15 @@ const TtsRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      console.error('--- TTS ROUTE ERROR --- OPENAI_API_KEY not set');
+      return NextResponse.json(
+        { error: 'TTS not configured: OPENAI_API_KEY missing' },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const parsed = TtsRequestSchema.safeParse(body);
 
@@ -35,7 +39,7 @@ export async function POST(request: NextRequest) {
     const response = await fetch(OPENAI_TTS_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
