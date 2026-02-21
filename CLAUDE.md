@@ -42,12 +42,12 @@ src/
 └── lib/
     ├── utils.ts          # cn() Helper (clsx + tailwind-merge)
     ├── text-parser.ts    # Shared Typen (TextBlock, StyledSegment) + Parsing-Funktionen
-    ├── language-rules.ts # Sprachspezifische Vereinfachungsregeln (13 Sprachen) — wird in actions.ts importiert
+    ├── language-rules.ts # Sprachspezifische Vereinfachungsregeln (15 Sprachen) — wird in actions.ts importiert
     └── export.ts         # Export-Funktionen (PDF, DOCX, MD, TXT)
 
 public/                   # Statische Assets (SVGs)
 docs/
-├── rules/                # Vollständige Regelwerke Leichte/Einfache Sprache (13 Sprachen)
+├── rules/                # Vollständige Regelwerke Leichte/Einfache Sprache (15 Sprachen)
 │   ├── LS_ES_de.md       # Deutsch
 │   ├── LS_ES_fr-CH.md    # Französisch (CH)
 │   ├── LS_ES_it-CH.md    # Italienisch (CH)
@@ -60,6 +60,8 @@ docs/
 │   ├── LS_ES_sq.md       # Albanisch
 │   ├── LS_ES_mk.md       # Mazedonisch
 │   ├── LS_ES_sr.md       # Serbisch
+│   ├── LS_ES_ru.md       # Russisch
+│   ├── LS_ES_uk.md       # Ukrainisch
 │   └── LS_ES_ti.md       # Tigrinya
 └── tickets/              # Ticket-System (PR-001 bis PR-xxx)
     ├── TICKETS.md        # Ticket-Index

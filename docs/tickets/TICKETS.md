@@ -37,6 +37,7 @@
 | [PR-018](completed/PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
 | [PR-019](completed/PR-019.md) | ✨ Feature | 🔥 Hoch | Vorlesefunktion auf OpenAI TTS umstellen |
 | [PR-020](completed/PR-020.md) | 🔧 Refactor | ⚡ Mittel | Technische Schulden aufräumen (Zod, Gemini-Deps, GEMINI_API_KEY) |
+| [PR-021](completed/PR-021.md) | ✨ Feature | ⚡ Mittel | Russisch und Ukrainisch als Sprachen hinzufügen |
 
 ## ⚪ Verworfen
 
