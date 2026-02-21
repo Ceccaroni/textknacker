@@ -1,22 +1,19 @@
 # PHORO Read — Status
 
-> Letzte Aktualisierung: 2026-02-19
+> Letzte Aktualisierung: 2026-02-21
 
 ## Zuletzt bearbeitet (diese Session)
 
-- **PR-009**: Bildbearbeitung vor Analyse — **erledigt** ✅
-  - **Eigentliche Ursache des OCR-Fehlers:** Hardcoded `media_type: "image/jpeg"` in `actions.ts`, aber das tatsächliche Bildformat stimmte nicht überein (Anthropic API: "Image does not match the provided media type image/jpeg")
-  - **Fix 1 (Hauptfix):** `actions.ts` — `detectMediaType()` erkennt Format aus base64 Magic Bytes statt hardcoded `image/jpeg`
-  - **Fix 2:** `image-editor.tsx` — Prüft `image.complete` vor Canvas-Zugriff, verifiziert JPEG-Output nach `toDataURL()`, zeigt Fehlermeldung bei Konvertierungsproblemen
-  - **Fix 3:** `next.config.ts` — `experimental.serverActions.bodySizeLimit: '10mb'` (präventiv, Default war 1 MB)
-  - **Fix 4:** `image-editor.tsx` — Bild-Downscaling auf max 2048px + JPEG-Qualität 0.85 (Bandbreite)
-  - **Diagnose-Verbesserung:** Catch-Block in `runOCR()` gibt jetzt echte Fehlermeldung zurück statt generischem String
-- **CLAUDE.md**: Regressionsschutz-Regeln hinzugefügt
+- **PR-017**: Ticket als erledigt abgelegt (HEIC/JPEG Media-Type Mismatch) ✅
+- **PR-018**: Neues Ticket angelegt — Vereinfachung ignoriert Quellsprache (Bug, offen) 🔴
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-009 auf iPhone verifizieren** — Deploy abwarten, Kamera-Foto testen
-2. **PR-008** — Open Dyslexic Schriftoption (niedrige Prio)
+1. **PR-018** — Bug: Vereinfachung ignoriert Quellsprache, Ausgabe immer Deutsch (🔥 Hoch)
+   - Teil 1: Bug-Ursache im Prompt/Code finden
+   - Teil 2: Mehrsprachige Regelwerke einbinden (User liefert diese)
+   - Teil 3: Testen (FR, IT, EN, DE, RM)
+2. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
 
 ## Deployment
 
@@ -42,6 +39,7 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 
 ## Offene / In Arbeit
 
+- [ ] **PR-018**: Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch 🔥
 - [ ] **PR-008**: Open Dyslexic Schriftoption 💤
 
 ## Bekannte technische Schulden
