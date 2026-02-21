@@ -34,7 +34,7 @@ src/
 ├── app/
 │   ├── layout.tsx        # Root-Layout (Lexend Font, html lang="de")
 │   ├── page.tsx          # Einzige Seite — Desktop: Side-by-Side (Input|Result), Mobile: View-Switching
-│   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API (system prompt + Basis-Instruktionen + modus-spezifische Regeln)
+│   ├── actions.ts        # Server Actions: runOCR() + simplifyText() → Claude API (system prompt + sprachspezifische Regeln + modus-spezifische Regeln)
 │   ├── globals.css       # Tailwind + shadcn/ui CSS-Variablen (oklch)
 │   └── favicon.ico
 ├── components/
@@ -43,10 +43,25 @@ src/
 └── lib/
     ├── utils.ts          # cn() Helper (clsx + tailwind-merge)
     ├── text-parser.ts    # Shared Typen (TextBlock, StyledSegment) + Parsing-Funktionen
+    ├── language-rules.ts # Sprachspezifische Vereinfachungsregeln (13 Sprachen) — wird in actions.ts importiert
     └── export.ts         # Export-Funktionen (PDF, DOCX, MD, TXT)
 
 public/                   # Statische Assets (SVGs)
 docs/
+├── rules/                # Vollständige Regelwerke Leichte/Einfache Sprache (13 Sprachen)
+│   ├── LS_ES_de.md       # Deutsch
+│   ├── LS_ES_fr-CH.md    # Französisch (CH)
+│   ├── LS_ES_it-CH.md    # Italienisch (CH)
+│   ├── LS_ES_rm-CH.md    # Rumantsch (CH)
+│   ├── LS_ES_en-CH.md    # Englisch
+│   ├── LS_ES_es.md       # Spanisch
+│   ├── LS_ES_pt.md       # Portugiesisch
+│   ├── LS_ES_nl.md       # Niederländisch
+│   ├── LS_ES_tr.md       # Türkisch
+│   ├── LS_ES_sq.md       # Albanisch
+│   ├── LS_ES_mk.md       # Mazedonisch
+│   ├── LS_ES_sr.md       # Serbisch
+│   └── LS_ES_ti.md       # Tigrinya
 └── tickets/              # Ticket-System (PR-001 bis PR-xxx)
     ├── TICKETS.md        # Ticket-Index
     ├── TEMPLATE.md       # Vorlage für neue Tickets

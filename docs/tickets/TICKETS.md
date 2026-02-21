@@ -8,11 +8,12 @@
 | Ticket | Typ | Priorität | Titel |
 |--------|-----|-----------|-------|
 | [PR-008](PR-008.md) | ✨ Feature | 💤 Niedrig | Open Dyslexic Schriftoption |
-| [PR-018](PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
 
 ## 🟡 In Arbeit
 
-_Keine_
+| Ticket | Typ | Priorität | Titel |
+|--------|-----|-----------|-------|
+| [PR-018](PR-018.md) | 🐛 Bug | 🔥 Hoch | Vereinfachung ignoriert Quellsprache – Ausgabe immer Deutsch |
 
 ## 🟢 Erledigt
 

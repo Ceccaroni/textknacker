@@ -4,20 +4,30 @@
 
 ## Zuletzt bearbeitet (diese Session)
 
-- **PR-017**: Ticket als erledigt abgelegt (HEIC/JPEG Media-Type Mismatch) ✅
-- **PR-018**: Neues Ticket angelegt — Vereinfachung ignoriert Quellsprache (Bug, offen) 🔴
+- **PR-018 Teil 1**: Bug-Ursache identifiziert ✅
+  - Schweizer Rechtschreibungsregel (`ss statt ß`) war generisch für ALLE Sprachen → drängte Claude Richtung Deutsch
+  - Keine sprachspezifischen Regelwerke vorhanden, nur generische englische Regeln
+- **PR-018 Teil 2**: Mehrsprachige Regelwerke implementiert ✅
+  - 13 Regelwerke (vom User erstellt) in `docs/rules/` abgelegt
+  - `src/lib/language-rules.ts` NEU: Kondensierte Prompt-Bausteine für alle 13 Sprachen
+  - `src/app/actions.ts` refaktoriert: System-Prompt mit sprachspezifischen Regeln, verstärkte Spracherkennung, Schweizer Rechtschreibung nur noch in `de`-Regeln
+  - Build erfolgreich ✅
+- **PR-018 Teil 3**: Testen — NOCH OFFEN 🔴
 
 ## Nächste Schritte (Priorität)
 
-1. **PR-018** — Bug: Vereinfachung ignoriert Quellsprache, Ausgabe immer Deutsch (🔥 Hoch)
-   - Teil 1: Bug-Ursache im Prompt/Code finden
-   - Teil 2: Mehrsprachige Regelwerke einbinden (User liefert diese)
-   - Teil 3: Testen (FR, IT, EN, DE, RM)
+1. **PR-018 Teil 3** — Manuell testen (🔥 Hoch)
+   - Französischer Text → FR-Vereinfachung?
+   - Italienischer Text → IT-Vereinfachung?
+   - Englischer Text → EN-Vereinfachung?
+   - Deutscher Text → DE-Vereinfachung (Regression)?
+   - Rätoromanisch testen
+   - Stichproben: ES, TR, NL, etc.
 2. **PR-008** — Open Dyslexic Schriftoption (💤 Niedrig)
 
 ## Deployment
 
-Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Min).
+Lokale Änderungen noch NICHT committed/gepusht. Build läuft lokal durch.
 
 ## Erledigte Tickets
 
@@ -52,12 +62,14 @@ Alle Änderungen gepusht. GitHub Actions deployt automatisch auf Firebase (~5 Mi
 ## Wichtige Dateien
 
 - `src/app/page.tsx` — Gesamte App-Logik (Desktop: Side-by-Side, Mobile: View-Switching)
-- `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API), media_type-Erkennung via Magic Bytes
+- `src/app/actions.ts` — Server Actions (OCR + Vereinfachung via Claude API), sprachspezifische Regeln, media_type-Erkennung via Magic Bytes
+- `src/lib/language-rules.ts` — Sprachspezifische Vereinfachungsregeln für 13 Sprachen (Prompt-Bausteine)
 - `src/components/image-editor.tsx` — Bildbearbeitung (Crop, Helligkeit, Kontrast) vor OCR, JPEG-Verifikation
 - `src/lib/text-parser.ts` — Shared Parsing-Logik (TextBlock, parseTextBlocks, parseInlineSegments, stripMarkdown)
 - `src/lib/export.ts` — Alle Export-Funktionen (PDF, DOCX, MD, TXT)
 - `src/app/globals.css` — Tailwind-Theme + PHORO-Farbtokens
 - `next.config.ts` — Server Actions Body-Size-Limit (10mb)
+- `docs/rules/LS_ES_*.md` — 13 Regelwerke für Leichte/Einfache Sprache (Dokumentation)
 - `DESIGN-SYSTEM.md` — Verbindliches Design-System
 - `docs/tickets/TICKETS.md` — Ticket-Übersicht
 - `CLAUDE.md` — Architektur-Referenz

@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import Anthropic from '@anthropic-ai/sdk';
+import { buildLanguageRulesPrompt } from '@/lib/language-rules';
 
 // Initialize Anthropic client
 if (!process.env.ANTHROPIC_API_KEY) {
@@ -107,70 +108,82 @@ export async function simplifyText(prevState: SimplifyState, formData: FormData)
 
   const { text, mode } = validatedFields.data;
 
-  // System prompt: Rolle (für beide Modi gleich)
-  const systemPrompt = `Du bist ein Analytiker für didaktische Materialien, der darauf spezialisiert ist, Sach- und Fliesstexte zu überarbeiten. Du hilfst dabei, die sprachliche Verständlichkeit für Schüler:innen zu verbessern, ohne den Inhalt zu kürzen oder den Fliesstextcharakter zu verlieren. Du erklärst schwierige Begriffe im Text und zusätzlich in einem Glossar, das nach Vorkommen sortiert ist. Du vereinfachst aktiv, ohne fachliche Präzision zu verlieren.`;
+  // Build language-specific rules for the selected mode (all 13 languages)
+  const languageRules = buildLanguageRulesPrompt(mode);
 
-  // Basis-Instruktionen (für beide Modi gleich)
-  const baseInstructions = `Folge diesen Schritten:
+  // System prompt: role definition + language detection + language-specific rules
+  // Written in English to avoid biasing output language
+  const systemPrompt = `You are a specialist for adapting educational and informational texts. You improve linguistic accessibility for learners without shortening content or losing the continuous prose character. You explain difficult terms inline and in a glossary sorted by order of appearance. You actively simplify while preserving factual precision.
 
-1. Analysiere jeweils nur eine Seite oder logisch zusammenhängende Abschnitte.
-2. Erkenne automatisch, ob es sich um einen Fliesstext handelt. Bei Fliesstexten: Erhalte Struktur, Kohärenz und Satzfluss.
-3. Vereinfache aktiv sprachlich schwierige Stellen, ohne Informationen zu kürzen. Fachliche Genauigkeit hat Priorität.
-4. Erkläre schwierige Begriffe direkt im Text (z.B. durch Klammerergänzungen oder kurze Nebensätze) und zusätzlich in einem Glossar am Ende, das nach Vorkommen im Text sortiert ist.`;
+CRITICAL LANGUAGE RULE:
+1. DETECT the language of the input text.
+2. RESPOND ENTIRELY in that same language. Never switch languages.
+3. Find the matching language code below and apply those language-specific rules.
+4. If the language is not listed, use the generic rules and respond in the input language.
 
-  // Modus-spezifische Regeln
+${languageRules}`;
+
+  // Base instructions (English to stay language-neutral)
+  const baseInstructions = `Follow these steps:
+
+1. Detect the language of the input text. Apply the matching language-specific rules from the system prompt.
+2. Analyze one page or one logically coherent section at a time.
+3. Automatically detect whether the text is continuous prose. For prose: preserve structure, coherence, and sentence flow.
+4. Actively simplify linguistically difficult passages without cutting information. Factual accuracy takes priority.
+5. Explain difficult terms inline (e.g. via parenthetical additions or short relative clauses) AND in a glossary at the end, sorted by order of appearance in the text.`;
+
+  // Mode-specific generic rules (apply to ALL languages as baseline)
   const modeRules = mode === 'einfach'
-    ? `Zielniveau: EINFACHE SPRACHE (B1-B2)
+    ? `Target level: PLAIN LANGUAGE (CEFR B1-B2)
 
-Regeln:
-- Kürzere Sätze bevorzugen, aber komplexere Strukturen sind erlaubt
-- Einfache, bekannte Wörter verwenden
-- Fachbegriffe dürfen vorkommen, müssen aber erklärt werden
-- Konkrete, alltagsnahe Formulierungen bevorzugen
-- Übersichtliche Gliederung mit Absätzen und Zwischentiteln (## Markdown-Headings)
-- Wichtige Informationen hervorheben`
-    : `Zielniveau: LEICHTE SPRACHE (A1-A2)
+Generic rules (apply to all languages — language-specific rules in system prompt override these where they differ):
+- Prefer shorter sentences, but more complex structures are allowed
+- Use simple, common words
+- Technical terms may appear but must be explained
+- Prefer concrete, everyday formulations
+- Use clear structure with paragraphs and subheadings (## Markdown headings)
+- Highlight important information`
+    : `Target level: EASY-TO-READ LANGUAGE (CEFR A1-A2)
 
-Strikte Regeln — halte dich an ALLE:
+Generic rules (apply to all languages — language-specific rules in system prompt override these where they differ):
 
-Wörter:
-- Nur einfache, bekannte, kurze Wörter
-- Keine Fremd- und Fachwörter (wenn nötig: erklären)
-- Lange Wörter (mehr als 3 Silben) mit Binde-Strich trennen
-- Keine Synonyme — immer das gleiche Wort für die gleiche Sache
-- Keine Redewendungen oder bildhafte Sprache
-- Verben statt Hauptwörter verwenden
+Words:
+- Use only simple, common, short words
+- No foreign or technical terms (if unavoidable: explain them)
+- Split long words (more than 3 syllables) with hyphens (in languages where this applies)
+- No synonyms — always use the same word for the same concept
+- No idioms or figurative language
+- Prefer verbs over nouns (nominalization)
 
-Sätze:
-- Maximal 10–12 Wörter pro Satz
-- Pro Satz nur EINE Information
-- Einfacher Satzbau: Subjekt – Verb – Objekt
-- Keine Nebensätze
-- Neuer Satz = neue Zeile
+Sentences:
+- Maximum 10–12 words per sentence
+- Only ONE piece of information per sentence
+- Simple sentence structure: Subject – Verb – Object
+- No subordinate clauses
+- New sentence = new line
 
-Stil:
-- Aktiv formulieren (kein Passiv)
-- Positiv formulieren (keine Verneinungen)
-- Kein Konjunktiv
-- Kein Genitiv
-- Leser persönlich ansprechen (Du/Sie beibehalten)
+Style:
+- Use active voice (no passive)
+- Use positive phrasing (avoid negations)
+- No subjunctive mood
+- No genitive case (in languages that have it)
+- Address the reader directly (keep Du/Sie, tu/vous, etc. as in the original)
 
-Zahlen & Zeichen:
-- Arabische Zahlen verwenden (nicht ausschreiben)
-- Datum vereinfachen (z.B. 3. März 2016)
+Numbers & symbols:
+- Use Arabic numerals (do not spell out numbers)
+- Simplify dates (e.g. 3 March 2016)
 
 Layout:
-- Übersichtliche Gliederung mit Zwischen-Titeln (## Markdown-Headings)
-- Absätze zwischen Themen-Blöcken`;
+- Clear structure with subheadings (## Markdown headings)
+- Paragraphs between topic blocks`;
 
   const prompt = `${baseInstructions}
 
 ${modeRules}
 
-WICHTIG:
-- Antworte IMMER in der gleichen Sprache wie der Eingabetext.
-- Bei deutschen Texten: Verwende IMMER Schweizer Rechtschreibung (ss statt ß, z.B. «strasse» statt «straße», «gruss» statt «gruß»).
-- Gib den vereinfachten Text aus, gefolgt vom Glossar. Keine weiteren Erklärungen oder Kommentare.
+CRITICAL RULES:
+- You MUST respond in the SAME LANGUAGE as the input text. Detect the language automatically and apply the matching language-specific rules.
+- Output the simplified text followed by the glossary. No additional explanations or comments.
 
 Text: "${text}"`;
 
@@ -190,12 +203,13 @@ Text: "${text}"`;
     const simplifiedText = message.content[0]?.type === 'text' ? message.content[0].text : null;
 
     if (!simplifiedText) {
-        return { message: "Could not simplify text", errors: undefined };
+        return { message: null, errors: { text: ['Simplification returned empty result'] } };
     }
 
     return { message: simplifiedText, errors: undefined };
   } catch (error) {
     console.error("--- CLAUDE API ERROR (SIMPLIFY) ---", error);
-    return { message: "Error during text simplification.", errors: { text: ["Server error during simplification."] } };
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return { message: null, errors: { text: [`API error: ${errorMessage}`] } };
   }
 }
