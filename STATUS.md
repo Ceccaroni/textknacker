@@ -2,30 +2,24 @@
 
 > Letzte Aktualisierung: 2026-02-22
 
-## Zuletzt bearbeitet (diese Session)
+## READY TO SHIP — Meilenstein v1.0
 
-- **PR-021**: Russisch und Ukrainisch als Sprachen hinzufügen ✅
-  - Regelwerke `LS_ES_ru.md` und `LS_ES_uk.md` nach `docs/rules/` kopiert
-  - `ru` (Русский) und `uk` (Українська) in `language-rules.ts` eingetragen
-  - Regeln aus Section 7 der Regelwerke extrahiert (Leichte Sprache + Einfache Sprache)
-  - Alle Referenzen von 13 → 15 Sprachen aktualisiert
-  - Build verifiziert: OK
-- **PR-022**: Copy-Button im Ergebnis-Textrahmen ✅
-  - Clipboard-Icon (Lucide `Copy`) oben rechts im Ergebnis-Textrahmen
-  - Kopiert Plaintext (via `stripMarkdown`) in die Zwischenablage
-  - Visuelles Feedback: Icon wechselt zu Häkchen (`Check`, grün) für 2s
-  - Dezent: `text-phoro-slate/40` → Hover: `text-phoro-blue`
-  - Build verifiziert: OK
+PHORO Read ist feature-complete und produktionsbereit. Alle geplanten Funktionen sind implementiert, alle Tickets erledigt, keine offenen Bugs oder technischen Schulden.
 
-## Nächste Schritte (Priorität)
+### Was PHORO Read kann
 
-Keine offenen Schritte. Alle Tickets erledigt oder verworfen.
+- **Textvereinfachung** in 2 Modi: Einfache Sprache (B1-B2) und Leichte Sprache (A1-A2)
+- **15 Sprachen** mit sprachspezifischen Regelwerken (de, fr, it, rm, en, es, pt, nl, tr, sq, mk, sr, ru, uk, ti)
+- **OCR per Foto** — Kamera-Aufnahme oder Bild-Upload, inkl. Bildbearbeitung (Crop, Helligkeit, Kontrast)
+- **Vorlesefunktion** via OpenAI TTS (Stimme: nova)
+- **Fokus-Modus** — Satz-für-Satz-Hervorhebung zum Mitlesen
+- **Erweiterter Zeichenabstand** für bessere Lesbarkeit
+- **Copy-Button** — Vereinfachten Text in die Zwischenablage kopieren
+- **Export** in 4 Formate: PDF, DOCX, Markdown, Plaintext
+- **Responsive** — Desktop (Side-by-Side) und Mobile (View-Switching)
+- **Markdown-Rendering** in der Textausgabe (Überschriften, Listen, Fett/Kursiv)
 
-## Deployment
-
-Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase.
-
-## Erledigte Tickets
+### Erledigte Tickets (22 total, 1 verworfen)
 
 - [x] PR-001: "Read" Label Alignment
 - [x] PR-002: Button umbenennen
@@ -47,14 +41,15 @@ Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase.
 - [x] PR-020: Technische Schulden aufräumen (Zod, Gemini-Deps, GEMINI_API_KEY, GEMINI.md)
 - [x] PR-021: Russisch und Ukrainisch als Sprachen hinzufügen (13 → 15)
 - [x] PR-022: Copy-Button im Ergebnis-Textrahmen
+- [ ] ~~PR-008: Open Dyslexic Schriftoption~~ (verworfen)
 
 ## Offene / In Arbeit
 
-Keine offenen Tickets.
+Keine offenen Tickets. Keine bekannten Issues. Keine technischen Schulden.
 
-## Bekannte technische Schulden
+## Deployment
 
-Keine offenen Schulden.
+Alles committed und gepusht. GitHub Actions deployt automatisch auf Firebase Hosting (SSR).
 
 ## Wichtige Dateien
 
