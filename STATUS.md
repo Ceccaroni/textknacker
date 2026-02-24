@@ -1,6 +1,6 @@
 # PHORO Read — Status
 
-> Letzte Aktualisierung: 2026-02-22
+> Letzte Aktualisierung: 2026-02-24
 
 ## READY TO SHIP — Meilenstein v1.0
 
