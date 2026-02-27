@@ -430,21 +430,218 @@ Aus dem InDesign Style Guide übertragen auf Code:
 
 ---
 
-## 10. Logo-Verwendung im Code
+## 10. Logo — Bauanleitung für alle PHORO-Produkte
 
-### Sun-O Icon (aus Brand Identity)
+> **Diese Anleitung ist verbindlich für jedes PHORO-Produkt.** Das Logo ist bei allen Produkten identisch aufgebaut — nur der Produktname ändert sich (z.B. "read", "kasus", "studio"). Farben werden hier bewusst generisch gehalten (`FARBE_*`), da jedes Produkt ein eigenes Farbkonzept haben kann. Im Zweifel die Farb-Tokens aus Abschnitt 1 dieses Dokuments verwenden.
 
-- 3-Ray Sun mit Bogen – NICHT 8 Rays
-- Farbe wechselt nach Tier (Dawn/Light/Beacon/Pharos)
-- Animation: Staggered Ray Rotation, dezent, nur beim "Thinking"-State
+### 10.1 Architektur-Überblick
+
+Das Logo besteht aus **zwei getrennten Teilen**, die per Flexbox nebeneinander stehen:
+
+1. **SVG-Datei** (`public/logo-phoro.svg`) — enthält die Buchstaben "PHORO" als SVG-Pfade (kein Font-Rendering!), einen dekorativen Bogen darunter und drei kleine Strahlen rechts oben
+2. **HTML `<span>`** — der Produktname (z.B. "read", "kasus") als normaler Text in Lexend font-light
+
+Diese Trennung ist wichtig: "PHORO" ist **kein Text**, sondern ein SVG mit exakten Pfaden. Der Produktname daneben ist **echter HTML-Text**.
+
+### 10.2 Die SVG-Datei (`public/logo-phoro.svg`)
+
+**ViewBox:** `"76 34 192 66"` — nicht ändern, ausser Elemente werden verschoben.
+
+#### Bestandteile (in dieser Reihenfolge im SVG)
+
+| # | Element | Beschreibung |
+|---|---------|--------------|
+| 1–5 | `<path>` × 5 | Buchstaben P, H, O, R, O als individuelle SVG-Pfade |
+| 6 | `<path>` | Dekorativer geschwungener Bogen unter dem gesamten Schriftzug (x≈84 bis x≈239) |
+| 7 | `<rect>` | Strahl 1 — vertikaler Strich, rechts oben |
+| 8 | `<rect>` | Strahl 2 — 45°-gedrehter Strich |
+| 9 | `<rect>` | Strahl 3 — 90°-gedrehter (horizontaler) Strich |
+
+#### Die drei Strahlen (Sun-Rays / Leuchtturm-Motiv)
+
+Drei `<rect>`-Elemente bilden eine fächerartige Progression von vertikal nach horizontal:
+
+```xml
+<!-- Strahl 1: vertikal -->
+<rect fill="FARBE" x="229.2" y="40.2" width="4.5" height="12.1" rx="2.3" ry="2.3"/>
+
+<!-- Strahl 2: 45° gedreht -->
+<rect fill="FARBE" x="246.4" y="47.4" width="4.5" height="12.1" rx="2.3" ry="2.3"
+      transform="translate(110.7 -160.2) rotate(45)"/>
+
+<!-- Strahl 3: 90° gedreht (horizontal) -->
+<rect fill="FARBE" x="253.5" y="64.8" width="4.5" height="12.1" rx="2.3" ry="2.3"
+      transform="translate(326.6 -184.9) rotate(90)"/>
+```
+
+Alle drei haben:
+- **Gleiche Grösse:** `4.5 × 12.1` SVG-Einheiten
+- **Abgerundete Enden:** `rx="2.3" ry="2.3"` (Pill-Form)
+- **Gleiche Farbe** wie die Buchstaben
+
+Die `transform`-Werte (`translate` + `rotate`) sind exakt kalibriert — der `translate` korrigiert den Drehpunkt. **Nicht manuell anpassen**, sondern 1:1 übernehmen.
+
+#### Der Bogen
+
+Der Bogen (Element 6) ist ein einziger langer `<path>`, der sich unter dem gesamten "PHORO"-Schriftzug erstreckt. Er kann eine leicht abweichende Farbe haben (in der Referenz: Buchstaben `#1c3d5a`, Bogen `#214057` — etwas dunkler). Optional, je nach Farbkonzept.
+
+#### SVG-Datei übernehmen
+
+Die SVG-Datei 1:1 aus dem Referenzprojekt kopieren. Die Pfade für P-H-O-R-O sind für **alle PHORO-Produkte identisch**. Nur die `fill`-Attribute auf die eigenen Farben ändern (6× Buchstaben/Strahlen, 1× Bogen).
+
+### 10.3 Der Produktname als HTML-Text
+
+Der Produktname wird **nicht** ins SVG gepackt, sondern als separates HTML-Element daneben gesetzt.
+
+**Warum so?**
+- Skaliert unabhängig vom SVG
+- Nutzt die System-Schriftart (Lexend via `next/font`)
+- Lässt sich per Tailwind stylen
+- Die Baseline-Ausrichtung zum SVG wird über `margin-bottom` feingesteuert
+
+#### Markup (Desktop & Mobile Input — Standardgrösse)
+
+```tsx
+<div className="flex items-end gap-1.5">
+  <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
+  <span className="text-FARBE_ACCENT text-lg font-light tracking-wide mb-2">
+    produktname
+  </span>
+</div>
+```
+
+#### Markup (Kompakte Variante, z.B. Mobile Reading Header)
+
+```tsx
+<div className="flex items-end gap-1 mx-auto">
+  <img src="/logo-phoro.svg" alt="PHORO" className="h-8" />
+  <span className="text-FARBE_ACCENT text-base font-light tracking-wide mb-1.5">
+    produktname
+  </span>
+</div>
+```
+
+#### Tailwind-Klassen erklärt
+
+| Klasse | Wert | Zweck |
+|--------|------|-------|
+| `flex items-end` | — | Flex-Container, Kinder am **unteren Rand** ausgerichtet |
+| `gap-1.5` / `gap-1` | 6px / 4px | Horizontaler Abstand zwischen SVG und Text |
+| `h-10` / `h-8` | 40px / 32px | SVG-Höhe (Standard / Kompakt) |
+| `text-lg` / `text-base` | 18px / 16px | Schriftgrösse des Produktnamens |
+| `font-light` | weight 300 | Dünner Schriftschnitt — Kontrast zum kräftigen SVG |
+| `tracking-wide` | letter-spacing 0.05em | Leicht gesperrte Buchstaben |
+| `mb-2` / `mb-1.5` | 8px / 6px | **Vertikale Baseline-Korrektur** (siehe unten) |
+
+#### Die `mb-2` / `mb-1.5` Baseline-Korrektur
+
+Das ist das Herzstück der Ausrichtung. `items-end` allein reicht nicht, weil:
+- Das SVG hat den Bogen am unteren Rand → die visuell wahrgenommene Unterkante der Buchstaben sitzt **höher** als der SVG-Rand
+- Der Text hat eine Descender-Line (bei "g", "y", "p") → die Baseline sitzt **höher** als der tatsächliche untere Textrand
+
+Der `margin-bottom` auf dem `<span>` korrigiert das, sodass der Produktname visuell auf derselben Höhe wie die PHORO-Buchstaben im SVG sitzt — **nicht** auf Höhe des Bogens.
+
+**Zum Kalibrieren:** Wert schrittweise anpassen (`mb-1`, `mb-1.5`, `mb-2`, `mb-2.5`), bis die Unterkante des Textes bündig mit der Unterkante der SVG-Buchstaben (nicht des Bogens!) aussieht.
+
+### 10.4 Grössentabelle
+
+| Kontext | SVG-Höhe | Gap | Textgrösse | mb-Korrektur |
+|---------|----------|-----|------------|--------------|
+| Desktop Header | `h-10` (40px) | `gap-1.5` (6px) | `text-lg` (18px) | `mb-2` (8px) |
+| Mobile Input Header | `h-10` (40px) | `gap-1.5` (6px) | `text-lg` (18px) | `mb-2` (8px) |
+| Mobile Reading Header | `h-8` (32px) | `gap-1` (4px) | `text-base` (16px) | `mb-1.5` (6px) |
+
+### 10.5 Header-Container
+
+Das Logo sitzt in einem `<header>`. Drei Varianten:
+
+#### Desktop Header (über volle Breite, zentriert)
+
+```tsx
+<header className="hidden md:flex px-4 pt-4 pb-2 border-b border-FARBE/15 bg-FARBE_HEADER flex-col items-center shrink-0">
+  <div className="flex items-end gap-1.5">
+    <img src="/logo-phoro.svg" alt="PHORO" className="h-10" />
+    <span className="text-FARBE_ACCENT text-lg font-light tracking-wide mb-2">produktname</span>
+  </div>
+  <p className="text-center text-FARBE_TEXT/60 mt-1 text-sm">
+    Untertitel / Tagline hier.
+  </p>
+</header>
+```
+
+- `hidden md:flex` → Nur ab md-Breakpoint (768px+) sichtbar
+- `flex-col items-center` → Logo und Untertitel vertikal gestapelt, zentriert
+- `shrink-0` → Header schrumpft nicht wenn Content scrollt
+
+#### Mobile Input Header
+
+```tsx
+<header className="md:hidden px-4 pt-4 pb-2 border-b border-FARBE/15 bg-FARBE_HEADER flex flex-col items-center shrink-0">
+  <!-- Identisches Logo-Markup wie Desktop -->
+</header>
+```
+
+- `md:hidden` → Nur unter md-Breakpoint sichtbar
+- Sonst identisch zum Desktop Header
+
+#### Mobile Reading Header (kompakt, mit Zurück-Button)
+
+```tsx
+<header className="md:hidden px-4 py-3 border-b border-FARBE/15 bg-FARBE_HEADER flex items-center shrink-0">
+  <Button variant="ghost" size="icon" onClick={handleBack}>
+    <ArrowLeft className="h-5 w-5" />
+  </Button>
+  <div className="flex items-end gap-1 mx-auto">
+    <img src="/logo-phoro.svg" alt="PHORO" className="h-8" />
+    <span className="text-FARBE_ACCENT text-base font-light tracking-wide mb-1.5">produktname</span>
+  </div>
+  <div className="w-9" />
+</header>
+```
+
+- `flex items-center` → Horizontales Layout (nicht `flex-col`!)
+- Zurück-Button links, Logo zentriert via `mx-auto`, leeres `<div className="w-9">` rechts als Gegengewicht für die Zentrierung
+- Kleineres Logo (`h-8`, `text-base`) und kein Untertitel
+
+### 10.6 Schriftart
+
+Der Produktname nutzt **Lexend** — die gleiche Schrift wie der Rest der App. Import via `next/font/google` im Root-Layout:
+
+```tsx
+// src/app/layout.tsx
+import { Lexend } from 'next/font/google'
+
+const lexend = Lexend({ subsets: ['latin'] })
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="de" className={lexend.className}>
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+Der Produktname erbt die Schriftart automatisch. Gewicht `font-light` (300) wird explizit auf dem `<span>` gesetzt.
+
+### 10.7 Brand-Regeln
+
+- 3-Ray Sun mit Bogen — **NICHT** 8 Rays
+- Tier-Farben (Dawn/Light/Beacon/Pharos) können auf die Strahlen oder den Bogen angewendet werden
+- Animation: Staggered Ray Rotation, dezent, nur beim "Thinking"-State (optional)
 - Favicon: Vereinfachte Version (Circle + 3 Rays)
+- Wortmarke "PHORO" immer als SVG-Pfade, **nie** als Font-Text gerendert
 
-### Wortmarke
+### 10.8 Checkliste für neue Produkte
 
-- Font: Lexend (passend zum Brand – Dyslexie-optimiert)
-- Gewicht: 700 (Bold) für Wortmarke
-- Bogen unter dem Text (aus Brand Identity)
-- Farbe: Pharos Blue (#1A3550)
+1. SVG-Datei aus dem Referenzprojekt kopieren → `public/logo-phoro.svg`
+2. `fill`-Attribute im SVG auf eigene Farben ändern (6× Buchstaben/Strahlen, 1× Bogen)
+3. Header-Markup mit den drei Varianten (Desktop, Mobile Input, Mobile Reading) einbauen
+4. Produktname als `<span>` mit `font-light tracking-wide` — **nicht** ins SVG
+5. `mb-2` Baseline-Korrektur visuell prüfen und ggf. feinjustieren (`mb-1` bis `mb-2.5`)
+6. Sicherstellen, dass Lexend im Root-Layout geladen wird
+7. Untertitel / Tagline anpassen
+8. Auf Desktop und Mobile testen — alle drei Header-Varianten prüfen
 
 ---
 
