@@ -1,6 +1,6 @@
 # PHORO Read — Status
 
-> Letzte Aktualisierung: 2026-02-24
+> Letzte Aktualisierung: 2026-02-27
 
 ## READY TO SHIP — Meilenstein v1.0
 
@@ -42,6 +42,11 @@ PHORO Read ist feature-complete und produktionsbereit. Alle geplanten Funktionen
 - [x] PR-021: Russisch und Ukrainisch als Sprachen hinzufügen (13 → 15)
 - [x] PR-022: Copy-Button im Ergebnis-Textrahmen
 - [ ] ~~PR-008: Open Dyslexic Schriftoption~~ (verworfen)
+
+## Letzte Session (2026-02-27)
+
+- DESIGN-SYSTEM.md Abschnitt 10 komplett überarbeitet: Aus dem kurzen Logo-Abschnitt eine vollständige, generische Bauanleitung für alle PHORO-Produkte gemacht (SVG-Struktur, Baseline-Korrektur, Header-Varianten, Grössentabelle, Checkliste)
+- Keine Code-Änderungen, nur Dokumentation
 
 ## Offene / In Arbeit
 
